@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from app_core.models.Login import Login
+from app_core.services.Login import Login
 from app_core.urls import none_login_pages
 from django.http import HttpResponse
 import json

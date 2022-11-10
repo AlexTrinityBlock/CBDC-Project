@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Login
+from app_core.services.Login import Login
 
 """
 前端頁面

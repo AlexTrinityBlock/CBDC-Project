@@ -1,5 +1,5 @@
 from tokenize import Token
-from .User import User
+from app_core.models.User import User
 import hashlib
 import json 
 import redis
