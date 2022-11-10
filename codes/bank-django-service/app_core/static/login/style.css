@@ -1,6 +1,7 @@
 /* CSS 變數設置 */
 :root {
-    --page-background-color: #b0dffc;
+    --page-background-color-1: #75C7FB;
+    --page-background-color-2: #FFFFFF;
     --panel-background-color: #FFFFFF;
     --main-color: #75C7FB;
     --shadow-color: #1aa1f5;
@@ -8,7 +9,8 @@
 
 /* 整體頁面背景 */
 body {
-    background-color: var(--page-background-color);
+    /* background-color: var(--page-background-color); */
+    background-image: linear-gradient(to right, var(--page-background-color-1) , var(--page-background-color-2));
 }
 
 /* 登入面板最外框 */
