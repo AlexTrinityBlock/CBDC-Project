@@ -55,7 +55,12 @@ class Login():
             result = json.dumps(result)
             return HttpResponse(result)
         elif request.method == 'POST':
-            data = request.POST
+            # 適應不同的Fetch POST 實現
+            try:
+                data = json.loads(request.body)
+            except:
+                data = request.POST
+            
 
         # 檢查 Requests 參數是否正確
         try:
@@ -105,11 +110,15 @@ class Login():
         # 檢查 Redis 中是否存在該Token
         if self.login_verify(token):
             result = {'code':1,'message':'Login success.'}
+            result = json.dumps(result)
+            result = HttpResponse(result)
+            result.set_cookie('test','123')
+            return result
         else:
             result = {'code':0,'message':'Login fail.'}
+            result = json.dumps(result)
+            return HttpResponse(result)
 
-        result = json.dumps(result)
-        return HttpResponse(result)
 
     # 檢查是否登入
     def check_login_from_request(self, request):
