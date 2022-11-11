@@ -15,8 +15,8 @@ urlpatterns = [
 
 # 把不需要登入就可以瀏覽的頁面加入這裡
 none_login_pages = [
-    "/login",
-    "/admin",
-    "/api/login",
-    "/api/check_login",
+    "login",
+    "admin",
+    "api/login",
+    "api/check_login",
 ]

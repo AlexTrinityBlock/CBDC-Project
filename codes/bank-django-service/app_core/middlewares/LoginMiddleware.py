@@ -19,7 +19,7 @@ class LoginMiddleware:
 
     def check_prefix_in_list(self,path:str):
         for path_in_list in self.none_login_pages:
-            if path.startswith(path_in_list):
+            if path.startswith('/' + path_in_list):
                 return True
         return False
 
