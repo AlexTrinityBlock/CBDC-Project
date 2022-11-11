@@ -61,7 +61,6 @@ class Login():
             except:
                 data = request.POST
             
-
         # 檢查 Requests 參數是否正確
         try:
             account = data['account']
@@ -77,6 +76,10 @@ class Login():
                 result = {'code':1, 'message':'Login success.'}
                 uuid_token = self.setUserToken(account)
                 result["token"] = uuid_token
+                result = json.dumps(result)
+                result = HttpResponse(result)
+                result.set_cookie('token',uuid_token,httponly=True)
+                return result
             else:
                 result = {'code':0, 'message':'Login fail.'}
         else:
