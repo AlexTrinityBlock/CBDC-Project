@@ -33,11 +33,9 @@ def 此API的名稱(request):
 """
 def login_api(request):
     login =Login()
-    result = login.login(request)
-    return HttpResponse(result)
+    return login.login(request)
 
 # 檢查登入 API
 def check_login(request):
     login =Login()
-    result = login.check_login(request)
-    return HttpResponse(result)
+    return login.check_login(request)
