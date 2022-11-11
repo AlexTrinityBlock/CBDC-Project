@@ -156,3 +156,35 @@ class Login():
             return True
         else:
             return False
+
+    # 登出
+    def logout(self,request):
+        redis_connection_token_index = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=0, password=os.environ['REDIS_PASSWORD'])
+        redis_connection_user_index = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=1, password=os.environ['REDIS_PASSWORD'])
+        # 只接收POST
+        if request.method == 'GET':
+            result = {'code':0, 'message':'Post method required.'}
+            result = json.dumps(result)
+            return HttpResponse(result)
+        elif request.method == 'POST':
+            # 適應不同的Fetch POST 實現
+            try:
+                data = json.loads(request.body)
+            except:
+                data = request.POST
+
+        # 檢查Token 是否正確，同時相容token存在於cookie或者request中。
+        if "token" in data:
+            token = data["token"]
+        elif "token" in request.COOKIES:
+            token = request.COOKIES["token"]
+        elif token == None:# 若無token 進行回應
+            return False
+
+        user = json.loads(redis_connection_token_index.get(token))['account']
+        redis_connection_user_index.delete(user)
+        redis_connection_token_index.delete(token)
+
+        result = {'code':1,'message':'Logout success.'}
+        result = json.dumps(result)
+        return HttpResponse(result)

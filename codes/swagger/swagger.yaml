@@ -87,3 +87,40 @@ paths:
                   token:
                     type: string
                     example: 95f585c748524b1ba154c13a37f973f4
+
+# 登出
+  /api/logout:
+    post:
+      tags:
+      - "登出"
+      summary: 登出。
+      description: ""
+      requestBody:
+        description: 登入使用者取得token。
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  message:
+                    type: string
+                    example: Login success.
+                  token:
+                    type: string
+                    example: 95f585c748524b1ba154c13a37f973f4

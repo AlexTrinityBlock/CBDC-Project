@@ -9,8 +9,9 @@ urlpatterns = [
     path('login', views.login, name='login'),
 
     # API
-    path('api/login', views.login_api),
-    path('api/check_login', views.check_login),
+    path('api/login', views.api_login),
+    path('api/check_login', views.api_check_login),
+    path('api/logout', views.api_logout),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡
