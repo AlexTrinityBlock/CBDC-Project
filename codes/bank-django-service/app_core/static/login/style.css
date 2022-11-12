@@ -1,13 +1,16 @@
 /* CSS 變數設置 */
 :root {
-    --page-background-color: #FFECE1;
+    --page-background-color-1: #96d5fc;
+    --page-background-color-2: #d2eeff;
     --panel-background-color: #FFFFFF;
-    --main-color: #FE8D24;
+    --main-color: #75C7FB;
+    --shadow-color: #1aa1f5;
 }
 
 /* 整體頁面背景 */
 body {
-    background-color: var(--page-background-color);
+    /* background-color: var(--page-background-color); */
+    background-image: linear-gradient(to right, var(--page-background-color-1) , var(--page-background-color-2));
 }
 
 /* 登入面板最外框 */
@@ -17,9 +20,9 @@ body {
     /* 上方空白 */
     margin-top: 100px;
     /* 倒影 */
-    box-shadow: 9px 8px 5px 0px rgba(254, 141, 36, 0.82);
-    -webkit-box-shadow: 9px 8px 5px 0px rgba(254, 141, 36, 0.82);
-    -moz-box-shadow: 9px 8px 5px 0px rgba(254, 141, 36, 0.82);
+    box-shadow: 9px 8px 5px 0px var(--shadow-color);
+    -webkit-box-shadow: 9px 8px 5px 0px var(--shadow-color);
+    -moz-box-shadow: 9px 8px 5px 0px var(--shadow-color);
     /*  */
     width: 400px;
     margin-left: auto;
@@ -35,9 +38,10 @@ body {
 
 /* 登入面板最外框 */
 .login-panel-image {
-    margin-left: 10%;
-    margin-right: 10%;
-    width: 200px;
+    margin-top: 10px;
+    margin-left: 15%;
+    margin-right: 15%;
+    width: 70%;
 }
 
 /* 登入面板主文字 */

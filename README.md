@@ -1,10 +1,7 @@
-
-#test word
-# 啟動專案Docker容器群 2022/10/25
 =======
 # CBDC 數位貨幣
 
-該計畫目前屬於開發原型階段，尚未發布。
+該計畫目前屬於開發原型階段，尚未發布，正在開發中。
 
 ---
 # Notes
@@ -94,4 +91,28 @@ git push origin master
 
 4. 到Github頁面發送Pull Request
 
-1234567456789
+## Git本地dev分支同步遠端dev
+
+僅需要於本地建立dev分支一開始使用，可以鎖定遠端dev拉取。
+
+(該動作僅在本地有dev分支開發需求時使用。)
+
+```
+git branch --set-upstream-to=origin/dev  dev
+```
+
+鎖定完畢後，未來僅需要
+
+```
+git pull
+```
+
+即可完成dev分支拉取。
+
+## 拉取所有進行追蹤的遠端分支
+
+將所有追蹤的遠端分支進行拉取。
+
+```
+git pull --all
+``` 
