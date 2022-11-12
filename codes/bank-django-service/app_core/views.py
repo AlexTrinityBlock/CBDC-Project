@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from app_core.services.Login import Login
-
+from app_core.services.Register import Register
 """
 前端頁面
 
@@ -43,3 +43,7 @@ def api_logout(request):
 def api_check_login(request):
     login =Login()
     return login.check_login(request)
+
+def api_register(request):
+    register =Register()
+    return register.register(request)
