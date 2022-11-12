@@ -1,18 +1,23 @@
 from django.test import TestCase
-
 from app_core.models.User import User
-import redis
-import requests
+from django.test.client import RequestFactory
+from app_core.services.Register import Register
 import json
-import os
 
 class TestRegist(TestCase):
-    # def test_register(self):
-    #     result = requests.post('http://127.0.0.1:8000/api/register', data={'account': 'test', 'password':'test','e-mail':'test@example.com'})
-    #     #result_json_object = json.loads(result.text)
-    #     print(result.text)
-    #     f = open("log.html", "w")
-    #     f.write(result.text)
-    #     f.close()
     def setUp(self):
         pass
+    def test_register(self):
+        
+        print("[註冊測試] 註冊測試判別。")
+
+        rf = RequestFactory()
+        post_request = rf.post('/api/register/', {'account': 'test1sdfds1w23ewq', 'password':'test','e_mail':'test@example.com'})
+
+        register = Register()
+        response = register.register(post_request) 
+        result = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(result['code'], 1)
+
+        user_number = User.objects.filter(account='test1sdfds1w23ewq').count()
+        self.assertEqual(user_number, 1)

@@ -34,7 +34,6 @@ class TestLogin(TestCase):
         print("[登入測試] 正確登入測試")
         result = requests.post(self.login_url, data={'account': self.account, 'password':self.password})
         result_json_object = json.loads(result.text)
-        print(result.text)
         self.assertEqual(result_json_object['code'], 1, '\n\n正確登入測試失敗!')
 
         print("[登入測試] 檢查Redis是否正確存有Token")
