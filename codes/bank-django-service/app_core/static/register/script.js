@@ -1,5 +1,3 @@
-import Cookies from '/static/login/js.cookie.min.mjs'
-
 // 送出函數
 function sendMessage(account_input, password_input, e_mail_input) {
     // Fetch函數
