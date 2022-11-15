@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'app_core.middlewares.LoginMiddleware.LoginMiddleware', # 手動添加，登入中間層。
+    'app_core.middlewares.PostHandler.PostHandler',
 ]
 
 ROOT_URLCONF = 'cbdc.urls'
@@ -137,6 +138,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 允取特定IP的 Request
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8084",
-    "http://127.0.0.1:8084",
+    "http://localhost:8085",
+    "http://127.0.0.1:8085",
 ]

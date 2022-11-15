@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from app_core.models.Login import Login
+from app_core.services.Login import Login
 from app_core.urls import none_login_pages
 from django.http import HttpResponse
 import json
@@ -19,7 +19,7 @@ class LoginMiddleware:
 
     def check_prefix_in_list(self,path:str):
         for path_in_list in self.none_login_pages:
-            if path.startswith(path_in_list):
+            if path == ('/' + path_in_list):
                 return True
         return False
 
@@ -39,6 +39,6 @@ class LoginMiddleware:
                 return HttpResponse(json.dumps(result))
         else:
             if verify_login_result and not self.is_api(request.path) and request.path.startswith("/login"):
-                return redirect("/")
+                return redirect("/home")
         response = self.get_response(request)
         return response

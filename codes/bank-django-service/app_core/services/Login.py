@@ -1,10 +1,11 @@
 from tokenize import Token
-from .User import User
+from app_core.models.User import User
 import hashlib
 import json 
 import redis
 import os
 import uuid
+from django.http import HttpResponse
 
 class Login():
     """登入類別
@@ -50,10 +51,16 @@ class Login():
 
         # 無論GET或者POST都接收，之後依照需求修改
         if request.method == 'GET':
-            data = request.GET
+            result = {'code':0, 'message':'Post method required.'}
+            result = json.dumps(result)
+            return HttpResponse(result)
         elif request.method == 'POST':
-            data = request.POST
-
+            # 適應不同的Fetch POST 實現
+            try:
+                data = json.loads(request.body)
+            except:
+                data = request.POST
+            
         # 檢查 Requests 參數是否正確
         try:
             account = data['account']
@@ -61,7 +68,7 @@ class Login():
         except:
             result = {'code':0, 'message':'Login format wrong.'}
             result = json.dumps(result)
-            return result
+            return HttpResponse(result)
 
         # 檢查帳號密碼是否存在 
         if self.check_account(account):
@@ -69,13 +76,17 @@ class Login():
                 result = {'code':1, 'message':'Login success.'}
                 uuid_token = self.setUserToken(account)
                 result["token"] = uuid_token
+                result = json.dumps(result)
+                result = HttpResponse(result)
+                result.set_cookie('token',uuid_token,httponly=True)
+                return result
             else:
                 result = {'code':0, 'message':'Login fail.'}
         else:
             result = {'code':0, 'message':'Login fail.'}
 
         result = json.dumps(result)
-        return result
+        return HttpResponse(result)
 
     # 檢查是否登入
     def check_login(self, request):
@@ -97,16 +108,20 @@ class Login():
         elif token == None:# 若無token 進行回應
             result = {'code':0,'message':'Missing token'}
             result = json.dumps(result)
-            return result
+            return HttpResponse(result)
 
         # 檢查 Redis 中是否存在該Token
         if self.login_verify(token):
             result = {'code':1,'message':'Login success.'}
+            result = json.dumps(result)
+            result = HttpResponse(result)
+            result.set_cookie('test','123')
+            return result
         else:
             result = {'code':0,'message':'Login fail.'}
+            result = json.dumps(result)
+            return HttpResponse(result)
 
-        result = json.dumps(result)
-        return result
 
     # 檢查是否登入
     def check_login_from_request(self, request):
@@ -141,3 +156,35 @@ class Login():
             return True
         else:
             return False
+
+    # 登出
+    def logout(self,request):
+        redis_connection_token_index = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=0, password=os.environ['REDIS_PASSWORD'])
+        redis_connection_user_index = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=1, password=os.environ['REDIS_PASSWORD'])
+        # 只接收POST
+        if request.method == 'GET':
+            result = {'code':0, 'message':'Post method required.'}
+            result = json.dumps(result)
+            return HttpResponse(result)
+        elif request.method == 'POST':
+            # 適應不同的Fetch POST 實現
+            try:
+                data = json.loads(request.body)
+            except:
+                data = request.POST
+
+        # 檢查Token 是否正確，同時相容token存在於cookie或者request中。
+        if "token" in data:
+            token = data["token"]
+        elif "token" in request.COOKIES:
+            token = request.COOKIES["token"]
+        elif token == None:# 若無token 進行回應
+            return False
+
+        user = json.loads(redis_connection_token_index.get(token))['account']
+        redis_connection_user_index.delete(user)
+        redis_connection_token_index.delete(token)
+
+        result = {'code':1,'message':'Logout success.'}
+        result = json.dumps(result)
+        return HttpResponse(result)

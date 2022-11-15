@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Login
-
+from app_core.services.Login import Login
+from app_core.services.Register import Register
 """
 前端頁面
 
@@ -16,9 +16,14 @@ def 頁面名稱(request):
 def index(request):
     return render(request, 'index/index.html')
 
+def home(request):
+    return render(request, 'home/index.html')
+
 def login(request):
     return render(request, 'login/index.html')
 
+def register(request):
+    return render(request, 'register/index.html')
 """
 API
 
@@ -31,13 +36,19 @@ def 此API的名稱(request):
 
 之後到 urls.py 來將網址聯繫到這個view
 """
-def login_api(request):
+def api_login(request):
     login =Login()
-    result = login.login(request)
-    return HttpResponse(result)
+    return login.login(request)
+
+def api_logout(request):
+    login =Login()
+    return login.logout(request)
 
 # 檢查登入 API
-def check_login(request):
+def api_check_login(request):
     login =Login()
-    result = login.check_login(request)
-    return HttpResponse(result)
+    return login.check_login(request)
+
+def api_register(request):
+    register =Register()
+    return register.register(request)

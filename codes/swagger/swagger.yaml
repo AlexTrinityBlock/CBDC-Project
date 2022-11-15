@@ -12,45 +12,6 @@ tags:
 
 paths:
   /api/login:
-    get:
-      tags:
-      - "登入"
-      summary: 登入使用者取得token。
-      description: ""
-      # 請求參數
-      parameters:
-        - name: account
-          in: query
-          description: 帳號
-          required: true
-          schema:
-            type: string
-            default: user
-        - name: password
-          in: query
-          description: 密碼
-          required: true
-          schema:
-            type: string
-            default: user
-      # 回應參數
-      responses:
-        '200':    # status code
-          description: 由回應的不同表現帳號密碼是否錯誤
-          content:
-            application/json:
-              schema: 
-                type: object
-                properties:
-                  code:
-                    type: int
-                    example: 1
-                  message:
-                    type: string
-                    example: Login success.
-                  token:
-                    type: string
-                    example: 95f585c748524b1ba154c13a37f973f4
     post:
       tags:
       - "登入"
@@ -123,6 +84,85 @@ paths:
                   message:
                     type: string
                     example: Login success.
+                  token:
+                    type: string
+                    example: 95f585c748524b1ba154c13a37f973f4
+
+# 登出
+  /api/logout:
+    post:
+      tags:
+      - "登出"
+      summary: 登出。
+      description: ""
+      requestBody:
+        description: 登入使用者取得token。
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  message:
+                    type: string
+                    example: Login success.
+                  token:
+                    type: string
+                    example: 95f585c748524b1ba154c13a37f973f4
+                    
+  /api/register:
+    post:
+      tags:
+      - "註冊"
+      summary: 註冊。
+      description: ""
+      requestBody:
+        description: 註冊
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties: 
+                account:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+                e_mail:
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  message:
+                    type: string
+                    example: registe success.
                   token:
                     type: string
                     example: 95f585c748524b1ba154c13a37f973f4
