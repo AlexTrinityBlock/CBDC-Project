@@ -9,3 +9,5 @@ class User(models.Model):
     account = models.CharField(max_length=100)
     password_hash = models.CharField(max_length=100)
     e_mail = models.CharField(null=True,max_length= 100)
+    name = models.CharField(null=True,max_length= 100)
+    test010 = models.CharField(null=True,max_length= 100)
