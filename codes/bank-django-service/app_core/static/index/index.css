@@ -44,5 +44,6 @@ body{ background-color: #f3f3f3;width: 100%; margin: 0; padding: 0;}
 }
 
 #login-and-register a h3{
- color: #FFFFFF;
+    font-size: 2rem;
+ color: #ffffff;
 }
