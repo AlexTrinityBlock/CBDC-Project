@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'app_core.middlewares.LoginMiddleware.LoginMiddleware', # 手動添加，登入中間層。
+    'app_core.middlewares.PostHandler.PostHandler',
 ]
 
 ROOT_URLCONF = 'cbdc.urls'

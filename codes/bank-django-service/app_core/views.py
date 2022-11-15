@@ -16,9 +16,14 @@ def 頁面名稱(request):
 def index(request):
     return render(request, 'index/index.html')
 
+def home(request):
+    return render(request, 'home/index.html')
+
 def login(request):
     return render(request, 'login/index.html')
 
+def register(request):
+    return render(request, 'register/index.html')
 """
 API
 

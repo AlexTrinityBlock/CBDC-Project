@@ -1,16 +1,14 @@
-import Cookies from '/static/login/js.cookie.min.mjs'
-import CheckLoginStatus from '/static/login/CheckLoginStatus.js'
-
 // 送出函數
-function sendMessage(account_input, password_input) {
+function sendMessage(account_input, password_input, e_mail_input) {
     // Fetch函數
     const data = JSON.stringify({
-        'account':account_input,
-        'password':password_input
+        'account': account_input,
+        'password': password_input,
+        'e_mail': e_mail_input
     })
 
 
-    fetch("/api/login", {
+    fetch("/api/register", {
         // 方法為Post
         method: "POST",
         // Header 一定要加入，否則在Laravel一類的框架可能會接收不到
@@ -24,32 +22,26 @@ function sendMessage(account_input, password_input) {
     }).then((response) => {
         // 將收到的回應轉換成JSON物件
         return response.json();
-    }).then((jsonObj) => {
+    }).then(async (jsonObj) => {
         // 若登入成功
         if (jsonObj['code'] == 1) {
-            // Cookies.set('token', jsonObj['token'])
-            LoginFail.innerHTML = " "
-            window.location.replace("/home");
-        } else {
-            LoginFail.innerHTML = "登入失敗，請重新登入"
+            LoginFail.innerHTML = "註冊成功"
+            await new Promise(r => setTimeout(r, 2000));
+            window.location.replace("/login");
+        } else if(jsonObj['code'] == 2){
+            LoginFail.innerHTML = "帳號已經被註冊"
         }
     });
 }
 
-// 將帳號密碼送出
+// 將註冊送出
 function submit() {
-    sendMessage(account.value, password.value)
+    sendMessage(account.value, password.value, e_mail.value)
 }
 
 // 主函數
 async function main() {
-    // 假如已經登入了就跳轉到主頁面
-    let token = Cookies.get('token')
-    let loginCheck = await CheckLoginStatus(token)
-    if (loginCheck) {
-        window.location.replace("/home");
-    }
-
+    // 將註冊按鈕綁定註冊函數
     document.getElementById("submit").onclick = submit;
 }
 
