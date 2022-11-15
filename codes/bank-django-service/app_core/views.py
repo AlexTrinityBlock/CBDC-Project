@@ -13,8 +13,8 @@ def 頁面名稱(request):
 
 之後到 urls.py 來將網址聯繫到這個view
 """
-def index(request):
-    return render(request, 'index/index.html')
+def home(request):
+    return render(request, 'home/index.html')
 
 def login(request):
     return render(request, 'login/index.html')

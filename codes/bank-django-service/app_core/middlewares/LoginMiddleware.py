@@ -39,6 +39,6 @@ class LoginMiddleware:
                 return HttpResponse(json.dumps(result))
         else:
             if verify_login_result and not self.is_api(request.path) and request.path.startswith("/login"):
-                return redirect("/")
+                return redirect("/home")
         response = self.get_response(request)
         return response
