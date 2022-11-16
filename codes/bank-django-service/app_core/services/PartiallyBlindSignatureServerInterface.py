@@ -33,7 +33,6 @@ F1 ~ Fn: 加密的公開訊息Hash
 signer寄送-3
 
 i_list: 20個，1~40之間的數字。
-C: int，簽章。
 =================
 user寄送-4
 
@@ -60,12 +59,19 @@ class PartiallyBlindSignatureServerInterface:
         self.NumberOfZeroKnowledgeProofRound = 20
         # User端的L長度
         self.LengthOfL = 40
+        # User端的i長度
         self.LengthOfi = 20
+        # User端的u長度
+        self.LengthOfu = 10
         # Redis 連線
         self.redis_connection = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=0, password=os.environ['REDIS_PASSWORD'])
         # 檢查使用者當前進行到的步驟
         self.status = dict()
         self.create_or_load_status(token)
+        #  F1~Fn
+        self.F_list = None
+        # i list
+        self.i_list = None
 
     # 生成隨機二進位序列
     def generate_b_list(self):
@@ -81,46 +87,6 @@ class PartiallyBlindSignatureServerInterface:
                 i_list.append(temp_number)
         i_list.sort()
         return i_list
-
-    # 創建新的認證狀態，或者載入舊的
-    def create_or_load_status(self,token):
-        status = json.loads(self.redis_connection.get(token))
-        if 'step' in status:
-            self.status = status
-        else:
-            status['step'] = 1
-            status['i_list'] = self.generate_i_list()
-            status['b_list'] = self.generate_b_list()
-            self.redis_connection.set(token, json.dumps(status))
-            self.redis_connection.expire(token, self.expiretime)
-            self.status = status
-
-    # 儲存並且前進到下個步驟
-    def save_and_next_step(self,token):
-        self.status['step'] += 1
-        self.redis_connection.set(token,json.dumps(self.status))
-        self.redis_connection.expire(token, self.expiretime)
-
-    # 取得使用者輸入
-    def input(self,input):
-        if self.status["step"] == 1:
-            raise Exception("第一步驟，從簽署者輸出公鑰，不需要輸入任何東西。")
-        elif self.status["step"] == 2:
-            input = json.loads(input)
-            self.status["C1"] = input["C1"]
-            self.status["C2"] = input["C2"]
-            self.status["N"] = input["N"]
-            self.status["g"] = input["g"]
-            self.zero_knowledge_proof_vefify(input)
-        elif self.status["step"] == 3:
-            pass
-        elif self.status["step"] == 4:
-            pass
-
-    # 取得輸出
-    def output(self):
-        if self.status["step"] == 1:
-            return json.dumps({"K1x":self.K1x, "K1y":self.K1y, "b_list":self.status["b_list"]})
 
     # 零知識證明驗證
     def zero_knowledge_proof_vefify(self, input:dict):
@@ -171,3 +137,63 @@ class PartiallyBlindSignatureServerInterface:
                     break
         return result
 
+    # 生成 i list
+    def generate_i_list(self):
+        i_list = []
+        for i in range(self.LengthOfu):
+            u = random.randrange(self.LengthOfi)
+            while u in i_list:
+                u = random.randrange(self.LengthOfi)
+            i_list.append(u)
+        i_list.sort()
+        self.i_list = i_list
+
+    # 創建新的認證狀態，或者載入舊的
+    def create_or_load_status(self,token):
+        status = json.loads(self.redis_connection.get(token))
+        if 'step' in status:
+            self.status = status
+        else:
+            status['step'] = 1
+            status['i_list'] = self.generate_i_list()
+            status['b_list'] = self.generate_b_list()
+            self.redis_connection.set(token, json.dumps(status))
+            self.redis_connection.expire(token, self.expiretime)
+            self.status = status
+
+    # 儲存並且前進到下個步驟
+    def save_and_next_step(self,token):
+        self.status['step'] += 1
+        self.redis_connection.set(token,json.dumps(self.status))
+        self.redis_connection.expire(token, self.expiretime)
+
+    # 取得使用者輸入
+    def input(self,input):
+        input = json.loads(input)
+        if self.status["step"] == 1:
+            raise Exception("第一步驟，從簽署者輸出公鑰，不需要輸入任何東西。")
+        elif self.status["step"] == 2:            
+            self.status["C1"] = input["C1"]
+            self.status["C2"] = input["C2"]
+            self.status["N"] = input["N"]
+            self.status["g"] = input["g"]
+            self.status["F_list"] = input["F_list"]
+            self.zero_knowledge_proof_vefify(input)
+        elif self.status["step"] == 3:
+            pass
+        elif self.status["step"] == 4:
+            self.status["L_list"] = input["L_list"]
+
+    # 取得輸出
+    def output(self):
+        if self.status["step"] == 1:
+            return json.dumps({"K1x":self.K1x, "K1y":self.K1y, "b_list":self.status["b_list"]})
+        if self.status["step"] == 2:
+            pass
+        if self.status["step"] == 3:
+            self.generate_i_list()
+            return json.dumps({"i_list":self.i_list})
+        if self.status["step"] == 4:
+            pass
+        if self.status["step"] == 5:
+            pass

@@ -31,11 +31,12 @@ ZeroKnowledgeProofC2List: List，20個C2'的零知識證明參數(x,r')或者(x'
 
 N: Yi的公鑰1
 g: Yi的公鑰2
+
+F1 ~ Fn: 加密的公開訊息Hash
 =================
 signer寄送-3
 
 i_list: 20個，1~40之間的數字。
-C: int，簽章。
 =================
 user寄送-4
 
@@ -98,6 +99,8 @@ class PartiallyBlindSignatureClientInterface:
         # 列表
         self.l_list = None # 由n個小於phi(N^2)並且與N互質的整數組成。
         self.LengthOfL = 40 # L 列表長度
+        self.F_list = None
+        self.i_list = None
 
     def set_K1(self, K1_x, K1_y):
         """設置點K1
@@ -169,23 +172,6 @@ class PartiallyBlindSignatureClientInterface:
         self.set_K1(input_object["K1x"], input_object["K1y"])
         self.b_list = input_object["b_list"]
 
-    def generate_keypairs_parameters(self):
-        # 生成Yi的公私鑰
-        Yi = YiModifiedPaillierEncryptionPy()
-        Yi.generate_keypairs(self.q)
-        self.p = Yi.p 
-        self.k = Yi.k
-        self.N = Yi.N
-        self.g = Yi.g
-        self.r1 = self.generate_r()
-        self.r2 = self.generate_r()
-        self.k2 = self.find_random_co_prime(self.q)
-        self.t = self.generate_t()
-        self.K = ellipticcurve.math.Math.multiply(self.K1, int(self.k2), self.curve_N, self.curve_A, self.curve_P)
-        self.C1 = self.encrypt(self.message_hash, self.N, self.g, self.r1, self.q)
-        self.C2 = self.encrypt(self.t, self.N, self.g, self.r2, self.q)
-        self.l_list = self.generate_l_list()
-
     def generate_zero_know_proof_parameter_set(self,info:int,r:int,b:int)->dict:
         """
         生成零知識證明參數
@@ -229,10 +215,52 @@ class PartiallyBlindSignatureClientInterface:
 
         return result
 
+    def generate_F_list(self):
+        '''
+        生成 F list
+        '''
+        F_list = []
+        for i in range(self.LengthOfL):
+            l_i_mul_I = gmpy2.mul(self.l_list[i], self.I)
+            F_i = self.encrypt(l_i_mul_I,self.N,self.g,self.l_list[i],self.q)
+            F_list.append(F_i)
+        return F_list 
+
+    def generate_keypairs_parameters(self):
+        # 生成Yi的公私鑰
+        Yi = YiModifiedPaillierEncryptionPy()
+        Yi.generate_keypairs(self.q)
+        self.p = Yi.p 
+        self.k = Yi.k
+        self.N = Yi.N
+        self.g = Yi.g
+        self.r1 = self.generate_r()
+        self.r2 = self.generate_r()
+        self.k2 = self.find_random_co_prime(self.q)
+        self.t = self.generate_t()
+        self.K = ellipticcurve.math.Math.multiply(self.K1, int(self.k2), self.curve_N, self.curve_A, self.curve_P)
+        self.C1 = self.encrypt(self.message_hash, self.N, self.g, self.r1, self.q)
+        self.C2 = self.encrypt(self.t, self.N, self.g, self.r2, self.q)
+        self.l_list = self.generate_l_list()
+        self.F_list = self.generate_F_list()
+
     def step1_output(self):
         result = self.generate_zero_know_proof_parameter_sets()
         result['N'] = int(self.N)
         result['g'] = int(self.g)
         result['C1'] = int(self.C1)
         result['C2'] = int(self.C2)
+        result['F_list'] = self.F_list
+        return json.dumps(result)
+
+    def step3_input(self, input:str):
+        input_object = json.loads(input)
+        self.i_list = input_object["i_list"]
+
+    def step4_output(self):
+        j = random.choice(self.i_list)
+        l_list = self.l_list.copy()
+        del l_list[j]
+        result = dict()
+        result['L_list'] = l_list
         return json.dumps(result)

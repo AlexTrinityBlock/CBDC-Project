@@ -53,6 +53,17 @@ class TestAlgorithm(TestCase):
         user_step1 = user.step1_output()
 
         signer.input(user_step1)
+        signer.save_and_next_step(token)
+        signer_step3 = signer.output()
+        signer.save_and_next_step(token)
+        
+        user.step3_input(signer_step3)
+        use_step4_output = user.step4_output()
+
+        signer.input(use_step4_output)
+        signer.save_and_next_step(token)
+
+        signer.output()
 
         redis_connection_0.delete(token)
         redis_connection_1.delete('user')
