@@ -66,6 +66,11 @@ class PartiallyBlindSignatureServerInterface:
         self.Q = PublicKey.fromPem(self.ECDSA_PUBLICKEY_2)
         self.Qx = self.Q.point.x
         self.Qy = self.Q.point.y
+        # 公共參數
+        self.G = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).curve.G
+        self.curve_N = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).curve.N
+        self.curve_A =PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).curve.A
+        self.curve_P = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).curve.P
         # 零知識證明次數
         self.NumberOfZeroKnowledgeProofRound = 20
         # User端的L長度
