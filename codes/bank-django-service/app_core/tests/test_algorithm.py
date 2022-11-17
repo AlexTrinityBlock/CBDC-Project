@@ -66,5 +66,20 @@ class TestAlgorithm(TestCase):
         signer_step5 = signer.output()
         user.step5_input(signer_step5)
 
+        # 檢查 C1, C2
+        Yi = YiModifiedPaillierEncryptionPy()
+        signer_C1 = signer.status["C1"]
+        signer_C2 = signer.status["C2"]
+        user_C1 = user.C1
+        user_C2 = user.C2
+        result1 = Yi.decrypt(user_C1,user.p,user.k,user.q,user.N)
+        print("原始C1: ",user.message_hash)
+        print("解密後C1: ",result1)
+        print("\n\n")
+
+        result2 = Yi.decrypt(user_C2,user.p,user.k,user.q,user.N)
+        print("原始C2: ",user.t)
+        print("解密後C2: ",result2)
+
         redis_connection_0.delete(token)
         redis_connection_1.delete('user')

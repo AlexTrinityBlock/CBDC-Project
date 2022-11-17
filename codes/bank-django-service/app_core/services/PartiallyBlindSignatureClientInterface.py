@@ -181,6 +181,7 @@ class PartiallyBlindSignatureClientInterface:
         如果是C1的話info 就是 Hash(m)
         如果是C2的話info就是Hash(info)
         """
+        Yi = YiModifiedPaillierEncryptionPy()
         result = dict()
         temp = dict()
         temp['x'] = random.randrange(self.q)
@@ -195,7 +196,7 @@ class PartiallyBlindSignatureClientInterface:
             result['xp'] = int(temp['xp'])
             result['rpp'] = int(temp['rpp'])
 
-        result['Cp'] = self.encrypt(temp['x'], self.N, self.g, temp['rp'], self.q)
+        result['Cp'] = Yi.encrypt(temp['x'], self.N, self.g, temp['rp'], self.q)
 
         return result
 
@@ -291,8 +292,8 @@ class PartiallyBlindSignatureClientInterface:
         vQ = ellipticcurve.math.Math.multiply(self.K1, v, self.curve_N, self.curve_A, self.curve_P)
         point = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
         t_p = gmpy2.mod(point.x,self.q)
-        print("t",self.t)
-        print("t'",t_p)
-        print("Kx'",point.x)
-        print("Kx",self.K.x)
+        # print("t",self.t)
+        # print("t'",t_p)
+        # print("Kx'",point.x)
+        # print("Kx",self.K.x)
         pass
