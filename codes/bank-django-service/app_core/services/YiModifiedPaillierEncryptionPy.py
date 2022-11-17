@@ -304,7 +304,7 @@ class YiModifiedPaillierEncryptionPy:
         keys = self.generate_keypairs(q)
         C1 = self.encrypt(m1, keys["PublicKey_N"], keys["PublicKey_g"], keys["RandomNumber_r"], q)
         D1 = self.decrypt(C1, keys["PrivateKey_p"], keys["PrivateKey_k"], q, keys["PublicKey_N"])
-        if C1 == D1:
+        if m1 != D1:
             raise Exception("加密後的數字密文無法順利解密回數字明文，請重新調整該類別。")
         cost_time = time.time() - start_time
         # 自檢字串加解密
@@ -312,7 +312,7 @@ class YiModifiedPaillierEncryptionPy:
         keys = self.generate_keypairs(q)
         C2 = self.encrypt_string(m2, keys["PublicKey_N"], keys["PublicKey_g"], keys["RandomNumber_r"], q)
         D2 = self.decrypt_string(C2, keys["PrivateKey_p"], keys["PrivateKey_k"], q, keys["PublicKey_N"])
-        if C2 == D2:
+        if m2 != D2:
             raise Exception("加密後的文字密文無法順利解密回文字明文，請重新調整該類別。")
         print("類別自我測試完成，加密後仍能順利解密。")
         print("生成鑰匙與加解密耗時%f 秒"%(cost_time))
