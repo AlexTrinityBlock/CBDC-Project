@@ -55,12 +55,11 @@ class PartiallyBlindSignatureServerInterface:
         self.ECDSA_PUBLICKEY_2 = os.environ['ECDSA_PUBLICKEY_2']
         self.ECDSA_PRIVATEKEY_2 = os.environ['ECDSA_PRIVATEKEY_2']
         # 從ECDSA PUBLICKEY取得X,Y軸
-        publicKey = PublicKey.fromPem(self.ECDSA_PUBLICKEY)
-        privateKey = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY)
-        self.K1x = publicKey.point.x
-        self.K1y = publicKey.point.y
-        self.q = publicKey.curve.N
-        self.k1 = privateKey.secret
+        self.K1 = PublicKey.fromPem(self.ECDSA_PUBLICKEY)
+        self.K1x = self.K1.point.x
+        self.K1y = self.K1.point.y
+        self.q = self.K1.curve.N
+        self.k1 = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY).secret
         # 第二把ECDSA 鑰匙對
         self.d = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).secret
         self.Q = PublicKey.fromPem(self.ECDSA_PUBLICKEY_2)
