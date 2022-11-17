@@ -66,9 +66,6 @@ class PartiallyBlindSignatureClientInterface:
         self.message_hash = None # 訊息的SHA256轉換成整數
         self.I = None # 雙方共識訊息info的hash
 
-        # 簽章
-        self.t = None # 用來簽署簽署者的公鑰的數值
-        
         # 加密混淆用隨機數
         self.r1 = None
         self.r2 = None
@@ -101,6 +98,12 @@ class PartiallyBlindSignatureClientInterface:
         self.LengthOfL = 40 # L 列表長度
         self.F_list = None
         self.i_list = None
+
+        # 盲簽章
+        self.C = None 
+        self.s = None
+        self.t = None # 用來簽署簽署者的公鑰的數值
+        self.R = None
 
     def set_K1(self, K1_x, K1_y):
         """設置點K1
@@ -264,3 +267,32 @@ class PartiallyBlindSignatureClientInterface:
         result = dict()
         result['L_list'] = l_list
         return json.dumps(result)
+
+    def step5_input(self, input:str):
+        Yi = YiModifiedPaillierEncryptionPy()
+        input_object = json.loads(input)
+        self.C = input_object["C"]
+        temp1 = Yi.decrypt(self.C,self.p, self.k, self.q, self.N)
+        k2_mod_q_inverse = gmpy2.invert(self.k2, self.q)
+        self.s = int(gmpy2.mod(k2_mod_q_inverse*temp1, self.q))
+        R = 0
+        for i in self.i_list:
+            R += self.l_list[i]
+        self.R = int(gmpy2.mod(R,self.q))
+        
+        signature = (self.t,self.s,self.R) # 簽章
+        
+        s_mod_q_inverse = gmpy2.invert(self.s, self.q)
+        u = int(gmpy2.mod(s_mod_q_inverse*(self.message_hash+(self.R * self.I)), self.q))
+        v = int(gmpy2.mod(s_mod_q_inverse * self.t, self.q))
+
+        G = ellipticcurve.point.Point(self.curve_Gx, self.curve_Gy)
+        uG = ellipticcurve.math.Math.multiply(G, u, self.curve_N, self.curve_A, self.curve_P)
+        vQ = ellipticcurve.math.Math.multiply(self.K1, v, self.curve_N, self.curve_A, self.curve_P)
+        point = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
+        t_p = gmpy2.mod(point.x,self.q)
+        print("t",self.t)
+        print("t'",t_p)
+        print("Kx'",point.x)
+        print("Kx",self.K.x)
+        pass

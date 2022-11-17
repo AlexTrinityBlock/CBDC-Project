@@ -52,9 +52,11 @@ class PartiallyBlindSignatureServerInterface:
         self.ECDSA_PRIVATEKEY = os.environ['ECDSA_PRIVATEKEY']
         # 從ECDSA PUBLICKEY取得X,Y軸
         publicKey = PublicKey.fromPem(self.ECDSA_PUBLICKEY)
+        privateKey = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY)
         self.K1x = publicKey.point.x
         self.K1y = publicKey.point.y
         self.q = publicKey.curve.N
+        self.k1 = privateKey.secret
         # 零知識證明次數
         self.NumberOfZeroKnowledgeProofRound = 20
         # User端的L長度
@@ -72,6 +74,8 @@ class PartiallyBlindSignatureServerInterface:
         self.F_list = None
         # i list
         self.i_list = None
+        # 盲簽章
+        self.C = None
 
     # 生成隨機二進位序列
     def generate_b_list(self):
@@ -161,6 +165,28 @@ class PartiallyBlindSignatureServerInterface:
             self.redis_connection.expire(token, self.expiretime)
             self.status = status
 
+    # 驗證 F 與 l 之間的關聯
+    def verify_L_F(self):
+        pass
+
+    # 建立盲簽章C
+    def generate_C(self):
+        Yi = YiModifiedPaillierEncryptionPy()
+        r = Yi.generate_r(self.status["N"])
+        N_pow_2 = pow(self.status["N"], 2)
+        k1_mod_q_mod_inverse= gmpy2.invert(self.k1, self.q)
+        C1 = gmpy2.mpz(self.status["C1"])
+        C2 = gmpy2.mpz(self.status["C2"])
+        F1_to_Fn = self.status["F_list"]
+        C1_C2_F_list_mul = C1*C2
+        for Fi in F1_to_Fn:
+            Fi = gmpy2.mpz(Fi)
+            C1_C2_F_list_mul *= Fi
+        temp1 = gmpy2.powmod(C1_C2_F_list_mul, k1_mod_q_mod_inverse, N_pow_2)
+        result = gmpy2.mod(temp1 * gmpy2.powmod(r,self.status["N"],N_pow_2),N_pow_2)
+        self.status["C"] = int(result)
+        self.C = int(result)
+
     # 儲存並且前進到下個步驟
     def save_and_next_step(self,token):
         self.status['step'] += 1
@@ -196,4 +222,5 @@ class PartiallyBlindSignatureServerInterface:
         if self.status["step"] == 4:
             pass
         if self.status["step"] == 5:
-            pass
+            self.generate_C()
+            return json.dumps({"C":self.C})
