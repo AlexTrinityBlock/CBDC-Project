@@ -178,7 +178,9 @@ class PartiallyBlindSignatureServerInterface:
         C1 = gmpy2.mpz(self.status["C1"])
         C2 = gmpy2.mpz(self.status["C2"])
         F1_to_Fn = self.status["F_list"]
-        C1_C2_F_list_mul = C1*C2
+        privateKey = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY)
+        C1_C2_F_list_mul = C1*gmpy2.powmod(C2,privateKey.secret,self.q)
+        self.C2_mul_d_mod_q = gmpy2.powmod(C2,privateKey.secret,self.q) # 暫存
         for Fi in F1_to_Fn:
             Fi = gmpy2.mpz(Fi)
             C1_C2_F_list_mul *= Fi

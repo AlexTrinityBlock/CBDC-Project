@@ -72,14 +72,14 @@ class TestAlgorithm(TestCase):
         signer_C2 = signer.status["C2"]
         user_C1 = user.C1
         user_C2 = user.C2
-        result1 = Yi.decrypt(user_C1,user.p,user.k,user.q,user.N)
-        print("原始C1: ",user.message_hash)
-        print("解密後C1: ",result1)
-        print("\n\n")
-
-        result2 = Yi.decrypt(user_C2,user.p,user.k,user.q,user.N)
-        print("原始C2: ",user.t)
-        print("解密後C2: ",result2)
+        # result1 = Yi.decrypt(user_C1,user.p,user.k,user.q,user.N)
+        # print("原始C1: ",user.message_hash)
+        # print("解密後C1: ",result1)
+        # print("\n\n")
+        # result2 = Yi.decrypt(user_C2,user.p,user.k,user.q,user.N)
+        # print("原始C2: ",user.t)
+        # print("解密後C2: ",result2)
+        print("C2^d: ",signer.C2_mul_d_mod_q)
 
         redis_connection_0.delete(token)
         redis_connection_1.delete('user')
