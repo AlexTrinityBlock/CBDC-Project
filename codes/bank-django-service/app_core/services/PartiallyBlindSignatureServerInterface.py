@@ -15,6 +15,8 @@ signer寄送-1
 
 K1x: int，ECDSA 公鑰
 K1y: int，ECDSA 公鑰
+Qx: int，ECDSA 公鑰2
+Qy: int，ECDSA 公鑰2
 b_list: 一串0/1，20個。
 =================
 user寄送-2
@@ -50,6 +52,8 @@ class PartiallyBlindSignatureServerInterface:
         # 從環境變數取得ECDSA鑰匙
         self.ECDSA_PUBLICKEY = os.environ['ECDSA_PUBLICKEY']
         self.ECDSA_PRIVATEKEY = os.environ['ECDSA_PRIVATEKEY']
+        self.ECDSA_PUBLICKEY_2 = os.environ['ECDSA_PUBLICKEY_2']
+        self.ECDSA_PRIVATEKEY_2 = os.environ['ECDSA_PRIVATEKEY_2']
         # 從ECDSA PUBLICKEY取得X,Y軸
         publicKey = PublicKey.fromPem(self.ECDSA_PUBLICKEY)
         privateKey = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY)
@@ -57,6 +61,11 @@ class PartiallyBlindSignatureServerInterface:
         self.K1y = publicKey.point.y
         self.q = publicKey.curve.N
         self.k1 = privateKey.secret
+        # 第二把ECDSA 鑰匙對
+        self.d = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).secret
+        self.Q = PublicKey.fromPem(self.ECDSA_PUBLICKEY_2)
+        self.Qx = self.Q.point.x
+        self.Qy = self.Q.point.y
         # 零知識證明次數
         self.NumberOfZeroKnowledgeProofRound = 20
         # User端的L長度
@@ -178,9 +187,8 @@ class PartiallyBlindSignatureServerInterface:
         C1 = gmpy2.mpz(self.status["C1"])
         C2 = gmpy2.mpz(self.status["C2"])
         F1_to_Fn = self.status["F_list"]
-        privateKey = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY)
-        C1_C2_F_list_mul = C1*gmpy2.powmod(C2,privateKey.secret,self.q)
-        self.C2_mul_d_mod_q = gmpy2.powmod(C2,privateKey.secret,self.q) # 暫存
+        C2_mul_d_mod_q = gmpy2.powmod(C2,self.d,self.q) 
+        C1_C2_F_list_mul = C1*C2_mul_d_mod_q
         for Fi in F1_to_Fn:
             Fi = gmpy2.mpz(Fi)
             C1_C2_F_list_mul *= Fi
@@ -215,7 +223,13 @@ class PartiallyBlindSignatureServerInterface:
     # 取得輸出
     def output(self):
         if self.status["step"] == 1:
-            return json.dumps({"K1x":self.K1x, "K1y":self.K1y, "b_list":self.status["b_list"]})
+            return json.dumps({
+                "K1x":self.K1x,
+                "K1y":self.K1y,
+                "b_list":self.status["b_list"],
+                "Qx":self.Qx,
+                "Qy":self.Qy
+            })
         if self.status["step"] == 2:
             pass
         if self.status["step"] == 3:

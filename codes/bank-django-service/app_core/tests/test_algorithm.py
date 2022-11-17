@@ -79,7 +79,7 @@ class TestAlgorithm(TestCase):
         # result2 = Yi.decrypt(user_C2,user.p,user.k,user.q,user.N)
         # print("原始C2: ",user.t)
         # print("解密後C2: ",result2)
-        print("C2^d: ",signer.C2_mul_d_mod_q)
+        # print("C2^d: ",signer.C2_mul_d_mod_q)
 
         redis_connection_0.delete(token)
         redis_connection_1.delete('user')

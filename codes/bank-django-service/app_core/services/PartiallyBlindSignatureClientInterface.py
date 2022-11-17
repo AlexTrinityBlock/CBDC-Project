@@ -89,6 +89,8 @@ class PartiallyBlindSignatureClientInterface:
         # ECDSA 點
         self.K = None # 使用者 ECDSA 的公鑰x,y座標，可以用 self.K.x, self.K.y
         self.K1 = None # 簽署者 ECDSA 的公鑰x,y座標，self.K1.x, self.K1.y
+        self.Qx = None # 簽署者 ECDSA 的公鑰x座標
+        self.Qy = None # 簽署者 ECDSA 的公鑰y座標
 
         # 零知識證明次數
         self.NumberOfZeroKnowledgeProofRound = 20
@@ -174,6 +176,8 @@ class PartiallyBlindSignatureClientInterface:
         input_object = json.loads(input)
         self.set_K1(input_object["K1x"], input_object["K1y"])
         self.b_list = input_object["b_list"]
+        self.Qx = input_object["Qx"]
+        self.Qy = input_object["Qy"]
 
     def generate_zero_know_proof_parameter_set(self,info:int,r:int,b:int)->dict:
         """
@@ -288,12 +292,13 @@ class PartiallyBlindSignatureClientInterface:
         v = int(gmpy2.mod(s_mod_q_inverse * self.t, self.q))
 
         G = ellipticcurve.point.Point(self.curve_Gx, self.curve_Gy)
+        Q = ellipticcurve.point.Point(self.Qx, self.Qy)
         uG = ellipticcurve.math.Math.multiply(G, u, self.curve_N, self.curve_A, self.curve_P)
-        vQ = ellipticcurve.math.Math.multiply(self.K1, v, self.curve_N, self.curve_A, self.curve_P)
+        vQ = ellipticcurve.math.Math.multiply(Q, v, self.curve_N, self.curve_A, self.curve_P)
         point = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
         t_p = gmpy2.mod(point.x,self.q)
-        # print("t",self.t)
-        # print("t'",t_p)
+        print("t",self.t)
+        print("t'",t_p)
         # print("Kx'",point.x)
         # print("Kx",self.K.x)
         pass
