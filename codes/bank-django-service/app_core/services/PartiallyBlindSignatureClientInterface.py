@@ -297,8 +297,8 @@ class PartiallyBlindSignatureClientInterface:
         vQ = ellipticcurve.math.Math.multiply(Q, v, self.curve_N, self.curve_A, self.curve_P)
         point = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
         t_p = gmpy2.mod(point.x,self.q)
-        print("t",self.t)
-        print("t'",t_p)
+        # print("t",self.t)
+        # print("t'",t_p)
         # print("Kx'",point.x)
         # print("Kx",self.K.x)
         pass
