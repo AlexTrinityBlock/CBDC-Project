@@ -306,5 +306,5 @@ class PartiallyBlindSignatureClientInterface:
 
         print("t",self.t)
         print("t'",K_p.x%self.q)
-        print("Kx'",K_p.x)
-        print("Kx",self.K.x)
+        # print("Kx'",K_p.x)
+        # print("Kx",self.K.x)
