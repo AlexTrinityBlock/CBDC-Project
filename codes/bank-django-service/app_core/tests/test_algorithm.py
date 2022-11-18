@@ -85,7 +85,8 @@ class TestAlgorithm(TestCase):
         user.step5_input(signer_step5)
 
         print("C的解密: ",user.temp1)
-        print("(H(m)+td+RI)*(k1^-1) mod q: ",gmpy2.mod((user.message_hash+(user.t*signer.d)+(user.R*user.I))*signer.k1_mod_q_mod_inverse,signer.q))
+        print("(H(m)+td+RI)*(k1^-1) mod q: ",
+        gmpy2.mod((user.message_hash+(user.t*signer.d)+(user.R*user.I))*signer.k1_mod_q_mod_inverse,signer.q))
 
         # 檢查 C1, C2
         # Yi = YiModifiedPaillierEncryptionPy()
