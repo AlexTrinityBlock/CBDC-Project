@@ -267,11 +267,12 @@ class PartiallyBlindSignatureClientInterface:
         self.i_list = input_object["i_list"]
 
     def step4_output(self):
-        j = random.choice(self.i_list)
+        self.j = random.choice(self.i_list)
         l_list = self.l_list.copy()
-        del l_list[j]
+        del l_list[self.j]
         result = dict()
         result['L_list'] = l_list
+        result['j'] = self.j
         return json.dumps(result)
 
     def step5_input(self, input:str):
@@ -279,11 +280,15 @@ class PartiallyBlindSignatureClientInterface:
         input_object = json.loads(input)
         self.C = input_object["C"]
         temp1 = Yi.decrypt(self.C,self.p, self.k, self.q, self.N)
+        self.temp1 = temp1
         k2_mod_q_inverse = gmpy2.invert(self.k2, self.q)
         self.s = int(gmpy2.mod(k2_mod_q_inverse*temp1, self.q))
+        self.i_list.remove(self.j)
+        print("使用者i list:",self.i_list)
         R = 0
         for i in self.i_list:
             R += self.l_list[i]
+        R -= self.j
         self.R = int(gmpy2.mod(R,self.q))
         
         signature = (self.t,self.s,self.R) # 簽章

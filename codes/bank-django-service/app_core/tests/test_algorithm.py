@@ -10,6 +10,7 @@ from app_core.services.PartiallyBlindSignatureServerInterface import PartiallyBl
 from app_core.services.Login import Login
 import requests
 import redis
+import gmpy2
 
 class TestAlgorithm(TestCase):
     
@@ -44,6 +45,8 @@ class TestAlgorithm(TestCase):
         signer = PartiallyBlindSignatureServerInterface(token)
         signer_step1 = signer.output()
         signer.save_and_next_step(token)
+        # print(signer.K1x)
+        # print(signer.ECDSA_PRIVATEKEY)
         # print("簽署者將公鑰傳遞給使用者，並且將零知識證明的提問順便傳送")
         # pprint(signer_step1)
         # print("")
@@ -81,6 +84,9 @@ class TestAlgorithm(TestCase):
 
         user.step5_input(signer_step5)
 
+        print("temp1:",user.temp1)
+        print("temp1'",gmpy2.mod((user.message_hash+(user.t*signer.d)+(user.R*user.I))*signer.k1_mod_q_mod_inverse,signer.q))
+
         # 檢查 C1, C2
         # Yi = YiModifiedPaillierEncryptionPy()
         # signer_C1 = signer.status["C1"]
@@ -94,7 +100,11 @@ class TestAlgorithm(TestCase):
         # result2 = Yi.decrypt(user_C2,user.p,user.k,user.q,user.N)
         # print("原始C2: ",user.t)
         # print("解密後C2: ",result2)
-        # print("C2^d: ",signer.C2_mul_d_mod_q)
+
+        # var1 = Yi.decrypt(signer.C2_pow_d_mod_N_pow_2,user.p,user.k,user.q,user.N)
+        # print(var1)
+        # print(gmpy2.mod(user.t*signer.d,signer.q))
+        # print(signer.i_list)
 
         redis_connection_0.delete(token)
         redis_connection_1.delete('user')

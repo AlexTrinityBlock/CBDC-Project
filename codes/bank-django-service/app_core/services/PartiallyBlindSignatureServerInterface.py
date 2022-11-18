@@ -184,22 +184,27 @@ class PartiallyBlindSignatureServerInterface:
 
     # 建立盲簽章C
     def generate_C(self):
-        Yi = YiModifiedPaillierEncryptionPy()
-        r = Yi.generate_r(self.status["N"])
-        N_pow_2 = pow(self.status["N"], 2)
+        Yi = YiModifiedPaillierEncryptionPy() # Yi的加解密
+        r = Yi.generate_r(self.status["N"])  # 生成混淆r
+        N_pow_2 = pow(self.status["N"], 2) 
         k1_mod_q_mod_inverse= gmpy2.invert(self.k1, self.q)
+        self.k1_mod_q_mod_inverse = k1_mod_q_mod_inverse
         C1 = gmpy2.mpz(self.status["C1"])
         C2 = gmpy2.mpz(self.status["C2"])
         F1_to_Fn = self.status["F_list"]
         d = gmpy2.mpz(self.d)
         # 把C2^d 改成 C2^d mod q 
-        C2_pow_d_mod_q = gmpy2.powmod(C2,self.d,self.q) # 無法肯定是否可行
-        C1_C2_F_list_mul = C1*C2_pow_d_mod_q
+        C2_pow_d_mod_N_pow_2 = gmpy2.powmod(C2,self.d,pow(self.status["N"], 2)) # 無法肯定是否可行
+        C1_C2_F_list_mul = C1*C2_pow_d_mod_N_pow_2
+        self.C2_pow_d_mod_N_pow_2 = C2_pow_d_mod_N_pow_2
         # C2^d (應該會指數過大)
         # C2_pow_d = pow(C2,d)
         # C1_C2_F_list_mul = C1*C2_pow_d
-        for Fi in F1_to_Fn:
-            Fi = gmpy2.mpz(Fi)
+        j = self.status["j"]
+        self.i_list.remove(j)
+        print("簽署者i list:",self.i_list)
+        for i in self.i_list:
+            Fi = self.status["F_list"][i]
             C1_C2_F_list_mul *= Fi
         temp1 = gmpy2.powmod(C1_C2_F_list_mul, k1_mod_q_mod_inverse, N_pow_2)
         result = gmpy2.mod(temp1 * gmpy2.powmod(r,self.status["N"],N_pow_2),N_pow_2)
@@ -228,6 +233,7 @@ class PartiallyBlindSignatureServerInterface:
             pass
         elif self.status["step"] == 4:
             self.status["L_list"] = input["L_list"]
+            self.status["j"] = input["j"]
 
     # 取得輸出
     def output(self):
