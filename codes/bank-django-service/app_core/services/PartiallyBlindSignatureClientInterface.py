@@ -31,11 +31,12 @@ ZeroKnowledgeProofC2List: List，20個C2'的零知識證明參數(x,r')或者(x'
 
 N: Yi的公鑰1
 g: Yi的公鑰2
+
+F1 ~ Fn: 加密的公開訊息Hash
 =================
 signer寄送-3
 
 i_list: 20個，1~40之間的數字。
-C: int，簽章。
 =================
 user寄送-4
 
@@ -65,9 +66,6 @@ class PartiallyBlindSignatureClientInterface:
         self.message_hash = None # 訊息的SHA256轉換成整數
         self.I = None # 雙方共識訊息info的hash
 
-        # 簽章
-        self.t = None # 用來簽署簽署者的公鑰的數值
-        
         # 加密混淆用隨機數
         self.r1 = None
         self.r2 = None
@@ -80,17 +78,20 @@ class PartiallyBlindSignatureClientInterface:
         self.C2 = None
 
         # ECDSA曲線參數 - secp256k1
-        self.curve_A = 0
-        self.curve_B = 7
-        self.curve_N = 115792089237316195423570985008687907852837564279074904382605163141518161494337 #等同該演算法中的q
-        self.curve_P = 115792089237316195423570985008687907853269984665640564039457584007908834671663
-        self.curve_Gx = 55066263022277343669578718895168534326250603453777594175500187360389116729240
-        self.curve_Gy = 32670510020758816978083085130507043184471273380659243275938904335757337482424
+        self.G = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.G
+        self.curve_Gx = self.G.x
+        self.curve_Gy = self.G.y
+        self.curve_A = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.A
+        self.curve_B = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.B
+        self.curve_N = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.N
+        self.curve_P = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.P
         self.q = self.curve_N
 
         # ECDSA 點
         self.K = None # 使用者 ECDSA 的公鑰x,y座標，可以用 self.K.x, self.K.y
         self.K1 = None # 簽署者 ECDSA 的公鑰x,y座標，self.K1.x, self.K1.y
+        self.Qx = None # 簽署者 ECDSA 的公鑰x座標
+        self.Qy = None # 簽署者 ECDSA 的公鑰y座標
 
         # 零知識證明次數
         self.NumberOfZeroKnowledgeProofRound = 20
@@ -98,6 +99,14 @@ class PartiallyBlindSignatureClientInterface:
         # 列表
         self.l_list = None # 由n個小於phi(N^2)並且與N互質的整數組成。
         self.LengthOfL = 40 # L 列表長度
+        self.F_list = None
+        self.i_list = None
+
+        # 盲簽章
+        self.C = None 
+        self.s = None
+        self.t = None # 用來簽署簽署者的公鑰的數值
+        self.R = None
 
     def set_K1(self, K1_x, K1_y):
         """設置點K1
@@ -138,9 +147,9 @@ class PartiallyBlindSignatureClientInterface:
         return r
 
     def generate_t(self):
-        Kx = gmpy2.mpz(self.K1.x)
-        self.t = gmpy2.mod(Kx, self.q)
-        return int(self.t)
+        Kx = gmpy2.mpz(self.K.x)
+        t = gmpy2.mod(Kx, self.q)
+        return int(t)
 
     def find_random_co_prime(self, n:int):
         result = random.randrange(deepcopy(n)) #尋找極限以下的隨機數
@@ -168,23 +177,8 @@ class PartiallyBlindSignatureClientInterface:
         input_object = json.loads(input)
         self.set_K1(input_object["K1x"], input_object["K1y"])
         self.b_list = input_object["b_list"]
-
-    def generate_keypairs_parameters(self):
-        # 生成Yi的公私鑰
-        Yi = YiModifiedPaillierEncryptionPy()
-        Yi.generate_keypairs(self.q)
-        self.p = Yi.p 
-        self.k = Yi.k
-        self.N = Yi.N
-        self.g = Yi.g
-        self.r1 = self.generate_r()
-        self.r2 = self.generate_r()
-        self.k2 = self.find_random_co_prime(self.q)
-        self.t = self.generate_t()
-        self.K = ellipticcurve.math.Math.multiply(self.K1, int(self.k2), self.curve_N, self.curve_A, self.curve_P)
-        self.C1 = self.encrypt(self.message_hash, self.N, self.g, self.r1, self.q)
-        self.C2 = self.encrypt(self.t, self.N, self.g, self.r2, self.q)
-        self.l_list = self.generate_l_list()
+        self.Qx = input_object["Qx"]
+        self.Qy = input_object["Qy"]
 
     def generate_zero_know_proof_parameter_set(self,info:int,r:int,b:int)->dict:
         """
@@ -192,6 +186,7 @@ class PartiallyBlindSignatureClientInterface:
         如果是C1的話info 就是 Hash(m)
         如果是C2的話info就是Hash(info)
         """
+        Yi = YiModifiedPaillierEncryptionPy()
         result = dict()
         temp = dict()
         temp['x'] = random.randrange(self.q)
@@ -206,7 +201,7 @@ class PartiallyBlindSignatureClientInterface:
             result['xp'] = int(temp['xp'])
             result['rpp'] = int(temp['rpp'])
 
-        result['Cp'] = self.encrypt(temp['x'], self.N, self.g, temp['rp'], self.q)
+        result['Cp'] = Yi.encrypt(temp['x'], self.N, self.g, temp['rp'], self.q)
 
         return result
 
@@ -229,10 +224,87 @@ class PartiallyBlindSignatureClientInterface:
 
         return result
 
+    def generate_F_list(self):
+        '''
+        生成 F list
+        '''
+        Yi = YiModifiedPaillierEncryptionPy()
+        F_list = []
+        for i in range(self.LengthOfL):
+            l_i_mul_I = gmpy2.mul(self.l_list[i], self.I)
+            l_i_mul_I_mod_q = gmpy2.mod(l_i_mul_I, self.q)
+            F_i = Yi.encrypt(l_i_mul_I_mod_q,self.N,self.g,self.l_list[i],self.q)
+            F_list.append(F_i)
+        return F_list 
+
+    def generate_keypairs_parameters(self):
+        # 生成Yi的公私鑰
+        Yi = YiModifiedPaillierEncryptionPy()
+        Yi.generate_keypairs(self.q)
+        self.p = Yi.p 
+        self.k = Yi.k
+        self.N = Yi.N
+        self.g = Yi.g
+        self.r1 = self.generate_r()
+        self.r2 = self.generate_r()
+        self.k2 = self.find_random_co_prime(self.q)
+        self.K = ellipticcurve.math.Math.multiply(self.K1, int(self.k2), self.curve_N, self.curve_A, self.curve_P)
+        self.t = self.generate_t()
+        self.C1 = self.encrypt(self.message_hash, self.N, self.g, self.r1, self.q)
+        self.C2 = self.encrypt(self.t, self.N, self.g, self.r2, self.q)
+        self.l_list = self.generate_l_list()
+        self.F_list = self.generate_F_list()
+
     def step1_output(self):
         result = self.generate_zero_know_proof_parameter_sets()
         result['N'] = int(self.N)
         result['g'] = int(self.g)
         result['C1'] = int(self.C1)
         result['C2'] = int(self.C2)
+        result['F_list'] = self.F_list
         return json.dumps(result)
+
+    def step3_input(self, input:str):
+        input_object = json.loads(input)
+        self.i_list = input_object["i_list"]
+
+    def step4_output(self):
+        self.j = random.choice(self.i_list)
+        l_list = self.l_list.copy()
+        del l_list[self.j]
+        result = dict()
+        result['L_list'] = l_list
+        result['j'] = self.j
+        return json.dumps(result)
+
+    def step5_input(self, input:str):
+        Yi = YiModifiedPaillierEncryptionPy()
+        input_object = json.loads(input)
+        self.C = input_object["C"]
+        temp1 = Yi.decrypt(self.C,self.p, self.k, self.q, self.N)
+        self.temp1 = temp1
+        k2_mod_q_inverse = gmpy2.invert(self.k2, self.q)
+        self.s = int(gmpy2.mod(k2_mod_q_inverse*temp1, self.q))
+        # print("使用者i list:",self.i_list)
+        R = 0
+        for i in self.i_list:
+            R += self.l_list[i]
+        self.R = int(gmpy2.mod(R,self.q))
+        s_mod_q_inverse = gmpy2.invert(self.s, self.q)
+
+        u = int(gmpy2.mod(s_mod_q_inverse*(self.message_hash+(self.R * self.I)), self.q))
+        v = int(gmpy2.mod(s_mod_q_inverse * self.t, self.q))
+
+        G = ellipticcurve.point.Point(self.curve_Gx, self.curve_Gy)
+        Q = ellipticcurve.point.Point(self.Qx, self.Qy)
+
+        uG = ellipticcurve.math.Math.multiply(G, u, self.curve_N, self.curve_A, self.curve_P)
+        vQ = ellipticcurve.math.Math.multiply(Q, v, self.curve_N, self.curve_A, self.curve_P)
+
+        K_p = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
+        t_p = gmpy2.mod(K_p.x,self.q)
+
+        print("t",self.t)
+        print("t'",K_p.x%self.q)
+        # print("Kx'",K_p.x)
+        # print("Kx",self.K.x)
