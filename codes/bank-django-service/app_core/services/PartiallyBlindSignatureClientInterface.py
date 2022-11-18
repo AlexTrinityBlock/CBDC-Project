@@ -228,10 +228,12 @@ class PartiallyBlindSignatureClientInterface:
         '''
         生成 F list
         '''
+        Yi = YiModifiedPaillierEncryptionPy()
         F_list = []
         for i in range(self.LengthOfL):
             l_i_mul_I = gmpy2.mul(self.l_list[i], self.I)
-            F_i = self.encrypt(l_i_mul_I,self.N,self.g,self.l_list[i],self.q)
+            l_i_mul_I_mod_q = gmpy2.mod(l_i_mul_I, self.q)
+            F_i = Yi.encrypt(l_i_mul_I_mod_q,self.N,self.g,self.l_list[i],self.q)
             F_list.append(F_i)
         return F_list 
 
@@ -283,28 +285,27 @@ class PartiallyBlindSignatureClientInterface:
         self.temp1 = temp1
         k2_mod_q_inverse = gmpy2.invert(self.k2, self.q)
         self.s = int(gmpy2.mod(k2_mod_q_inverse*temp1, self.q))
-        self.i_list.remove(self.j)
-        print("使用者i list:",self.i_list)
+        # print("使用者i list:",self.i_list)
         R = 0
         for i in self.i_list:
             R += self.l_list[i]
-        R -= self.j
         self.R = int(gmpy2.mod(R,self.q))
-        
-        signature = (self.t,self.s,self.R) # 簽章
-        
         s_mod_q_inverse = gmpy2.invert(self.s, self.q)
+
         u = int(gmpy2.mod(s_mod_q_inverse*(self.message_hash+(self.R * self.I)), self.q))
         v = int(gmpy2.mod(s_mod_q_inverse * self.t, self.q))
 
         G = ellipticcurve.point.Point(self.curve_Gx, self.curve_Gy)
         Q = ellipticcurve.point.Point(self.Qx, self.Qy)
+
         uG = ellipticcurve.math.Math.multiply(G, u, self.curve_N, self.curve_A, self.curve_P)
         vQ = ellipticcurve.math.Math.multiply(Q, v, self.curve_N, self.curve_A, self.curve_P)
+
         K_p = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
         t_p = gmpy2.mod(K_p.x,self.q)
-        print("t",self.t)
-        print("t'",t_p)
+
+        # print("t",self.t)
+        # print("t'",t_p)
         # print("Kx'",K_p.x)
         # print("Kx",self.K.x)
         pass

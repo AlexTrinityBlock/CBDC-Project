@@ -197,12 +197,7 @@ class PartiallyBlindSignatureServerInterface:
         C2_pow_d_mod_N_pow_2 = gmpy2.powmod(C2,self.d,pow(self.status["N"], 2)) # 無法肯定是否可行
         C1_C2_F_list_mul = C1*C2_pow_d_mod_N_pow_2
         self.C2_pow_d_mod_N_pow_2 = C2_pow_d_mod_N_pow_2
-        # C2^d (應該會指數過大)
-        # C2_pow_d = pow(C2,d)
-        # C1_C2_F_list_mul = C1*C2_pow_d
-        j = self.status["j"]
-        self.i_list.remove(j)
-        print("簽署者i list:",self.i_list)
+        # print("簽署者i list:",self.i_list)
         for i in self.i_list:
             Fi = self.status["F_list"][i]
             C1_C2_F_list_mul *= Fi
