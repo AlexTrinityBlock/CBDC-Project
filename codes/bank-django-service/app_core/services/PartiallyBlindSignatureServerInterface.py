@@ -191,8 +191,13 @@ class PartiallyBlindSignatureServerInterface:
         C1 = gmpy2.mpz(self.status["C1"])
         C2 = gmpy2.mpz(self.status["C2"])
         F1_to_Fn = self.status["F_list"]
-        C2_mul_d_mod_q = gmpy2.powmod(C2,self.d,self.q) # 無法肯定是否可行
-        C1_C2_F_list_mul = C1*C2_mul_d_mod_q
+        d = gmpy2.mpz(self.d)
+        # 把C2^d 改成 C2^d mod q 
+        C2_pow_d_mod_q = gmpy2.powmod(C2,self.d,self.q) # 無法肯定是否可行
+        C1_C2_F_list_mul = C1*C2_pow_d_mod_q
+        # C2^d (應該會指數過大)
+        # C2_pow_d = pow(C2,d)
+        # C1_C2_F_list_mul = C1*C2_pow_d
         for Fi in F1_to_Fn:
             Fi = gmpy2.mpz(Fi)
             C1_C2_F_list_mul *= Fi
@@ -227,6 +232,7 @@ class PartiallyBlindSignatureServerInterface:
     # 取得輸出
     def output(self):
         if self.status["step"] == 1:
+            # 第一階段，簽署者將ECDSA公鑰K1與Q發佈，並且發佈零知識證明的提問b_list。
             return json.dumps({
                 "K1x":self.K1x,
                 "K1y":self.K1y,
@@ -237,10 +243,12 @@ class PartiallyBlindSignatureServerInterface:
         if self.status["step"] == 2:
             pass
         if self.status["step"] == 3:
+            # 從20個F中挑選任意10個，以0~19之間數值表示選擇的數字。
             self.generate_i_list()
             return json.dumps({"i_list":self.i_list})
         if self.status["step"] == 4:
             pass
         if self.status["step"] == 5:
+            # 生成盲簽章C
             self.generate_C()
             return json.dumps({"C":self.C})
