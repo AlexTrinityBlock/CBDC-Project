@@ -55,11 +55,11 @@ class PartiallyBlindSignatureServerInterface:
         self.ECDSA_PUBLICKEY_2 = os.environ['ECDSA_PUBLICKEY_2']
         self.ECDSA_PRIVATEKEY_2 = os.environ['ECDSA_PRIVATEKEY_2']
         # 從ECDSA PUBLICKEY取得X,Y軸
+        self.k1 = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY).secret
         self.K1 = PublicKey.fromPem(self.ECDSA_PUBLICKEY)
         self.K1x = self.K1.point.x
         self.K1y = self.K1.point.y
         self.q = self.K1.curve.N
-        self.k1 = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY).secret
         # 第二把ECDSA 鑰匙對
         self.d = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).secret
         self.Q = PublicKey.fromPem(self.ECDSA_PUBLICKEY_2)
@@ -191,7 +191,7 @@ class PartiallyBlindSignatureServerInterface:
         C1 = gmpy2.mpz(self.status["C1"])
         C2 = gmpy2.mpz(self.status["C2"])
         F1_to_Fn = self.status["F_list"]
-        C2_mul_d_mod_q = gmpy2.powmod(C2,self.d,self.q) 
+        C2_mul_d_mod_q = gmpy2.powmod(C2,self.d,self.q) # 無法肯定是否可行
         C1_C2_F_list_mul = C1*C2_mul_d_mod_q
         for Fi in F1_to_Fn:
             Fi = gmpy2.mpz(Fi)

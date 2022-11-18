@@ -75,9 +75,9 @@ class TestAlgorithm(TestCase):
         signer.input(use_step4_output)
         signer.save_and_next_step(token)
         signer_step5 = signer.output()
-        print("簽署者將C傳給使用者")
-        pprint(signer_step5)
-        print("")
+        # print("簽署者將C傳給使用者")
+        # pprint(signer_step5)
+        # print("")
 
         user.step5_input(signer_step5)
 

@@ -78,12 +78,13 @@ class PartiallyBlindSignatureClientInterface:
         self.C2 = None
 
         # ECDSA曲線參數 - secp256k1
-        self.curve_A = 0
-        self.curve_B = 7
-        self.curve_N = 115792089237316195423570985008687907852837564279074904382605163141518161494337 #等同該演算法中的q
-        self.curve_P = 115792089237316195423570985008687907853269984665640564039457584007908834671663
-        self.curve_Gx = 55066263022277343669578718895168534326250603453777594175500187360389116729240
-        self.curve_Gy = 32670510020758816978083085130507043184471273380659243275938904335757337482424
+        self.G = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.G
+        self.curve_Gx = self.G.x
+        self.curve_Gy = self.G.y
+        self.curve_A = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.A
+        self.curve_B = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.B
+        self.curve_N = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.N
+        self.curve_P = PublicKey.fromPem(os.environ['ECDSA_PUBLICKEY']).curve.P
         self.q = self.curve_N
 
         # ECDSA 點
@@ -295,10 +296,10 @@ class PartiallyBlindSignatureClientInterface:
         Q = ellipticcurve.point.Point(self.Qx, self.Qy)
         uG = ellipticcurve.math.Math.multiply(G, u, self.curve_N, self.curve_A, self.curve_P)
         vQ = ellipticcurve.math.Math.multiply(Q, v, self.curve_N, self.curve_A, self.curve_P)
-        point = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
-        t_p = gmpy2.mod(point.x,self.q)
-        # print("t",self.t)
-        # print("t'",t_p)
-        # print("Kx'",point.x)
+        K_p = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
+        t_p = gmpy2.mod(K_p.x,self.q)
+        print("t",self.t)
+        print("t'",t_p)
+        # print("Kx'",K_p.x)
         # print("Kx",self.K.x)
         pass
