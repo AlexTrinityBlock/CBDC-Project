@@ -147,9 +147,9 @@ class PartiallyBlindSignatureClientInterface:
         return r
 
     def generate_t(self):
-        Kx = gmpy2.mpz(self.K1.x)
-        self.t = gmpy2.mod(Kx, self.q)
-        return int(self.t)
+        Kx = gmpy2.mpz(self.K.x)
+        t = gmpy2.mod(Kx, self.q)
+        return int(t)
 
     def find_random_co_prime(self, n:int):
         result = random.randrange(deepcopy(n)) #尋找極限以下的隨機數
@@ -248,8 +248,8 @@ class PartiallyBlindSignatureClientInterface:
         self.r1 = self.generate_r()
         self.r2 = self.generate_r()
         self.k2 = self.find_random_co_prime(self.q)
-        self.t = self.generate_t()
         self.K = ellipticcurve.math.Math.multiply(self.K1, int(self.k2), self.curve_N, self.curve_A, self.curve_P)
+        self.t = self.generate_t()
         self.C1 = self.encrypt(self.message_hash, self.N, self.g, self.r1, self.q)
         self.C2 = self.encrypt(self.t, self.N, self.g, self.r2, self.q)
         self.l_list = self.generate_l_list()
@@ -304,8 +304,7 @@ class PartiallyBlindSignatureClientInterface:
         K_p = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
         t_p = gmpy2.mod(K_p.x,self.q)
 
-        # print("t",self.t)
-        # print("t'",t_p)
-        # print("Kx'",K_p.x)
-        # print("Kx",self.K.x)
-        pass
+        print("t",self.t)
+        print("t'",K_p.x%self.q)
+        print("Kx'",K_p.x)
+        print("Kx",self.K.x)
