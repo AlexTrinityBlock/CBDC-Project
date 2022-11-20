@@ -15,6 +15,9 @@ urlpatterns = [
     path('api/check_login', views.api_check_login),
     path('api/logout', views.api_logout),
     path('api/register',views.api_register),
+
+    # 密碼學 API
+    path('api/blind-signature/get/Q',views.api_blind_signature_get_Q),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡

@@ -78,34 +78,8 @@ class TestAlgorithm(TestCase):
         signer.input(use_step4_output)
         signer.save_and_next_step(token)
         signer_step5 = signer.output()
-        # print("簽署者將C傳給使用者")
-        # pprint(signer_step5)
-        # print("")
 
         user.step5_input(signer_step5)
-
-        # print("C的解密: ",user.temp1)
-        # print("(H(m)+td+RI)*(k1^-1) mod q: ",
-        # gmpy2.mod((user.message_hash+(user.t*signer.d)+(user.R*user.I))*signer.k1_mod_q_mod_inverse,signer.q))
-
-        # 檢查 C1, C2
-        # Yi = YiModifiedPaillierEncryptionPy()
-        # signer_C1 = signer.status["C1"]
-        # signer_C2 = signer.status["C2"]
-        # user_C1 = user.C1
-        # user_C2 = user.C2
-        # result1 = Yi.decrypt(user_C1,user.p,user.k,user.q,user.N)
-        # print("原始C1: ",user.message_hash)
-        # print("解密後C1: ",result1)
-        # print("\n\n")
-        # result2 = Yi.decrypt(user_C2,user.p,user.k,user.q,user.N)
-        # print("原始C2: ",user.t)
-        # print("解密後C2: ",result2)
-
-        # var1 = Yi.decrypt(signer.C2_pow_d_mod_N_pow_2,user.p,user.k,user.q,user.N)
-        # print(var1)
-        # print(gmpy2.mod(user.t*signer.d,signer.q))
-        # print(signer.i_list)
 
         redis_connection_0.delete(token)
         redis_connection_1.delete('user')

@@ -26,7 +26,11 @@ SECRET_KEY = os.environ['BANK_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    os.environ['BANK_DJANGO_SERVICE_IP'],
+]
 
 
 # Application definition
@@ -140,4 +144,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8085",
     "http://127.0.0.1:8085",
+    os.environ['USER_CRYPTOGRAPHY_SUPPORT_FLASK_SERVICE_URL'],
 ]
