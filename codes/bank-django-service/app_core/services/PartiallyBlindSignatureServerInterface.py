@@ -7,7 +7,7 @@ import ellipticcurve
 from ellipticcurve.privateKey import PrivateKey, PublicKey
 import gmpy2
 import random
-from .YiModifiedPaillierEncryptionPy import YiModifiedPaillierEncryptionPy
+from app_core.services.YiModifiedPaillierEncryptionPy import YiModifiedPaillierEncryptionPy
 """
 Note
 =================
