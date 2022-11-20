@@ -14,6 +14,6 @@ class User(models.Model):
     home_address = models.CharField(null=True,max_length=100)
     e_mail = models.CharField(null=True,max_length= 100)
     phone = models.CharField(null=True,max_length=100)
-    remaining = models.CharField(null=True,max_length=100)
+    remaining = models.IntegerField()
 
     
