@@ -3,9 +3,9 @@ from django.db import models
 # 顧客的貨幣資料表
 class userCurrency(models.Model):
 
-    user_id = models.IntegerField()
-    denomination =models.IntegerField()
-    coin_seq= models.IntegerField()
-    sign_coin_seq = models.IntegerField()
-    spend_check =models.BooleanField()
+    user_id = models.CharField(default="user_id",max_length=100)
+    denomination =models.IntegerField(default=0)
+    coin_seq= models.CharField(default="coin_seq",max_length=100)
+    sign_coin_seq = models.CharField(default="sign_coin_seq",max_length=100)
+    spend_check =models.BooleanField(default=False)
     
