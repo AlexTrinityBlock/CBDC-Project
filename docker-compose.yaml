@@ -160,7 +160,7 @@ services:
       # ECDSA 私鑰2
       ECDSA_PRIVATEKEY_2: ${ECDSA_PRIVATEKEY_2}
       # Django 銀行伺服器的URL
-      BANK_DJANGO_SERVICE_URL: "http://10.0.0.1"
+      BANK_DJANGO_SERVICE_URL: "http://10.0.0.1:8000"
     # 等待資料庫系統運作後再啟動
     #網路IP設置
     networks:

@@ -4,7 +4,6 @@ from pprint import pprint
 import json
 import os
 from unittest import result
-import redis
 import ellipticcurve
 from ellipticcurve.privateKey import PrivateKey, PublicKey
 import gmpy2
