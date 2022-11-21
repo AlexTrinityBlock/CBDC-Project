@@ -11,6 +11,7 @@ def main():
             subprocess.run(['python','/code/manage.py','loaddata','app_core/fixtures/data.json'], check = True)
             subprocess.run(['python','/code/manage.py','runserver','0.0.0.0:8000'], check = True)
             subprocess.run(['chmod','+x','Test'], check = True)
+            subprocess.run(['chmod','+x','SaveSQLData'], check = True)
             subprocess.run(['python','/code/manage.py','test','app_core.tests.test_login'], check = True)
             break
         except subprocess.CalledProcessError:
