@@ -8,5 +8,9 @@ class User(models.Model):
     """
     account = models.CharField(max_length=100)
     password_hash = models.CharField(max_length=100)
-    e_mail = models.CharField(null=True,max_length= 100)
     name = models.CharField(null=True,max_length= 100)
+    id_num = models.CharField(default="Identity Number",max_length=100)
+    home_address = models.CharField(default="Address",max_length=100)
+    e_mail = models.CharField(null=True,max_length= 100)
+    phone =models.CharField(default="09xxxxxxxx",max_length=100)
+    remaining = models.IntegerField(default=0)
