@@ -1,7 +1,7 @@
 from django.db import models
 
 # 顧客的貨幣資料表
-class userCurrency(models.Model):
+class UserCurrency(models.Model):
 
     user_id = models.CharField(default="user_id",max_length=100)
     denomination =models.IntegerField(default=0)
