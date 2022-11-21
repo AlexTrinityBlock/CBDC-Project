@@ -1,7 +1,7 @@
 from django.db import models
 
 # 銀行簽章過的貨幣資料表
-class bankCurrency(models.Model):
+class BankCurrency(models.Model):
 
     user_id = models.CharField(default="user_id",max_length=100)
     denomination =models.IntegerField(default=0)
