@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/blind-signature/init',views.api_blind_signature_init),
     path('api/blind-signature/get/Q',views.api_blind_signature_get_Q),
     path('api/blind-signature/get/K1',views.api_blind_signature_get_K1),
+    path('api/blind-signature/get/q',views.api_blind_signature_get_q),
     path('api/blind-signature/step/1/get/K1/Q/bit-list',views.api_blind_signature_step_1_get_K1_Q_bit_list),
     path('api/blind-signature/step/2/get/i-list',views.api_blind_signature_step_2_get_i_list),
     path('api/blind-signature/step/5/get/C',views.api_blind_signature_step_5_get_C),
@@ -38,4 +39,5 @@ none_login_pages = [
     "api/register",
     "api/blind-signature/get/Q",
     "api/blind-signature/get/K1",
+    "api/blind-signature/get/q",
 ]

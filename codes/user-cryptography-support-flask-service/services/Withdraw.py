@@ -6,25 +6,38 @@ from services.PartiallyBlindSignatureClientInterface import PartiallyBlindSignat
 import requests
 import os
 import json
+import uuid
+import hashlib
+import random
 
 class Withdraw:
     def __init__(self):
         pass
+
+    def hash(self, message:str):
+        """Hash函數H()
+
+        使用SHA256，Hash算法
+        """
+        h = hashlib.new('sha256')
+        h.update(bytes(message, 'utf-8'))
+        hex_string = h.hexdigest()
+        return hex_string
+
     def withdraw(self,request):
-        print("測試盲簽章算法客戶端")
-
-        # 取得token
         url = os.environ['BANK_DJANGO_SERVICE_URL']
-        result = requests.post(url+"/api/login", data={'account': 'user', 'password':'user'}, timeout=3).text
-        token = json.loads(result)['token']
 
-        signer_step1 = requests.post(url+"/api/blind-signature/step/1/get/K1/Q/bit-list", data={'token': token,'withdraw':1}, timeout=3).text
-        signer_step1 = json.loads(signer_step1)
+        withdraw = request.form['withdraw']
+        token = request.form['token']
+        random_number =str(random.randint(0,9999999))
+        secret_message = self.hash(str(uuid.uuid4())+random_number)
+
+        signer_step1 = requests.post(url+"/api/blind-signature/step/1/get/K1/Q/bit-list", data={'token': token,'withdraw':withdraw}, timeout=3).text
+        signer_step1_obj = json.loads(signer_step1)
 
         user= PartiallyBlindSignatureClientInterface()
-        user.generate_message_hash("Message")
-        user.generate_I(signer_step1['PublicInfomation'])
-        print("I:",user.I)
+        user.generate_message_hash(secret_message)
+        user.generate_I(signer_step1_obj['PublicInfomation'])
         user.step1_input(signer_step1)
         user.generate_keypairs_parameters()
         user_step1 = user.step1_output()
@@ -36,4 +49,14 @@ class Withdraw:
         
         signer_step5 = requests.post(url+"/api/blind-signature/step/5/get/C", data={'token': token, 'data':user_step4}, timeout=3).text
 
-        return signer_step5
+        user.step5_input(signer_step5)
+
+        result = dict()
+
+        result['Info'] = signer_step1_obj['PublicInfomation']
+        result['message'] = secret_message
+        result['t'] = user.t
+        result['s'] = user.s
+        result['R'] = user.R
+        
+        return result

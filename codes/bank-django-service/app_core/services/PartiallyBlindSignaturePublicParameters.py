@@ -15,6 +15,7 @@ class PartiallyBlindSignaturePublicParameters:
         self.Q = PublicKey.fromPem(self.ECDSA_PUBLICKEY_2)
         self.Qx = self.Q.point.x
         self.Qy = self.Q.point.y
+        self.q = self.K1.curve.N
     def get_Q(self):
         result = {
             "Qx":self.Qx,
@@ -29,4 +30,8 @@ class PartiallyBlindSignaturePublicParameters:
         }
         return HttpResponse(json.dumps(result))
 
-
+    def get_q(self):
+        result = {
+            "q":self.q
+        }
+        return HttpResponse(json.dumps(result))

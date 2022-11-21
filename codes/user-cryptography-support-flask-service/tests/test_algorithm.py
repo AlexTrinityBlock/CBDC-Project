@@ -51,6 +51,5 @@ class TestAlgorithm(TestCase):
         
         signer_step5 = requests.post(url+"/api/blind-signature/step/5/get/C", data={'token': token, 'data':user_step4}, timeout=3).text
         requests.post(url+"/api/logout", data={'token': token})
-        print(signer_step5)
         
         

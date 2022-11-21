@@ -26,7 +26,10 @@ class PartiallyBlindSignature:
             token = ResolveRequest.ResolveToken(request)
             self.server = PartiallyBlindSignatureServerInterface(token)
             withdraw = ResolveRequest.ResolvePost(request)['withdraw']
-            public_info = "withdraw:"+withdraw
+            public_info = json.dumps({
+                "currency":withdraw,
+                "Text":"Technology provided by ECDSA project."
+            }) 
             self.server.generate_I(public_info)
             result = self.server.output()
             self.server.save_and_next_step(token)

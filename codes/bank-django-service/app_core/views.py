@@ -71,6 +71,10 @@ def api_blind_signature_get_K1(request):
     obj = PartiallyBlindSignaturePublicParameters()
     return obj.get_K1()
 
+def api_blind_signature_get_q(request):
+    obj =PartiallyBlindSignaturePublicParameters()
+    return obj.get_q()
+
 def api_blind_signature_step_1_get_K1_Q_bit_list(request):
     obj = PartiallyBlindSignature()
     return obj.api_blind_signature_step_1_get_K1_Q_bit_list(request)
