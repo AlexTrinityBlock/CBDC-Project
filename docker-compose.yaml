@@ -49,6 +49,10 @@ services:
       ECDSA_PRIVATEKEY_2: ${ECDSA_PRIVATEKEY_2}
       # 銀行Django金鑰
       BANK_SECRET_KEY: ${BANK_SECRET_KEY}
+      # 銀行Django 內網 IP
+      BANK_DJANGO_SERVICE_IP: 10.0.0.1
+      # 使用者密碼學支援服務URL
+      USER_CRYPTOGRAPHY_SUPPORT_FLASK_SERVICE_URL:  http://10.0.0.6
     # 等待資料庫系統運作後再啟動
     depends_on:
       - bank-database-service
@@ -122,6 +126,46 @@ services:
     networks:
       devnetwork:
         ipv4_address: 10.0.0.4
+
+  ###############
+  #使用者密碼學支援服務#
+  ###############
+  #服務名稱
+  user-cryptography-support-flask-service:
+    #這個是我們的映像檔名稱，可以自己選擇，或者使用現有映像檔
+    image: user-cryptography-support-flask-service:0.0
+    #用在這個資料夾下的Dockerfile建立映像檔
+    build: ./dockerfiles/user-cryptography-support-flask-service/
+    #要啟動這個，才能在關閉終端後仍然繼續運作容器
+    tty: true
+    #與容器外的資料夾共通的部分
+    #容器外的/codes/user-cryptography-support-flask-service對應到容器內的code
+    volumes:
+      - ./codes/user-cryptography-support-flask-service:/code
+    # 開啟 8080 port 對外，對應到內部的80port
+    ports:
+      - "8086:5000"
+    # 啟動後指令
+    command: "python init.py" 
+    # 環境變數
+    environment:
+      # Flask 除錯模式
+      FLASK_DEBUG: 1
+      # ECDSA 公鑰
+      ECDSA_PUBLICKEY: ${ECDSA_PUBLICKEY}
+      # ECDSA 私鑰
+      ECDSA_PRIVATEKEY: ${ECDSA_PRIVATEKEY}
+      # ECDSA 公鑰2
+      ECDSA_PUBLICKEY_2: ${ECDSA_PUBLICKEY_2}
+      # ECDSA 私鑰2
+      ECDSA_PRIVATEKEY_2: ${ECDSA_PRIVATEKEY_2}
+      # Django 銀行伺服器的URL
+      BANK_DJANGO_SERVICE_URL: "http://10.0.0.1:8000"
+    # 等待資料庫系統運作後再啟動
+    #網路IP設置
+    networks:
+      devnetwork:
+        ipv4_address: 10.0.0.6
 
 networks:
   #網路名稱為devnetwork，該名稱可以變更。

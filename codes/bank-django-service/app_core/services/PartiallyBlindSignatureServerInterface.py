@@ -7,7 +7,7 @@ import ellipticcurve
 from ellipticcurve.privateKey import PrivateKey, PublicKey
 import gmpy2
 import random
-from .YiModifiedPaillierEncryptionPy import YiModifiedPaillierEncryptionPy
+from app_core.services.YiModifiedPaillierEncryptionPy import YiModifiedPaillierEncryptionPy
 """
 Note
 =================
@@ -48,7 +48,7 @@ C: int，簽章。
 class PartiallyBlindSignatureServerInterface:
     def __init__(self, token:str):
         # 逾期時間(秒)
-        self.expiretime = 300
+        self.expiretime = 1800
         # 從環境變數取得ECDSA鑰匙
         self.ECDSA_PUBLICKEY = os.environ['ECDSA_PUBLICKEY']
         self.ECDSA_PRIVATEKEY = os.environ['ECDSA_PRIVATEKEY']
@@ -165,19 +165,6 @@ class PartiallyBlindSignatureServerInterface:
         i_list.sort()
         self.i_list = i_list
 
-    # 創建新的認證狀態，或者載入舊的
-    def create_or_load_status(self,token):
-        status = json.loads(self.redis_connection.get(token))
-        if 'step' in status:
-            self.status = status
-        else:
-            status['step'] = 1
-            status['i_list'] = self.generate_i_list()
-            status['b_list'] = self.generate_b_list()
-            self.redis_connection.set(token, json.dumps(status))
-            self.redis_connection.expire(token, self.expiretime)
-            self.status = status
-
     # 驗證 F 與 l 之間的關聯
     def verify_L_F(self):
         pass
@@ -205,12 +192,6 @@ class PartiallyBlindSignatureServerInterface:
         result = gmpy2.mod(temp1 * gmpy2.powmod(r,self.status["N"],N_pow_2),N_pow_2)
         self.status["C"] = int(result)
         self.C = int(result)
-
-    # 儲存並且前進到下個步驟
-    def save_and_next_step(self,token):
-        self.status['step'] += 1
-        self.redis_connection.set(token,json.dumps(self.status))
-        self.redis_connection.expire(token, self.expiretime)
 
     # 取得使用者輸入
     def input(self,input):
@@ -253,3 +234,26 @@ class PartiallyBlindSignatureServerInterface:
             # 生成盲簽章C
             self.generate_C()
             return json.dumps({"C":self.C})
+
+    # 儲存並且前進到下個步驟
+    def save_and_next_step(self,token):
+        status = json.loads(self.redis_connection.get(token))
+        self.status['step'] += 1
+        status['BlindSignature'] =  self.status
+        self.redis_connection.set(token,json.dumps(status))
+        self.redis_connection.expire(token, self.expiretime)
+
+    # 創建新的認證狀態，或者載入舊的
+    def create_or_load_status(self,token):
+        status = json.loads(self.redis_connection.get(token))
+        if 'BlindSignature' in status:
+            self.status = status['BlindSignature']
+        else:
+            signature_status = dict()
+            signature_status['step'] = 1
+            signature_status['i_list'] = self.generate_i_list()
+            signature_status['b_list'] = self.generate_b_list()
+            status['BlindSignature'] =  signature_status
+            self.redis_connection.set(token, json.dumps(status))
+            self.redis_connection.expire(token, self.expiretime)
+            self.status = status['BlindSignature']

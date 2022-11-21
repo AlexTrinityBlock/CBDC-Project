@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from app_core.services.Login import Login
 from app_core.services.Register import Register
+from app_core.services.PartiallyBlindSignaturePublicParameters import PartiallyBlindSignaturePublicParameters
+from app_core.services.PartiallyBlindSignature import PartiallyBlindSignature
 """
 前端頁面
 
@@ -24,6 +26,7 @@ def login(request):
 
 def register(request):
     return render(request, 'register/index.html')
+
 """
 API
 
@@ -52,3 +55,26 @@ def api_check_login(request):
 def api_register(request):
     register =Register()
     return register.register(request)
+
+"""
+密碼學 API
+"""
+def api_blind_signature_init(request):
+    obj = PartiallyBlindSignature()
+    return obj.init_blind_signature(request)
+
+def api_blind_signature_get_Q(request):
+    obj = PartiallyBlindSignaturePublicParameters()
+    return obj.get_Q()
+
+def api_blind_signature_get_K1(request):
+    obj = PartiallyBlindSignaturePublicParameters()
+    return obj.get_K1()
+
+def api_blind_signature_step_1_get_K1_Q_bit_list(request):
+    obj = PartiallyBlindSignature()
+    return obj.api_blind_signature_step_1_get_K1_Q_bit_list(request)
+
+def api_blind_signature_step_2_get_i_list(request):
+    obj = PartiallyBlindSignature()
+    return obj.api_blind_signature_step_2_get_i_list(request)
