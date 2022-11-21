@@ -3,14 +3,17 @@ from flask_cors import CORS
 from services import YiModifiedPaillierEncryptionPy
 import unittest
 import sys
+from services.Withdraw import Withdraw
 
 app = Flask(__name__)
 CORS(app)
 
 # API
-@app.route("/")
-def helloWorld():
-  return "Hello, cross-origin-world!"
+@app.route("/withdraw",methods=['POST', 'GET'])
+def withdraw():
+  withdraw = Withdraw()
+  result = withdraw.withdraw(request)
+  return result
 
 # Flask 命令行
 @app.cli.command()

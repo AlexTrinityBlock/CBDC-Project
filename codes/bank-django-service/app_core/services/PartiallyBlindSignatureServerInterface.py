@@ -176,10 +176,10 @@ class PartiallyBlindSignatureServerInterface:
         F = set(F_list)        
         for i in range(len(L_list)):
             L_i_mul_I_mod_q = gmpy2.mod(L_list[i]*self.status['I'],self.q)
-            Fi_p = Yi.encrypt(L_i_mul_I_mod_q,self.status['N'],self.status['g'],L_list[j],self.status['N'])
+            Fi_p = Yi.encrypt(L_i_mul_I_mod_q,self.status['N'],self.status['g'],L_list[i],self.status['N'])
             F_p.add(Fi_p)
-        if len(F_p & F) is not 1:
-            raise Exception("F 驗證失敗")
+        if len(F_p & F) is not len(F_list)-1:
+            raise Exception("F 驗證失敗",len(F - F_p ))
 
     # 建立盲簽章C
     def generate_C(self):

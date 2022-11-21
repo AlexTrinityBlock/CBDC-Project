@@ -35,7 +35,7 @@ class PartiallyBlindSignature:
             self.init_blind_signature(request)
             return HttpResponse(json.dumps({
                 "code": 0,
-                "message": "Fail"
+                "message": "step1 fail"
             }))        
 
     def api_blind_signature_step_2_get_i_list(self,request):
@@ -52,7 +52,7 @@ class PartiallyBlindSignature:
             self.init_blind_signature(request)
             return HttpResponse(json.dumps({
                 "code": 0,
-                "message": "Fail"
+                "message": "step2 fail"
             }))   
 
     def api_blind_signature_step_5_get_C(self,request):
@@ -69,5 +69,5 @@ class PartiallyBlindSignature:
             self.init_blind_signature(request)
             return HttpResponse(json.dumps({
                 "code": 0,
-                "message": "Fail"
+                "message": "step5 fail"
             }))   
