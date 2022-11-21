@@ -10,6 +10,7 @@ from app_core.services.PartiallyBlindSignatureServerInterface import PartiallyBl
 from app_core.services.Login import Login
 import requests
 import redis
+import gmpy2
 
 class TestAlgorithm(TestCase):
     
@@ -44,6 +45,11 @@ class TestAlgorithm(TestCase):
         signer = PartiallyBlindSignatureServerInterface(token)
         signer_step1 = signer.output()
         signer.save_and_next_step(token)
+        # print(signer.K1x)
+        # print(signer.ECDSA_PRIVATEKEY)
+        # print("簽署者將公鑰傳遞給使用者，並且將零知識證明的提問順便傳送")
+        # pprint(signer_step1)
+        # print("")
 
         user = PartiallyBlindSignatureClientInterface()
         user.generate_message_hash("Message")
@@ -51,8 +57,29 @@ class TestAlgorithm(TestCase):
         user.step1_input(signer_step1)
         user.generate_keypairs_parameters()
         user_step1 = user.step1_output()
+        # print("使用者將 C1, C2, 零知識證明內容，F1~Fn傳送給簽署者")
+        # pprint(user_step1)
+        # print("")
 
         signer.input(user_step1)
+        signer.save_and_next_step(token)
+        signer_step3 = signer.output()
+        signer.save_and_next_step(token)
+        # print("簽署者將i序列傳給使用者")
+        # pprint(signer_step3)
+        # print("")
+        
+        user.step3_input(signer_step3)
+        use_step4_output = user.step4_output()
+        # print("使用者將對應的L傳給簽署者")
+        # pprint(use_step4_output)
+        # print("")
+
+        signer.input(use_step4_output)
+        signer.save_and_next_step(token)
+        signer_step5 = signer.output()
+
+        user.step5_input(signer_step5)
 
         redis_connection_0.delete(token)
         redis_connection_1.delete('user')

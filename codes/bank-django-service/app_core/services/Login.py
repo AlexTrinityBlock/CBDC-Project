@@ -36,11 +36,11 @@ class Login():
 
         # 將使用者加入已經登入的使用者表單
         redis_connection_user_index.set(account,token)
-        redis_connection_user_index.expire(account,300)
+        redis_connection_user_index.expire(account,1800)
 
         # 用 uuid 作為使用者的Token
         redis_connection_token_index.set(token,json_data)
-        redis_connection_token_index.expire(token,300) # 300 秒，5分鐘超時。
+        redis_connection_token_index.expire(token,1800) # 300 秒，5分鐘超時。
 
         return token
 

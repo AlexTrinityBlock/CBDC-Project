@@ -7,7 +7,7 @@ import ellipticcurve
 from ellipticcurve.privateKey import PrivateKey, PublicKey
 import gmpy2
 import random
-from .YiModifiedPaillierEncryptionPy import YiModifiedPaillierEncryptionPy
+from app_core.services.YiModifiedPaillierEncryptionPy import YiModifiedPaillierEncryptionPy
 """
 Note
 =================
@@ -15,6 +15,8 @@ signer寄送-1
 
 K1x: int，ECDSA 公鑰
 K1y: int，ECDSA 公鑰
+Qx: int，ECDSA 公鑰2
+Qy: int，ECDSA 公鑰2
 b_list: 一串0/1，20個。
 =================
 user寄送-2
@@ -33,7 +35,6 @@ F1 ~ Fn: 加密的公開訊息Hash
 signer寄送-3
 
 i_list: 20個，1~40之間的數字。
-C: int，簽章。
 =================
 user寄送-4
 
@@ -47,25 +48,47 @@ C: int，簽章。
 class PartiallyBlindSignatureServerInterface:
     def __init__(self, token:str):
         # 逾期時間(秒)
-        self.expiretime = 300
+        self.expiretime = 1800
         # 從環境變數取得ECDSA鑰匙
         self.ECDSA_PUBLICKEY = os.environ['ECDSA_PUBLICKEY']
         self.ECDSA_PRIVATEKEY = os.environ['ECDSA_PRIVATEKEY']
+        self.ECDSA_PUBLICKEY_2 = os.environ['ECDSA_PUBLICKEY_2']
+        self.ECDSA_PRIVATEKEY_2 = os.environ['ECDSA_PRIVATEKEY_2']
         # 從ECDSA PUBLICKEY取得X,Y軸
-        publicKey = PublicKey.fromPem(self.ECDSA_PUBLICKEY)
-        self.K1x = publicKey.point.x
-        self.K1y = publicKey.point.y
-        self.q = publicKey.curve.N
+        self.k1 = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY).secret
+        self.K1 = PublicKey.fromPem(self.ECDSA_PUBLICKEY)
+        self.K1x = self.K1.point.x
+        self.K1y = self.K1.point.y
+        self.q = self.K1.curve.N
+        # 第二把ECDSA 鑰匙對
+        self.d = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).secret
+        self.Q = PublicKey.fromPem(self.ECDSA_PUBLICKEY_2)
+        self.Qx = self.Q.point.x
+        self.Qy = self.Q.point.y
+        # 公共參數
+        self.G = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).curve.G
+        self.curve_N = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).curve.N
+        self.curve_A =PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).curve.A
+        self.curve_P = PrivateKey.fromPem(self.ECDSA_PRIVATEKEY_2).curve.P
         # 零知識證明次數
         self.NumberOfZeroKnowledgeProofRound = 20
         # User端的L長度
         self.LengthOfL = 40
+        # User端的i長度
         self.LengthOfi = 20
+        # User端的u長度
+        self.LengthOfu = 10
         # Redis 連線
         self.redis_connection = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=0, password=os.environ['REDIS_PASSWORD'])
         # 檢查使用者當前進行到的步驟
         self.status = dict()
         self.create_or_load_status(token)
+        #  F1~Fn
+        self.F_list = None
+        # i list
+        self.i_list = None
+        # 盲簽章
+        self.C = None
 
     # 生成隨機二進位序列
     def generate_b_list(self):
@@ -81,46 +104,6 @@ class PartiallyBlindSignatureServerInterface:
                 i_list.append(temp_number)
         i_list.sort()
         return i_list
-
-    # 創建新的認證狀態，或者載入舊的
-    def create_or_load_status(self,token):
-        status = json.loads(self.redis_connection.get(token))
-        if 'step' in status:
-            self.status = status
-        else:
-            status['step'] = 1
-            status['i_list'] = self.generate_i_list()
-            status['b_list'] = self.generate_b_list()
-            self.redis_connection.set(token, json.dumps(status))
-            self.redis_connection.expire(token, self.expiretime)
-            self.status = status
-
-    # 儲存並且前進到下個步驟
-    def save_and_next_step(self,token):
-        self.status['step'] += 1
-        self.redis_connection.set(token,json.dumps(self.status))
-        self.redis_connection.expire(token, self.expiretime)
-
-    # 取得使用者輸入
-    def input(self,input):
-        if self.status["step"] == 1:
-            raise Exception("第一步驟，從簽署者輸出公鑰，不需要輸入任何東西。")
-        elif self.status["step"] == 2:
-            input = json.loads(input)
-            self.status["C1"] = input["C1"]
-            self.status["C2"] = input["C2"]
-            self.status["N"] = input["N"]
-            self.status["g"] = input["g"]
-            self.zero_knowledge_proof_vefify(input)
-        elif self.status["step"] == 3:
-            pass
-        elif self.status["step"] == 4:
-            pass
-
-    # 取得輸出
-    def output(self):
-        if self.status["step"] == 1:
-            return json.dumps({"K1x":self.K1x, "K1y":self.K1y, "b_list":self.status["b_list"]})
 
     # 零知識證明驗證
     def zero_knowledge_proof_vefify(self, input:dict):
@@ -171,3 +154,106 @@ class PartiallyBlindSignatureServerInterface:
                     break
         return result
 
+    # 生成 i list
+    def generate_i_list(self):
+        i_list = []
+        for i in range(self.LengthOfu):
+            u = random.randrange(self.LengthOfi)
+            while u in i_list:
+                u = random.randrange(self.LengthOfi)
+            i_list.append(u)
+        i_list.sort()
+        self.i_list = i_list
+
+    # 驗證 F 與 l 之間的關聯
+    def verify_L_F(self):
+        pass
+
+    # 建立盲簽章C
+    def generate_C(self):
+        Yi = YiModifiedPaillierEncryptionPy() # Yi的加解密
+        r = Yi.generate_r(self.status["N"])  # 生成混淆r
+        N_pow_2 = pow(self.status["N"], 2) 
+        k1_mod_q_mod_inverse= gmpy2.invert(self.k1, self.q)
+        self.k1_mod_q_mod_inverse = k1_mod_q_mod_inverse
+        C1 = gmpy2.mpz(self.status["C1"])
+        C2 = gmpy2.mpz(self.status["C2"])
+        F1_to_Fn = self.status["F_list"]
+        d = gmpy2.mpz(self.d)
+        # 把C2^d 改成 C2^d mod q 
+        C2_pow_d_mod_N_pow_2 = gmpy2.powmod(C2,self.d,pow(self.status["N"], 2)) # 無法肯定是否可行
+        C1_C2_F_list_mul = C1*C2_pow_d_mod_N_pow_2
+        self.C2_pow_d_mod_N_pow_2 = C2_pow_d_mod_N_pow_2
+        # print("簽署者i list:",self.i_list)
+        for i in self.i_list:
+            Fi = self.status["F_list"][i]
+            C1_C2_F_list_mul *= Fi
+        temp1 = gmpy2.powmod(C1_C2_F_list_mul, k1_mod_q_mod_inverse, N_pow_2)
+        result = gmpy2.mod(temp1 * gmpy2.powmod(r,self.status["N"],N_pow_2),N_pow_2)
+        self.status["C"] = int(result)
+        self.C = int(result)
+
+    # 取得使用者輸入
+    def input(self,input):
+        input = json.loads(input)
+        if self.status["step"] == 1:
+            raise Exception("第一步驟，從簽署者輸出公鑰，不需要輸入任何東西。")
+        elif self.status["step"] == 2:            
+            self.status["C1"] = input["C1"]
+            self.status["C2"] = input["C2"]
+            self.status["N"] = input["N"]
+            self.status["g"] = input["g"]
+            self.status["F_list"] = input["F_list"]
+            self.zero_knowledge_proof_vefify(input)
+        elif self.status["step"] == 3:
+            pass
+        elif self.status["step"] == 4:
+            self.status["L_list"] = input["L_list"]
+            self.status["j"] = input["j"]
+
+    # 取得輸出
+    def output(self):
+        if self.status["step"] == 1:
+            # 第一階段，簽署者將ECDSA公鑰K1與Q發佈，並且發佈零知識證明的提問b_list。
+            return json.dumps({
+                "K1x":self.K1x,
+                "K1y":self.K1y,
+                "b_list":self.status["b_list"],
+                "Qx":self.Qx,
+                "Qy":self.Qy
+            })
+        if self.status["step"] == 2:
+            pass
+        if self.status["step"] == 3:
+            # 從20個F中挑選任意10個，以0~19之間數值表示選擇的數字。
+            self.generate_i_list()
+            return json.dumps({"i_list":self.i_list})
+        if self.status["step"] == 4:
+            pass
+        if self.status["step"] == 5:
+            # 生成盲簽章C
+            self.generate_C()
+            return json.dumps({"C":self.C})
+
+    # 儲存並且前進到下個步驟
+    def save_and_next_step(self,token):
+        status = json.loads(self.redis_connection.get(token))
+        self.status['step'] += 1
+        status['BlindSignature'] =  self.status
+        self.redis_connection.set(token,json.dumps(status))
+        self.redis_connection.expire(token, self.expiretime)
+
+    # 創建新的認證狀態，或者載入舊的
+    def create_or_load_status(self,token):
+        status = json.loads(self.redis_connection.get(token))
+        if 'BlindSignature' in status:
+            self.status = status['BlindSignature']
+        else:
+            signature_status = dict()
+            signature_status['step'] = 1
+            signature_status['i_list'] = self.generate_i_list()
+            signature_status['b_list'] = self.generate_b_list()
+            status['BlindSignature'] =  signature_status
+            self.redis_connection.set(token, json.dumps(status))
+            self.redis_connection.expire(token, self.expiretime)
+            self.status = status['BlindSignature']
