@@ -63,7 +63,7 @@ class VerifyCurrency:
         K_p = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
         t_p = gmpy2.mod(K_p.x,self.q)
 
-        if self.t != t_p:
+        if self.t == t_p:
             return True
         else:
             return False

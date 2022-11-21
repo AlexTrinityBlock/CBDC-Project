@@ -36,6 +36,11 @@ class TestAlgorithm(TestCase):
 
         print(signature)
 
+        t = int(signature['t'],16)
+        s = int(signature['s'],16)
+        R = int(signature['R'],16)
         verifyCurrency = VerifyCurrency()
-        verifyCurrency.verify_currency(signature['t'],signature['s'],signature['R'],signature['message'],signature['Info'])
+        result = verifyCurrency.verify_currency(t,s,R,signature['message'],signature['Info'])
+        self.assertEqual(result,True)
+
 

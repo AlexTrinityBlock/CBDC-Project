@@ -6,15 +6,22 @@ info:
 servers:
   - url: http://127.0.0.1:8081
     description: 銀行伺服器
+  - url: http://127.0.0.1:8086
+    description: 密碼學支援伺服器
 tags:
-  - name: "登入"
-    description: "從銀行領錢的API。"
+  - name: "銀行登入與註冊"
+    description: "從銀行登入API。"
+  - name: "密碼學支援服務"
+    description: "密碼學支援服務API。"
 
 paths:
+#################
+# 銀行伺服器 API #
+#################
   /api/login:
     post:
       tags:
-      - "登入"
+      - "銀行登入與註冊"
       summary: 登入使用者取得token。
       description: ""
       requestBody:
@@ -58,7 +65,7 @@ paths:
       security:
         - token: []
       tags:
-      - "登入"
+      - "銀行登入與註冊"
       summary: 檢查使用者token
       description: ""
       # 請求參數
@@ -92,7 +99,7 @@ paths:
   /api/logout:
     post:
       tags:
-      - "登出"
+      - "銀行登入與註冊"
       summary: 登出。
       description: ""
       requestBody:
@@ -128,7 +135,7 @@ paths:
   /api/register:
     post:
       tags:
-      - "註冊"
+      - "銀行登入與註冊"
       summary: 註冊。
       description: ""
       requestBody:
@@ -166,3 +173,98 @@ paths:
                   token:
                     type: string
                     example: 95f585c748524b1ba154c13a37f973f4
+#######################
+# 密碼學支援伺服器 API #
+#######################
+  #提款
+  /withdraw:
+    post:
+      tags:
+      - "密碼學支援服務"
+      summary: 提款，獲得不被追蹤的數位貨幣盲簽章。
+      requestBody:
+        description: 提款，獲得不被追蹤的數位貨幣盲簽章。需要輸入銀行登入 Token。
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 字串，銀行登入後取得的 token。
+                  type: string
+                  required: true
+                withdraw:
+                  description: 整數，要提領的金額。
+                  type: int
+                  required: true    
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  Info:
+                    type: string
+                    example: "{\"currency\": \"123\", \"Text\": \"Technology provided by ECDSA project.\"}"
+                  R:
+                    type: string
+                    example:  d319c95e07fc2054fc0ae0a13fa74d5e7e5e85a9aac6244876af055ab61b0c5
+                  message:
+                    type: string
+                    example: 236eaa1d29afb27d3ed69461b24968d49452454c04e945e7f7aefd1204c9bcea
+                  s:
+                    type: string
+                    example: 301ac1953003348d41b6afdbd6145eebfa1fb2fc95f5493a626bdb2956aee6cc
+                  t:
+                    type: string
+                    example: 922257d693122b5ef27f1b635ee3fb3a3f457db8b21f5cabe78b0dcec729bbab
+  # 驗證簽章
+  /verify/currency:
+    post:
+      tags:
+      - "密碼學支援服務"
+      summary: 驗證盲簽章是否為銀行發佈。
+      requestBody:
+        description: 驗證盲簽章，公開訊息，是否為銀行發佈。
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                Info:
+                  description: 銀行跟使用者的公開共識訊息。
+                  type: string
+                  required: true
+                message:
+                  description: 在兌換貨幣前，保持祕密的訊息。代表貨幣本身。
+                  type: string
+                  required: true
+                R:
+                  description: 盲簽章的一部分
+                  type: string
+                  required: true
+                s:
+                  description: 盲簽章的一部分
+                  type: string
+                  required: true
+                t:
+                  description: 盲簽章的一部分
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1

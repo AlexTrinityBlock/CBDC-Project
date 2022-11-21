@@ -55,8 +55,8 @@ class Withdraw:
 
         result['Info'] = signer_step1_obj['PublicInfomation']
         result['message'] = secret_message
-        result['t'] = user.t
-        result['s'] = user.s
-        result['R'] = user.R
+        result['t'] = hex(user.t)
+        result['s'] = hex(user.s)
+        result['R'] = hex(user.R)
         
         return result
