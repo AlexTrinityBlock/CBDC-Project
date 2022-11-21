@@ -36,6 +36,7 @@ class TestAlgorithm(TestCase):
         self.assertTrue(result, "\n\n ECDSA模塊測試失敗，有可能是模塊損壞或者ECDSA鑰匙錯誤")
 
     def test_PartiallyBlindSignatureServerInterface(self):
+        print("[算法測試] 盲簽章算法驗證")
         redis_connection_0 = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=0, password=os.environ['REDIS_PASSWORD']) 
         redis_connection_1 = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=1, password=os.environ['REDIS_PASSWORD']) 
 
@@ -43,6 +44,7 @@ class TestAlgorithm(TestCase):
         token = login.setUserToken("user")
 
         signer = PartiallyBlindSignatureServerInterface(token)
+        signer.generate_I("Public")
         signer_step1 = signer.output()
         signer.save_and_next_step(token)
         # print(signer.K1x)
@@ -83,3 +85,5 @@ class TestAlgorithm(TestCase):
 
         redis_connection_0.delete(token)
         redis_connection_1.delete('user')
+
+        self.assertEqual(user.t,user.t_p)

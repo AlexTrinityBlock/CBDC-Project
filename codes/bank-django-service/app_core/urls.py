@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/blind-signature/get/K1',views.api_blind_signature_get_K1),
     path('api/blind-signature/step/1/get/K1/Q/bit-list',views.api_blind_signature_step_1_get_K1_Q_bit_list),
     path('api/blind-signature/step/2/get/i-list',views.api_blind_signature_step_2_get_i_list),
+    path('api/blind-signature/step/5/get/C',views.api_blind_signature_step_5_get_C),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡

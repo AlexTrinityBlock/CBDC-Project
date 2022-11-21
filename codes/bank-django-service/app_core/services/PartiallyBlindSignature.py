@@ -19,21 +19,55 @@ class PartiallyBlindSignature:
         return HttpResponse(json.dumps({
             "code": 1,
             "message": "Refresh Signature status"
-        }))
-        
+        }))        
 
     def api_blind_signature_step_1_get_K1_Q_bit_list(self,request):
-        token = ResolveRequest.ResolveToken(request)
-        self.server = PartiallyBlindSignatureServerInterface(token)
-        result = self.server.output()
-        self.server.save_and_next_step(token)
-        return HttpResponse(result)
+        try:
+            token = ResolveRequest.ResolveToken(request)
+            self.server = PartiallyBlindSignatureServerInterface(token)
+            withdraw = ResolveRequest.ResolvePost(request)['withdraw']
+            public_info = "withdraw:"+withdraw
+            self.server.generate_I(public_info)
+            result = self.server.output()
+            self.server.save_and_next_step(token)
+            return HttpResponse(result)
+        except:
+            self.init_blind_signature(request)
+            return HttpResponse(json.dumps({
+                "code": 0,
+                "message": "Fail"
+            }))        
 
     def api_blind_signature_step_2_get_i_list(self,request):
-        token = ResolveRequest.ResolveToken(request)
-        self.server = PartiallyBlindSignatureServerInterface(token)
-        data = ResolveRequest.ResolvePost(request)['data']
-        self.server.input(data)
-        self.server.save_and_next_step(token)
-        result = self.server.output()
-        return HttpResponse(result)
+        try:
+            token = ResolveRequest.ResolveToken(request)
+            self.server = PartiallyBlindSignatureServerInterface(token)
+            data = ResolveRequest.ResolvePost(request)['data']
+            self.server.input(data)
+            self.server.save_and_next_step(token)
+            result = self.server.output()
+            self.server.save_and_next_step(token)
+            return HttpResponse(result)
+        except:
+            self.init_blind_signature(request)
+            return HttpResponse(json.dumps({
+                "code": 0,
+                "message": "Fail"
+            }))   
+
+    def api_blind_signature_step_5_get_C(self,request):
+        try:
+            token = ResolveRequest.ResolveToken(request)
+            self.server = PartiallyBlindSignatureServerInterface(token)
+            data = ResolveRequest.ResolvePost(request)['data']
+            self.server.input(data)
+            self.server.save_and_next_step(token)        
+            result = self.server.output()
+            self.init_blind_signature(request)
+            return HttpResponse(result)
+        except:
+            self.init_blind_signature(request)
+            return HttpResponse(json.dumps({
+                "code": 0,
+                "message": "Fail"
+            }))   

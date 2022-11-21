@@ -302,9 +302,9 @@ class PartiallyBlindSignatureClientInterface:
         vQ = ellipticcurve.math.Math.multiply(Q, v, self.curve_N, self.curve_A, self.curve_P)
 
         K_p = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
-        t_p = gmpy2.mod(K_p.x,self.q)
+        self.t_p = gmpy2.mod(K_p.x,self.q)
 
-        print("t",self.t)
-        print("t'",K_p.x%self.q)
+        # print("t",self.t)
+        # print("t'",K_p.x%self.q)
         # print("Kx'",K_p.x)
         # print("Kx",self.K.x)

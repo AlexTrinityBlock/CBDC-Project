@@ -95,15 +95,14 @@ class PartiallyBlindSignatureServerInterface:
         b_list = [ random.randrange(2) for i in range(self.NumberOfZeroKnowledgeProofRound) ]
         return b_list
 
-    # 生成隨機選擇0-40之間的數值不重複
-    def generate_i_list(self):
-        i_list = []
-        for i in range(self.LengthOfi):
-            temp_number = random.randrange(self.LengthOfL+1)
-            if temp_number not in i_list:
-                i_list.append(temp_number)
-        i_list.sort()
-        return i_list
+    # 生成I
+    def generate_I(self,text:str):
+        h = hashlib.new('sha256')
+        h.update(bytes(text, 'utf-8'))
+        hex_string = h.hexdigest()
+        message_hash = int(hex_string, 16)
+        self.status["I"] = message_hash
+        self.status["PublicInfomation"] = text
 
     # 零知識證明驗證
     def zero_knowledge_proof_vefify(self, input:dict):
@@ -164,10 +163,23 @@ class PartiallyBlindSignatureServerInterface:
             i_list.append(u)
         i_list.sort()
         self.i_list = i_list
+        self.status["i_list"] = i_list
 
     # 驗證 F 與 l 之間的關聯
     def verify_L_F(self):
-        pass
+        Yi = YiModifiedPaillierEncryptionPy()
+        F_list = self.status["F_list"].copy()
+        L_list = self.status["L_list"].copy()
+        i_list = self.status["i_list"].copy()
+        j = self.status["j"]        
+        F_p = set()
+        F = set(F_list)        
+        for i in range(len(L_list)):
+            L_i_mul_I_mod_q = gmpy2.mod(L_list[i]*self.status['I'],self.q)
+            Fi_p = Yi.encrypt(L_i_mul_I_mod_q,self.status['N'],self.status['g'],L_list[j],self.status['N'])
+            F_p.add(Fi_p)
+        if len(F_p & F) is not 1:
+            raise Exception("F 驗證失敗")
 
     # 建立盲簽章C
     def generate_C(self):
@@ -185,7 +197,7 @@ class PartiallyBlindSignatureServerInterface:
         C1_C2_F_list_mul = C1*C2_pow_d_mod_N_pow_2
         self.C2_pow_d_mod_N_pow_2 = C2_pow_d_mod_N_pow_2
         # print("簽署者i list:",self.i_list)
-        for i in self.i_list:
+        for i in self.status["i_list"]:
             Fi = self.status["F_list"][i]
             C1_C2_F_list_mul *= Fi
         temp1 = gmpy2.powmod(C1_C2_F_list_mul, k1_mod_q_mod_inverse, N_pow_2)
@@ -206,10 +218,11 @@ class PartiallyBlindSignatureServerInterface:
             self.status["F_list"] = input["F_list"]
             self.zero_knowledge_proof_vefify(input)
         elif self.status["step"] == 3:
-            pass
+            raise Exception('[盲簽章流程]', '錯誤的步驟')
         elif self.status["step"] == 4:
             self.status["L_list"] = input["L_list"]
             self.status["j"] = input["j"]
+            self.verify_L_F()
 
     # 取得輸出
     def output(self):
@@ -220,16 +233,18 @@ class PartiallyBlindSignatureServerInterface:
                 "K1y":self.K1y,
                 "b_list":self.status["b_list"],
                 "Qx":self.Qx,
-                "Qy":self.Qy
+                "Qy":self.Qy,
+                'I':self.status["I"],
+                "PublicInfomation":self.status["PublicInfomation"]
             })
         if self.status["step"] == 2:
-            pass
+            raise Exception('[盲簽章流程]', '錯誤的步驟')
         if self.status["step"] == 3:
             # 從20個F中挑選任意10個，以0~19之間數值表示選擇的數字。
             self.generate_i_list()
-            return json.dumps({"i_list":self.i_list})
+            return json.dumps({"i_list":self.status["i_list"]})
         if self.status["step"] == 4:
-            pass
+            raise Exception('[盲簽章流程]', '錯誤的步驟')
         if self.status["step"] == 5:
             # 生成盲簽章C
             self.generate_C()

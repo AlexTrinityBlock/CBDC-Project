@@ -78,3 +78,7 @@ def api_blind_signature_step_1_get_K1_Q_bit_list(request):
 def api_blind_signature_step_2_get_i_list(request):
     obj = PartiallyBlindSignature()
     return obj.api_blind_signature_step_2_get_i_list(request)
+
+def api_blind_signature_step_5_get_C(request):
+    obj = PartiallyBlindSignature()
+    return obj.api_blind_signature_step_5_get_C(request)
