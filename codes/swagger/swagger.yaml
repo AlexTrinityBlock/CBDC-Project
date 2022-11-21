@@ -9,7 +9,7 @@ servers:
   - url: http://127.0.0.1:8086
     description: 密碼學支援伺服器
 tags:
-  - name: "銀行登入與註冊"
+  - name: "銀行使用者登入與註冊"
     description: "從銀行登入API。"
   - name: "密碼學支援服務"
     description: "密碼學支援服務API。"
@@ -21,7 +21,7 @@ paths:
   /api/login:
     post:
       tags:
-      - "銀行登入與註冊"
+      - "銀行使用者登入與註冊"
       summary: 登入使用者取得token。
       description: ""
       requestBody:
@@ -65,7 +65,7 @@ paths:
       security:
         - token: []
       tags:
-      - "銀行登入與註冊"
+      - "銀行使用者登入與註冊"
       summary: 檢查使用者token
       description: ""
       # 請求參數
@@ -99,7 +99,7 @@ paths:
   /api/logout:
     post:
       tags:
-      - "銀行登入與註冊"
+      - "銀行使用者登入與註冊"
       summary: 登出。
       description: ""
       requestBody:
@@ -135,7 +135,7 @@ paths:
   /api/register:
     post:
       tags:
-      - "銀行登入與註冊"
+      - "銀行使用者登入與註冊"
       summary: 註冊。
       description: ""
       requestBody:
