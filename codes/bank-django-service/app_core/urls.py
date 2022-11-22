@@ -26,7 +26,9 @@ urlpatterns = [
     path('api/blind-signature/step/5/get/C',views.api_blind_signature_step_5_get_C),
 
     # 管理員專用API
-    
+    path('api/administrator/login', views.api_administrator_login),
+    path('api/administrator/check_login', views.api_administrator_check_login),
+    path('api/administrator/logout', views.api_administrator_logout),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡
@@ -42,4 +44,9 @@ none_login_pages = [
     "api/blind-signature/get/Q",
     "api/blind-signature/get/K1",
     "api/blind-signature/get/q",
+    "api/administrator/login",
+    "api/administrator/check_login",
+    "api/administrator/logout",
+    "api/administrator/check_login",
+    "api/administrator/logout",
 ]

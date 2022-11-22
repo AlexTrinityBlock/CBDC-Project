@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from app_core.services.Login import Login
+from app_core.services.AdministratorLogin import AdministratorLogin
 from app_core.services.Register import Register
 from app_core.services.PartiallyBlindSignaturePublicParameters import PartiallyBlindSignaturePublicParameters
 from app_core.services.PartiallyBlindSignature import PartiallyBlindSignature
@@ -86,3 +87,18 @@ def api_blind_signature_step_2_get_i_list(request):
 def api_blind_signature_step_5_get_C(request):
     obj = PartiallyBlindSignature()
     return obj.api_blind_signature_step_5_get_C(request)
+"""
+管理員登入登出
+"""
+def api_administrator_login(request):
+    obj = AdministratorLogin()
+    return obj.login(request)
+
+def api_administrator_logout(request):
+    login =AdministratorLogin()
+    return login.logout(request)
+
+# 檢查登入 API
+def api_administrator_check_login(request):
+    login =AdministratorLogin()
+    return login.check_login(request)

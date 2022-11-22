@@ -10,9 +10,11 @@ servers:
     description: 密碼學支援伺服器
 tags:
   - name: "銀行使用者登入與註冊"
-    description: "從銀行登入API。"
+    description: "銀行用戶登入API。"
   - name: "密碼學支援服務"
-    description: "密碼學支援服務API。"
+    description: "密碼學支援服務API，請將 Server 調整到密碼學支援服務。"
+  - name: "銀行管理員登入"
+    description: "銀行管理員登入API。"
 
 paths:
 #################
@@ -209,7 +211,7 @@ paths:
                 properties:
                   Info:
                     type: string
-                    example: "{\"currency\": \"123\", \"Text\": \"Technology provided by ECDSA project.\"}"
+                    example: '{"currency": "1", "Text": "Technology provided by ECDSA project."}'
                   R:
                     type: string
                     example:  d319c95e07fc2054fc0ae0a13fa74d5e7e5e85a9aac6244876af055ab61b0c5
@@ -268,3 +270,120 @@ paths:
                   code:
                     type: int
                     example: 1
+#######################
+# 銀行管理員登入 API #
+#######################
+# 銀行管理員登入API
+  /api/administrator/login:
+    post:
+      tags:
+      - "銀行管理員登入"
+      summary: 登入使用者取得token。
+      description: ""
+      requestBody:
+        description: 登入使用者取得token。
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                account:
+                  type: string
+                  default: root
+                  required: true
+                password:
+                  type: string
+                  default: dev 
+                  required: true    
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  message:
+                    type: string
+                    example: Login success.
+                  token:
+                    type: string
+                    example: 95f585c748524b1ba154c13a37f973f4
+# 銀行管理員登入驗證 API
+  # 驗證登入API
+  /api/administrator/check_login:
+    get:
+      security:
+        - token: []
+      tags:
+      - "銀行管理員登入"
+      summary: 檢查使用者token
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 檢查使用者token
+          # required: true
+          schema:
+            type: string
+      # 回應參數
+      responses:
+        '200':    # status code
+          description: 顯示token是否有效。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  message:
+                    type: string
+                    example: Login success.
+                  token:
+                    type: string
+                    example: 95f585c748524b1ba154c13a37f973f4
+# 銀行管理員登出
+# 登出
+  /api/administrator/logout:
+    post:
+      tags:
+      - "銀行管理員登入"
+      summary: 登出。
+      description: ""
+      requestBody:
+        description: 登入使用者取得token。
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  message:
+                    type: string
+                    example: Login success.
+                  token:
+                    type: string
+                    example: 95f585c748524b1ba154c13a37f973f4
