@@ -25,38 +25,44 @@ class Withdraw:
         return hex_string
 
     def withdraw(self,request):
-        url = os.environ['BANK_DJANGO_SERVICE_URL']
+        try:
+            url = os.environ['BANK_DJANGO_SERVICE_URL']
 
-        withdraw = request.form['withdraw']
-        token = request.form['token']
-        random_number =str(random.randint(0,9999999))
-        secret_message = self.hash(str(uuid.uuid4())+random_number)
+            withdraw = request.form['withdraw']
+            token = request.form['token']
+            random_number =str(random.randint(0,9999999))
+            secret_message = self.hash(str(uuid.uuid4())+random_number)
 
-        signer_step1 = requests.post(url+"/api/blind-signature/step/1/get/K1/Q/bit-list", data={'token': token,'withdraw':withdraw}, timeout=3).text
-        signer_step1_obj = json.loads(signer_step1)
+            signer_step1 = requests.post(url+"/api/blind-signature/step/1/get/K1/Q/bit-list", data={'token': token,'withdraw':withdraw}, timeout=3).text
+            signer_step1_obj = json.loads(signer_step1)
 
-        user= PartiallyBlindSignatureClientInterface()
-        user.generate_message_hash(secret_message)
-        user.generate_I(signer_step1_obj['PublicInfomation'])
-        user.step1_input(signer_step1)
-        user.generate_keypairs_parameters()
-        user_step1 = user.step1_output()
+            user= PartiallyBlindSignatureClientInterface()
+            user.generate_message_hash(secret_message)
+            user.generate_I(signer_step1_obj['PublicInfomation'])
+            user.step1_input(signer_step1)
+            user.generate_keypairs_parameters()
+            user_step1 = user.step1_output()
 
-        signer_step2 = requests.post(url+"/api/blind-signature/step/2/get/i-list", data={'token': token, 'data':user_step1}, timeout=3).text
+            signer_step2 = requests.post(url+"/api/blind-signature/step/2/get/i-list", data={'token': token, 'data':user_step1}, timeout=3).text
 
-        user.step3_input(signer_step2)
-        user_step4 = user.step4_output()
-        
-        signer_step5 = requests.post(url+"/api/blind-signature/step/5/get/C", data={'token': token, 'data':user_step4}, timeout=3).text
+            user.step3_input(signer_step2)
+            user_step4 = user.step4_output()
+            
+            signer_step5 = requests.post(url+"/api/blind-signature/step/5/get/C", data={'token': token, 'data':user_step4}, timeout=3).text
 
-        user.step5_input(signer_step5)
+            user.step5_input(signer_step5)
 
-        result = dict()
-
-        result['Info'] = signer_step1_obj['PublicInfomation']
-        result['message'] = secret_message
-        result['t'] = hex(user.t)
-        result['s'] = hex(user.s)
-        result['R'] = hex(user.R)
-        
+            result = dict()
+            result['code'] = 1
+            result['Hint'] = 'Success to withdraw'
+            result['Info'] = signer_step1_obj['PublicInfomation']
+            result['message'] = secret_message
+            result['t'] = hex(user.t)
+            result['s'] = hex(user.s)
+            result['R'] = hex(user.R)
+        except:
+            return {
+                "code":0,
+                "Hint":"Fail to withdraw"
+            }
         return result

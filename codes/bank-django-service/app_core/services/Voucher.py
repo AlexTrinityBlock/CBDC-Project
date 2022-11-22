@@ -33,9 +33,43 @@ class Voucher:
         }))
 
     def redeem_voucher(self,request):
+        # 輸入資料擷取
+        input_data = ResolveRequest.ResolvePost(request)
+        input_voucher_token = input_data['voucher_token']
+        
+        # 取得點數卡資料庫實例
+        voucher = VoucherModel.objects.filter(voucher_token=input_voucher_token)
+
+        # 檢查Token是否有效
+        if voucher.count() != 1:
+            return HttpResponse(json.dumps({
+                'code': 0,
+                'message': 'Invalid voucher token'
+            }))
+
+        # 檢查點數卡是否被使用過
+        if voucher[0].is_used == 1:
+            return HttpResponse(json.dumps({
+                'code': 0,
+                'message': 'Voucher token is used'
+            }))
+
+        # 取得該點數卡的餘額
+        currency_in_voucher = voucher[0].currency
+
+        # 設置點數卡為已經使用過了
+        voucher = voucher[0]
+        voucher.is_used = 1
+        voucher.save()
+
+        # 更新貨幣總數
         user_id = ResolveRequest.ResolveUserID(request)
-        # balance = UserBalance.objects.filter(id=user_id)[0].id
+        user_balance = UserBalance.objects.filter(user_id=user_id)[0]
+        user_balance.balance = user_balance.balance + currency_in_voucher
+        user_balance.save()
+        
         return HttpResponse(json.dumps({
             'code': 1,
+            'message': 'The voucher successfully deposited into the bank'
         }))
 

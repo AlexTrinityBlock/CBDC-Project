@@ -433,3 +433,41 @@ paths:
                   token:
                     type: string
                     example: 27add4b6aa8a6842e3072ac048a7b20b9c73f8f4b0ec06ce9b0f513b9b201102
+# 兌換儲值卡
+  /api/redeem/voucher:
+    post:
+      tags:
+      - "儲值卡"
+      summary: 兌換儲值卡。
+      description: ""
+      requestBody:
+        description: 兌換儲值卡。
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 使用者登入的 token
+                  type: string
+                  required: true
+                voucher_token:
+                  description: 儲值卡的Token
+                  type: string
+                  required: true    
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  token:
+                    type: string
+                    example: 27add4b6aa8a6842e3072ac048a7b20b9c73f8f4b0ec06ce9b0f513b9b201102
