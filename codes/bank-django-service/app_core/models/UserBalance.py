@@ -7,4 +7,4 @@ class UserBalance(models.Model):
     撰寫: 蕭維均
     """
     user_id = models.IntegerField()
-    balance = models.IntegerField()
+    balance = models.IntegerField(default=0)
