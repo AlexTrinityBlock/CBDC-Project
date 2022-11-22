@@ -6,10 +6,10 @@ def main():
     for i in range(20):
         # 嘗試進行資料庫操作，如果操作失敗則嘗試重新連線，因為MySQL的啟動時間較長，所以重試直到連上。
         try:
-            subprocess.run(['python','/code/manage.py','runserver','0.0.0.0:8000'], check = True)
             subprocess.run(['python','/code/manage.py','makemigrations'], check = True)
             subprocess.run(['python','/code/manage.py','migrate'], check = True)
             subprocess.run(['python','/code/manage.py','loaddata','app_core/fixtures/data.json'], check = True)
+            subprocess.run(['python','/code/manage.py','runserver','0.0.0.0:8000'], check = True)
             subprocess.run(['chmod','+x','Test'], check = True)
             subprocess.run(['chmod','+x','SaveSQLData'], check = True)
             subprocess.run(['python','/code/manage.py','test','app_core.tests.test_login'], check = True)
