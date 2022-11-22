@@ -5,6 +5,7 @@ from app_core.services.AdministratorLogin import AdministratorLogin
 from app_core.services.Register import Register
 from app_core.services.PartiallyBlindSignaturePublicParameters import PartiallyBlindSignaturePublicParameters
 from app_core.services.PartiallyBlindSignature import PartiallyBlindSignature
+from app_core.services.Voucher import Voucher
 """
 前端頁面
 
@@ -102,3 +103,14 @@ def api_administrator_logout(request):
 def api_administrator_check_login(request):
     login =AdministratorLogin()
     return login.check_login(request)
+
+"""
+生成代金券
+"""
+def api_generate_voucher(request):
+    obj = Voucher()
+    return obj.generate_voucher(request)
+
+def redeem_voucher(request):
+    obj = Voucher()
+    return obj.redeem_voucher(request)

@@ -15,6 +15,8 @@ tags:
     description: "密碼學支援服務API，請將 Server 調整到密碼學支援服務。"
   - name: "銀行管理員登入"
     description: "銀行管理員登入API。"
+  - name: "儲值卡"
+    description: "儲值卡生成與儲值"
 
 paths:
 #################
@@ -314,6 +316,7 @@ paths:
                   token:
                     type: string
                     example: 95f585c748524b1ba154c13a37f973f4
+
 # 銀行管理員登入驗證 API
   # 驗證登入API
   /api/administrator/check_login:
@@ -387,3 +390,46 @@ paths:
                   token:
                     type: string
                     example: 95f585c748524b1ba154c13a37f973f4
+
+#######################
+# 儲值卡 API #
+#######################
+# 生成儲值卡 API
+  /api/generate/voucher:
+    post:
+      tags:
+      - "儲值卡"
+      summary: 使用管理員權限生成儲值卡序號。
+      description: ""
+      requestBody:
+        description: 輸入管理員權限與金額，生成儲值卡序號。
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 有管理員權限的登入 token
+                  type: string
+                  required: true
+                amount:
+                  description: 內含的金額
+                  type: int
+                  default: 1
+                  required: true    
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  token:
+                    type: string
+                    example: 27add4b6aa8a6842e3072ac048a7b20b9c73f8f4b0ec06ce9b0f513b9b201102

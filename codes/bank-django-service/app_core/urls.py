@@ -29,6 +29,10 @@ urlpatterns = [
     path('api/administrator/login', views.api_administrator_login),
     path('api/administrator/check_login', views.api_administrator_check_login),
     path('api/administrator/logout', views.api_administrator_logout),
+
+    # 生成代金券序號
+    path('api/generate/voucher', views.api_generate_voucher),
+    path('api/redeem/voucher', views.redeem_voucher),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡

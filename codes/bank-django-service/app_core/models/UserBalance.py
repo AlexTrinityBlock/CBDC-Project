@@ -1,7 +1,7 @@
 from django.db import models
 
 # 貨幣資料表
-class Currency(models.Model):
+class UserBalance(models.Model):
     """貨幣資料表
     尚未完成
     撰寫: 蕭維均
