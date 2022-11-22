@@ -5,6 +5,7 @@ from app_core.models.User import User
 from app_core.models.UserBalance import UserBalance
 from django.http import HttpResponse
 import json
+import os
 
 class Voucher:
     def __init__(self):
@@ -21,7 +22,7 @@ class Voucher:
                 'code': 0,
                 'message': 'User forbidden'
         }))
-        token =UUIDRandom.random_uuid_string()[:10]
+        token =UUIDRandom.random_uuid_string()[:int(os.environ['BANK_VOUCHER_LENGTH'])]
         voucher = VoucherModel()
         voucher.currency = data['amount']
         voucher.voucher_token = token

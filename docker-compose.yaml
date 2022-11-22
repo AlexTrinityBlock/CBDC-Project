@@ -49,6 +49,8 @@ services:
       ECDSA_PRIVATEKEY_2: ${ECDSA_PRIVATEKEY_2}
       # 銀行Django金鑰
       BANK_SECRET_KEY: ${BANK_SECRET_KEY}
+      # 銀行發行代金券Token長度
+      BANK_VOUCHER_LENGTH: ${BANK_VOUCHER_LENGTH}
       # 銀行Django 內網 IP
       BANK_DJANGO_SERVICE_IP: 10.0.0.1
       # 使用者密碼學支援服務URL
