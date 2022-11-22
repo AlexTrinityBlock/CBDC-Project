@@ -14,8 +14,8 @@ class TestLogin(TestCase):
     # 測試初始設置
     def setUp(self):
         # 網址路徑
-        self.login_url = 'http://127.0.0.1:8000/api/login'
-        self.check_login_url = 'http://127.0.0.1:8000/api/check_login'
+        self.login_url = 'http://localhost:8000/api/login'
+        self.check_login_url = 'http://localhost:8000/api/check_login'
         # 使用者帳號與密碼的Hash
         self.account = "user"
         self.password = 'user'
