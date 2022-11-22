@@ -43,6 +43,20 @@ header{
 .intro-box .box-title { width:100%;color: #004AAD; font-size: 40px; padding-top: 20px; display: inline-block;}
 .intro-box .box-content{ display:inline-block; width: 70%; color: #004AAD; font-size: 21px; padding-top: 15px;}
 
+/* login-and-register */
+#login-and-register{
+    position:absolute;
+    margin-top: 500px;
+    display:table;
+    vertical-align:middle;
+}
+
+#login-and-register a h3{
+    font-size: 2rem;
+ color: #ffffff;
+}
+
+
 .hyperlink-btn {
     text-decoration:none;
 }

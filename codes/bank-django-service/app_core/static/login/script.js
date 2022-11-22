@@ -29,7 +29,7 @@ function sendMessage(account_input, password_input) {
         if (jsonObj['code'] == 1) {
             // Cookies.set('token', jsonObj['token'])
             LoginFail.innerHTML = " "
-            window.location.replace("/");
+            window.location.replace("/home");
         } else {
             LoginFail.innerHTML = "登入失敗，請重新登入"
         }
@@ -47,7 +47,7 @@ async function main() {
     let token = Cookies.get('token')
     let loginCheck = await CheckLoginStatus(token)
     if (loginCheck) {
-        window.location.replace("/");
+        window.location.replace("/home");
     }
 
     document.getElementById("submit").onclick = submit;

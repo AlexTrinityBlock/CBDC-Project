@@ -24,7 +24,10 @@ class Login():
     def setUserToken(self,account:str):
         # 生成Token 
         token = uuid.uuid4().hex
-        json_data = json.dumps({'account':account})
+        json_data = json.dumps({
+            'account':account,
+            'role':'user'
+        })
         
         # Redis 連線物件
         redis_connection_token_index = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=0, password=os.environ['REDIS_PASSWORD'])
@@ -36,11 +39,11 @@ class Login():
 
         # 將使用者加入已經登入的使用者表單
         redis_connection_user_index.set(account,token)
-        redis_connection_user_index.expire(account,300)
+        redis_connection_user_index.expire(account,1800)
 
         # 用 uuid 作為使用者的Token
         redis_connection_token_index.set(token,json_data)
-        redis_connection_token_index.expire(token,300) # 300 秒，5分鐘超時。
+        redis_connection_token_index.expire(token,1800) # 300 秒，5分鐘超時。
 
         return token
 
@@ -115,7 +118,6 @@ class Login():
             result = {'code':1,'message':'Login success.'}
             result = json.dumps(result)
             result = HttpResponse(result)
-            result.set_cookie('test','123')
             return result
         else:
             result = {'code':0,'message':'Login fail.'}

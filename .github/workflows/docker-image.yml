@@ -13,15 +13,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v3    
     - name: Build containers
       run: docker-compose up -d
 
-    - name: Test Methods
+    - name: Init
       uses: nick-fields/retry@v2
       with:
         timeout_minutes: 10
         max_attempts: 20
-        command: docker compose exec bank-django-service bash ./Test
+        command: docker compose exec bank-django-service python manage.py test app_core.tests.test_login
 
+    - uses: actions/checkout@v3
+    - name: 測試銀行伺服器
+      run: docker-compose up -d && docker compose exec bank-django-service bash ./Test
+
+    - uses: actions/checkout@v3
+    - name: 測試密碼學支援伺服器
+      run: docker compose exec user-cryptography-support-flask-service flask test
