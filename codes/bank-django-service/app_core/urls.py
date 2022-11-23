@@ -33,6 +33,9 @@ urlpatterns = [
     # 生成代金券序號
     path('api/generate/voucher', views.api_generate_voucher),
     path('api/redeem/voucher', views.redeem_voucher),
+
+    # 使用者兌換貨幣
+    path('api/redeem/currency', views.redeem_currency),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡

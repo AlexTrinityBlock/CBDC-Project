@@ -6,6 +6,7 @@ from app_core.services.Register import Register
 from app_core.services.PartiallyBlindSignaturePublicParameters import PartiallyBlindSignaturePublicParameters
 from app_core.services.PartiallyBlindSignature import PartiallyBlindSignature
 from app_core.services.Voucher import Voucher
+from app_core.services.RedeemCurrency import RedeemCurrency
 """
 前端頁面
 
@@ -114,3 +115,10 @@ def api_generate_voucher(request):
 def redeem_voucher(request):
     obj = Voucher()
     return obj.redeem_voucher(request)
+
+"""
+以盲簽章兌換使用者存款
+"""
+def redeem_currency(request):
+    obj = RedeemCurrency()
+    return obj.redeem_currency(request)

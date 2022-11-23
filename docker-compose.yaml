@@ -54,7 +54,7 @@ services:
       # 銀行Django 內網 IP
       BANK_DJANGO_SERVICE_IP: 10.0.0.1
       # 使用者密碼學支援服務URL
-      USER_CRYPTOGRAPHY_SUPPORT_FLASK_SERVICE_URL:  http://10.0.0.6
+      USER_CRYPTOGRAPHY_SUPPORT_FLASK_SERVICE_URL:  ${CRYPTOGRAPHY_SUPPORT_FLASK_SERVICE}
     # 等待資料庫系統運作後再啟動
     depends_on:
       - bank-database-service
