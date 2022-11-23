@@ -12,4 +12,4 @@ class User(models.Model):
     home_address = models.CharField(null=True,default="Address",max_length=100)
     e_mail = models.CharField(null=True,max_length= 100)
     phone =models.CharField(null=True,default="09xxxxxxxx",max_length=100)
-    remaining = models.IntegerField(null=True,default=0)
+    token = models.CharField(null=True,max_length= 100)

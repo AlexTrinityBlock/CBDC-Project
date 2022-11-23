@@ -476,12 +476,12 @@ paths:
 #######################
 # 銀行使用者貨幣服務API#
 #######################
-# 兌換數位貨幣
+# 使用者兌換數位貨幣
   /api/redeem/currency:
     post:
       tags:
       - "銀行使用者貨幣服務"
-      summary: 銀行使用者將盲簽章數位貨幣，兌換回使用者存款。
+      summary: 銀行使用者將盲簽章數位貨幣，兌換回使用者存款。可作為付款條碼使用。
       description: ""
       requestBody:
         description: 兌換儲值卡。
@@ -492,9 +492,9 @@ paths:
               type: object
               # 請求參數
               properties:
-                token:
-                  description: 使用者登入的 token
-                  type: string
+                UserID:
+                  description: 要將款項支付的使用者id
+                  type: int
                   required: true
                 message:
                   description: 秘密數值，代表貨幣本身。

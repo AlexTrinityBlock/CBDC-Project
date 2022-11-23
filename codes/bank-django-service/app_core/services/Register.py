@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from app_core.models.User import User
 from app_core.models.UserBalance import UserBalance
+from app_core.services.UUIDRandom import UUIDRandom
 import hashlib
 
 import json 
@@ -27,6 +28,7 @@ class Register():
         user.account = data['account']
         user.e_mail = data['e_mail']
         user.password_hash = password_hash
+        user.token = UUIDRandom.random_uuid_string()
         user.save()
 
         # 新增帳戶時添加一個存款資料表條目。

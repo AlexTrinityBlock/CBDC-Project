@@ -57,4 +57,5 @@ none_login_pages = [
     "api/administrator/logout",
     "api/administrator/check_login",
     "api/administrator/logout",
+    "api/redeem/currency",
 ]

@@ -18,6 +18,7 @@ class RedeemCurrency:
         R = data["R"]
         s = data["s"]
         t = data["t"]
+        UserID = data["UserID"]
 
         # 檢查貨幣是否被使用過
         is_used = UsedCurrency.objects.filter(message=message,Info=Info,R=R,s=s,t=t).count()
@@ -41,8 +42,7 @@ class RedeemCurrency:
         amount = json.loads(Info)['currency']
 
         # 將額度存入使用者帳戶
-        id = ResolveRequest.ResolveUserID(request)
-        user_balance = UserBalance.objects.filter(user_id=id)[0]
+        user_balance = UserBalance.objects.filter(user_id=UserID)[0]
         user_balance.balance = user_balance.balance + int(amount)
         user_balance.save()
 
