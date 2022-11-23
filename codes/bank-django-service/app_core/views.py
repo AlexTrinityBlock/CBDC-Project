@@ -7,6 +7,7 @@ from app_core.services.PartiallyBlindSignaturePublicParameters import PartiallyB
 from app_core.services.PartiallyBlindSignature import PartiallyBlindSignature
 from app_core.services.Voucher import Voucher
 from app_core.services.RedeemCurrency import RedeemCurrency
+from app_core.services.GetBalance import GetBalance
 """
 前端頁面
 
@@ -117,8 +118,13 @@ def redeem_voucher(request):
     return obj.redeem_voucher(request)
 
 """
-以盲簽章兌換使用者存款
+使用者存款服務
 """
+#以盲簽章兌換使用者存款
 def redeem_currency(request):
     obj = RedeemCurrency()
     return obj.redeem_currency(request)
+# 使用者查詢餘額
+def get_balance(request):
+    obj = GetBalance()
+    return obj.get_balance(request)

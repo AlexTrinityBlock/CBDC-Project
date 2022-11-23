@@ -24,6 +24,13 @@ class ResolveRequest:
         return token
 
     @staticmethod
+    def ResolveGet(request):
+        if request.method == 'GET':
+            return request.GET
+        else:
+            raise Exception("方法錯誤")
+
+    @staticmethod
     def ResolvePost(request):
         if request.method == 'POST':
             return request.POST

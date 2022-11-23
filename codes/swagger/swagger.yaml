@@ -527,3 +527,29 @@ paths:
                   code:
                     type: int
                     example: 1
+# 餘額查詢
+  /api/get/balance:
+    get:
+      tags:
+      - "銀行使用者貨幣服務"
+      summary: 使用者餘額查詢
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 使用者token
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: balance\:餘額數量
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  balance:
+                    type: int
+                    example: 100
