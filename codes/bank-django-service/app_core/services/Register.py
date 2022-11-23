@@ -7,7 +7,7 @@ import json
 
 class Register():
     def register(self,request):
-            # 無論GET或者POST都接收，之後依照需求修改
+        # 無論GET或者POST都接收，之後依照需求修改
         if request.method == 'GET':
             result = {'code':0, 'message':'Registe post required'}
             result = json.dumps(result)
@@ -29,7 +29,7 @@ class Register():
         user.password_hash = password_hash
         user.save()
 
-        # 新增帳戶時添加一個存砍資料表條目。
+        # 新增帳戶時添加一個存款資料表條目。
         user_id = User.objects.filter(account=data['account'])[0].id
         user_balance = UserBalance()
         user_balance.user_id = user_id
