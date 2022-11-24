@@ -492,9 +492,9 @@ paths:
               type: object
               # 請求參數
               properties:
-                UserID:
+                bank_user_payment_id:
                   description: 要將款項支付的使用者id
-                  type: int
+                  type: string
                   required: true
                 message:
                   description: 秘密數值，代表貨幣本身。

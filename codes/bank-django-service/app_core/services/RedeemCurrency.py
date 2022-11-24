@@ -1,6 +1,7 @@
 from app_core.services.ResolveRequest import ResolveRequest
 from app_core.models.UsedCurrency import UsedCurrency
 from app_core.models.UserBalance import UserBalance
+from app_core.models.User import User
 from django.http import HttpResponse
 import json
 import os
@@ -18,7 +19,7 @@ class RedeemCurrency:
         R = data["R"]
         s = data["s"]
         t = data["t"]
-        UserID = data["UserID"]
+        bank_user_payment_id = data["bank_user_payment_id"]
 
         # 檢查貨幣是否被使用過
         is_used = UsedCurrency.objects.filter(message=message,Info=Info,R=R,s=s,t=t).count()
@@ -42,7 +43,8 @@ class RedeemCurrency:
         amount = json.loads(Info)['currency']
 
         # 將額度存入使用者帳戶
-        user_balance = UserBalance.objects.filter(user_id=UserID)[0]
+        id = User.objects.filter(bank_user_payment_id=bank_user_payment_id)[0].id
+        user_balance = UserBalance.objects.filter(user_id=id)[0]
         user_balance.balance = user_balance.balance + int(amount)
         user_balance.save()
 
@@ -55,4 +57,7 @@ class RedeemCurrency:
         used_currency.t = t
         used_currency.save()
 
-        return HttpResponse(is_used)
+        return HttpResponse(json.dumps({
+            'code':1,
+            'message':'Successful transaction.'
+        }))

@@ -28,7 +28,7 @@ class Register():
         user.account = data['account']
         user.e_mail = data['e_mail']
         user.password_hash = password_hash
-        user.token = UUIDRandom.random_uuid_string()
+        user.bank_user_payment_id = UUIDRandom.random_uuid_string()
         user.save()
 
         # 新增帳戶時添加一個存款資料表條目。
