@@ -4,7 +4,6 @@ from pprint import pprint
 import json
 import os
 from unittest import result
-import redis
 import ellipticcurve
 from ellipticcurve.privateKey import PrivateKey, PublicKey
 import gmpy2
@@ -302,7 +301,10 @@ class PartiallyBlindSignatureClientInterface:
         vQ = ellipticcurve.math.Math.multiply(Q, v, self.curve_N, self.curve_A, self.curve_P)
 
         K_p = ellipticcurve.math.Math.add(uG, vQ, self.curve_A, self.curve_P)
-        self.t_p = gmpy2.mod(K_p.x,self.q)
+        t_p = gmpy2.mod(K_p.x,self.q)
+
+        if self.t != t_p:
+            raise Exception("Fail to validation")
 
         # print("t",self.t)
         # print("t'",K_p.x%self.q)

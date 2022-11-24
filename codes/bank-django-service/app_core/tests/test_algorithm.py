@@ -10,6 +10,7 @@ from app_core.services.PartiallyBlindSignatureServerInterface import PartiallyBl
 from app_core.services.Login import Login
 import requests
 import redis
+import gmpy2
 
 class TestAlgorithm(TestCase):
     
@@ -35,6 +36,7 @@ class TestAlgorithm(TestCase):
         self.assertTrue(result, "\n\n ECDSA模塊測試失敗，有可能是模塊損壞或者ECDSA鑰匙錯誤")
 
     def test_PartiallyBlindSignatureServerInterface(self):
+        print("[算法測試] 盲簽章算法驗證")
         redis_connection_0 = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=0, password=os.environ['REDIS_PASSWORD']) 
         redis_connection_1 = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=1, password=os.environ['REDIS_PASSWORD']) 
 
@@ -42,8 +44,11 @@ class TestAlgorithm(TestCase):
         token = login.setUserToken("user")
 
         signer = PartiallyBlindSignatureServerInterface(token)
+        signer.generate_I("Public")
         signer_step1 = signer.output()
         signer.save_and_next_step(token)
+        # print(signer.K1x)
+        # print(signer.ECDSA_PRIVATEKEY)
         # print("簽署者將公鑰傳遞給使用者，並且將零知識證明的提問順便傳送")
         # pprint(signer_step1)
         # print("")
@@ -75,26 +80,10 @@ class TestAlgorithm(TestCase):
         signer.input(use_step4_output)
         signer.save_and_next_step(token)
         signer_step5 = signer.output()
-        print("簽署者將C傳給使用者")
-        pprint(signer_step5)
-        print("")
 
         user.step5_input(signer_step5)
 
-        # 檢查 C1, C2
-        # Yi = YiModifiedPaillierEncryptionPy()
-        # signer_C1 = signer.status["C1"]
-        # signer_C2 = signer.status["C2"]
-        # user_C1 = user.C1
-        # user_C2 = user.C2
-        # result1 = Yi.decrypt(user_C1,user.p,user.k,user.q,user.N)
-        # print("原始C1: ",user.message_hash)
-        # print("解密後C1: ",result1)
-        # print("\n\n")
-        # result2 = Yi.decrypt(user_C2,user.p,user.k,user.q,user.N)
-        # print("原始C2: ",user.t)
-        # print("解密後C2: ",result2)
-        # print("C2^d: ",signer.C2_mul_d_mod_q)
-
         redis_connection_0.delete(token)
         redis_connection_1.delete('user')
+
+        self.assertEqual(user.t,user.t_p)

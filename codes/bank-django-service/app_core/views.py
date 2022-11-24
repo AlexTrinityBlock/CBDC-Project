@@ -1,7 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from app_core.services.Login import Login
+from app_core.services.AdministratorLogin import AdministratorLogin
 from app_core.services.Register import Register
+from app_core.services.PartiallyBlindSignaturePublicParameters import PartiallyBlindSignaturePublicParameters
+from app_core.services.PartiallyBlindSignature import PartiallyBlindSignature
+from app_core.services.Voucher import Voucher
+from app_core.services.RedeemCurrency import RedeemCurrency
+from app_core.services.GetBalance import GetBalance
+from app_core.services.GetUserPaymentID import GetUserPaymentID
 """
 前端頁面
 
@@ -24,6 +31,7 @@ def login(request):
 
 def register(request):
     return render(request, 'register/index.html')
+
 """
 API
 
@@ -52,3 +60,76 @@ def api_check_login(request):
 def api_register(request):
     register =Register()
     return register.register(request)
+
+"""
+密碼學 API
+"""
+def api_blind_signature_init(request):
+    obj = PartiallyBlindSignature()
+    return obj.init_blind_signature(request)
+
+def api_blind_signature_get_Q(request):
+    obj = PartiallyBlindSignaturePublicParameters()
+    return obj.get_Q()
+
+def api_blind_signature_get_K1(request):
+    obj = PartiallyBlindSignaturePublicParameters()
+    return obj.get_K1()
+
+def api_blind_signature_get_q(request):
+    obj =PartiallyBlindSignaturePublicParameters()
+    return obj.get_q()
+
+def api_blind_signature_step_1_get_K1_Q_bit_list(request):
+    obj = PartiallyBlindSignature()
+    return obj.api_blind_signature_step_1_get_K1_Q_bit_list(request)
+
+def api_blind_signature_step_2_get_i_list(request):
+    obj = PartiallyBlindSignature()
+    return obj.api_blind_signature_step_2_get_i_list(request)
+
+def api_blind_signature_step_5_get_C(request):
+    obj = PartiallyBlindSignature()
+    return obj.api_blind_signature_step_5_get_C(request)
+"""
+管理員登入登出
+"""
+def api_administrator_login(request):
+    obj = AdministratorLogin()
+    return obj.login(request)
+
+def api_administrator_logout(request):
+    login =AdministratorLogin()
+    return login.logout(request)
+
+# 檢查登入 API
+def api_administrator_check_login(request):
+    login =AdministratorLogin()
+    return login.check_login(request)
+
+"""
+生成代金券
+"""
+def api_generate_voucher(request):
+    obj = Voucher()
+    return obj.generate_voucher(request)
+
+def redeem_voucher(request):
+    obj = Voucher()
+    return obj.redeem_voucher(request)
+
+"""
+使用者存款服務
+"""
+#以盲簽章兌換使用者存款
+def redeem_currency(request):
+    obj = RedeemCurrency()
+    return obj.redeem_currency(request)
+# 使用者查詢餘額
+def get_balance(request):
+    obj = GetBalance()
+    return obj.get_balance(request)
+# 取得使用者支付ID
+def bank_user_payment_id(request):
+    obj = GetUserPaymentID()
+    return obj.get_user_payment_ID(request)

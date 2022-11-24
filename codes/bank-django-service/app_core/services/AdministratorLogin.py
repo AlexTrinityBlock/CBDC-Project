@@ -1,5 +1,5 @@
 from tokenize import Token
-from app_core.models.User import User
+from app_core.models.Administrator import Administrator
 import hashlib
 import json 
 import redis
@@ -7,18 +7,18 @@ import os
 import uuid
 from django.http import HttpResponse
 
-class Login():
+class AdministratorLogin():
     """登入類別
     撰寫: 蕭維均
     """
     def check_account(self, account:str):
-        user_exist =  User.objects.filter(account__contains=account).count()
+        user_exist =  Administrator.objects.filter(account__contains=account).count()
         return True if user_exist == 1 else False
 
     def check_password(self,account:str ,password:str):
         password = password.encode('utf-8')
         password_hash = hashlib.sha256(password).hexdigest()
-        result = User.objects.filter(account = account, password_hash = password_hash).count()
+        result = Administrator.objects.filter(account = account, password_hash = password_hash).count()
         return True if result == 1 else False
 
     def setUserToken(self,account:str):
@@ -26,8 +26,9 @@ class Login():
         token = uuid.uuid4().hex
         json_data = json.dumps({
             'account':account,
-            'role':'user'
-        })
+            'role':'administrator',
+            'access_control_list':''
+            })
         
         # Redis 連線物件
         redis_connection_token_index = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=0, password=os.environ['REDIS_PASSWORD'])
@@ -118,6 +119,7 @@ class Login():
             result = {'code':1,'message':'Login success.'}
             result = json.dumps(result)
             result = HttpResponse(result)
+            result.set_cookie('test','123')
             return result
         else:
             result = {'code':0,'message':'Login fail.'}
