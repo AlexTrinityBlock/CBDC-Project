@@ -553,3 +553,35 @@ paths:
                   balance:
                     type: int
                     example: 100
+# 取得使用者支付ID
+  /api/get/user_payment_id:
+    get:
+      security:
+        - token: []
+      tags:
+      - "銀行使用者貨幣服務"
+      summary: 取得使用者支付ID
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 使用者token
+          required: true
+          schema:
+            type: string
+      # 回應參數
+      responses:
+        '200':    # status code
+          description: 顯示token是否有效。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  bank_user_payment_id:
+                    type: string
+                    example: 68746da1fe45c43396846880eb8c18f3966397af9f82fbf93170007d5003ec64

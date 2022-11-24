@@ -8,6 +8,7 @@ from app_core.services.PartiallyBlindSignature import PartiallyBlindSignature
 from app_core.services.Voucher import Voucher
 from app_core.services.RedeemCurrency import RedeemCurrency
 from app_core.services.GetBalance import GetBalance
+from app_core.services.GetUserPaymentID import GetUserPaymentID
 """
 前端頁面
 
@@ -128,3 +129,7 @@ def redeem_currency(request):
 def get_balance(request):
     obj = GetBalance()
     return obj.get_balance(request)
+# 取得使用者支付ID
+def bank_user_payment_id(request):
+    obj = GetUserPaymentID()
+    return obj.get_user_payment_ID(request)

@@ -37,6 +37,7 @@ urlpatterns = [
     # 使用者兌換貨幣
     path('api/redeem/currency', views.redeem_currency),
     path('api/get/balance', views.get_balance),
+    path('api/get/user_payment_id', views.bank_user_payment_id),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡
