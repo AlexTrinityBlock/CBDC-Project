@@ -32,6 +32,9 @@ def login(request):
 def register(request):
     return render(request, 'register/index.html')
 
+def logout(request):
+    return render(request, 'logout/index.html')
+
 """
 API
 
