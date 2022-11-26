@@ -19,7 +19,8 @@ class Register():
         password = password.encode('utf-8')
         password_hash = hashlib.sha256(password).hexdigest()
         user = User()
-        user_account_number = User.objects.filter(account__contains=data['account']).count() #數帳號
+        user_account_number = User.objects.filter(account=data['account']).count() #數帳號
+        print(user_account_number)
         if(user_account_number>0): 
             result = {'code':2, 'message':'account is created'}
             result = json.dumps(result)

@@ -12,7 +12,7 @@ class Login():
     撰寫: 蕭維均
     """
     def check_account(self, account:str):
-        user_exist =  User.objects.filter(account__contains=account).count()
+        user_exist =  User.objects.filter(account=account).count()
         return True if user_exist == 1 else False
 
     def check_password(self,account:str ,password:str):
