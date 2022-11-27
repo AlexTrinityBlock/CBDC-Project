@@ -630,10 +630,10 @@ paths:
     post:
       tags:
       - "銀行使用者AES驗證API"
-      summary: 儲存銀行使用者AES驗證密文
+      summary: 取得銀行使用者AES驗證密文
       description: ""
       requestBody:
-        description: 儲存銀行使用者AES驗證密文
+        description: 取得銀行使用者AES驗證密文
         required: true
         content:
           application/x-www-form-urlencoded:
