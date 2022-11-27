@@ -9,6 +9,7 @@ from app_core.services.Voucher import Voucher
 from app_core.services.RedeemCurrency import RedeemCurrency
 from app_core.services.GetBalance import GetBalance
 from app_core.services.GetUserPaymentID import GetUserPaymentID
+from app_core.services.AesVerifyKey import AesVerifyKey
 """
 前端頁面
 
@@ -136,3 +137,15 @@ def get_balance(request):
 def bank_user_payment_id(request):
     obj = GetUserPaymentID()
     return obj.get_user_payment_ID(request)
+
+"""
+使用者 AES 電子錢包
+"""
+# 設置電子錢包認證密文
+def api_set_aes_verify_ciphertext(request):
+    obj = AesVerifyKey()
+    return obj.set_aes_verify_ciphertext(request)
+# 取得電子錢包認證密文
+def api_get_aes_verify_ciphertext(request):
+    obj = AesVerifyKey()
+    return obj.get_aes_verify_ciphertext(request)

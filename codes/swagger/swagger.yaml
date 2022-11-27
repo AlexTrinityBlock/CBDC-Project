@@ -19,6 +19,8 @@ tags:
     description: "密碼學支援服務API，請將 Server 調整到密碼學支援服務。"
   - name: "儲值卡"
     description: "儲值卡生成與儲值"
+  - name: "銀行使用者AES驗證API"
+    description: "銀行使用者AES驗證API"
 
 paths:
 #################
@@ -585,3 +587,72 @@ paths:
                   bank_user_payment_id:
                     type: string
                     example: 68746da1fe45c43396846880eb8c18f3966397af9f82fbf93170007d5003ec64
+#######################
+# 銀行使用者AES驗證API#
+#######################
+# 儲存銀行使用者AES驗證密文
+  /api/set/aes-verify-ciphertext:
+    post:
+      tags:
+      - "銀行使用者AES驗證API"
+      summary: 儲存銀行使用者AES驗證密文
+      description: ""
+      requestBody:
+        description: 儲存銀行使用者AES驗證密文
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 
+                  type: string
+                  required: true
+                aes_key_verify_ciphertext:
+                  description: AES驗證密文
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: code:1表示成功，0表示失敗。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+# 儲存銀行使用者AES驗證密文
+  /api/get/aes-verify-ciphertext:
+    post:
+      tags:
+      - "銀行使用者AES驗證API"
+      summary: 儲存銀行使用者AES驗證密文
+      description: ""
+      requestBody:
+        description: 儲存銀行使用者AES驗證密文
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: code:1表示成功，0表示失敗。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1

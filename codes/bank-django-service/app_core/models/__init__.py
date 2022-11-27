@@ -7,3 +7,4 @@ from app_core.models.UsedCurrency import UsedCurrency
 from app_core.models.UserCurrency import UserCurrency
 from app_core.models.Administrator import Administrator
 from app_core.models.Voucher import Voucher
+from app_core.models.AESKeyVerify import AESKeyVerify

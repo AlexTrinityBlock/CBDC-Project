@@ -39,6 +39,11 @@ urlpatterns = [
     path('api/redeem/currency', views.redeem_currency),
     path('api/get/balance', views.get_balance),
     path('api/get/user_payment_id', views.bank_user_payment_id),
+
+    # 使用者 AES　功能，設置 AES 認證密文
+    path('api/set/aes-verify-ciphertext', views.api_set_aes_verify_ciphertext),
+    path('api/get/aes-verify-ciphertext', views.api_get_aes_verify_ciphertext),
+
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡
