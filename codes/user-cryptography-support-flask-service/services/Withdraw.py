@@ -27,9 +27,16 @@ class Withdraw:
     def withdraw(self,request):
         try:
             url = os.environ['BANK_DJANGO_SERVICE_URL']
+            try:
+                withdraw = request.form['withdraw']
+                token = request.form['token']
+            except Exception as e:
+                return {
+                    "code":0,
+                    "Hint":"Fail to withdraw",
+                    'error':str(e)
+                }
 
-            withdraw = request.form['withdraw']
-            token = request.form['token']
             random_number =str(random.randint(0,9999999))
             secret_message = self.hash(str(uuid.uuid4())+random_number)
 
@@ -60,9 +67,10 @@ class Withdraw:
             result['t'] = hex(user.t)
             result['s'] = hex(user.s)
             result['R'] = hex(user.R)
-        except:
+        except Exception as e:
             return {
                 "code":0,
-                "Hint":"Fail to withdraw"
+                "Hint":"Fail to withdraw",
+                'error':str(e)
             }
         return result

@@ -70,3 +70,21 @@ a:active {
     /* background-image: linear-gradient(to right, var(--page-background-color-1), var(--page-background-color-2)); */
     background-color: var(--panel-background-color);
 }
+
+/* 餘額標題文字 */
+#balance-title-text {
+    color: var(--main-color);
+    font-size: var(--font-size-1);
+    margin-top: var(--margin-vertical-1);
+    margin-bottom: var(--margin-vertical-1);
+}
+
+/* 餘額卡片 */
+#balance-card {
+    background-color: var(--main-color);
+    color: var(--font-color-1);
+    font-size: var(--font-size-1);
+    padding-top: var(--card-padding-top-1);
+    margin-top: var(--margin-vertical-1);
+    margin-bottom: var(--margin-vertical-1);
+}

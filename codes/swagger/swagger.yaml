@@ -28,6 +28,7 @@ paths:
 #################
 # 銀行伺服器 API #
 #################
+# 使用者登入
   /api/login:
     post:
       tags:
@@ -101,9 +102,39 @@ paths:
                   message:
                     type: string
                     example: Login success.
+
+  # 取得Token API
+  /api/get/token:
+    get:
+      security:
+        - token: []
+      tags:
+      - "銀行使用者登入與註冊"
+      summary: 取得Token API
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 使用者token
+          # required: true
+          schema:
+            type: string
+      # 回應參數
+      responses:
+        '200':    # status code
+          description: 顯示token是否有效。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
                   token:
                     type: string
-                    example: 95f585c748524b1ba154c13a37f973f4
+                    example: Login success.
 
 # 登出
   /api/logout:

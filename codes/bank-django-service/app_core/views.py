@@ -11,6 +11,8 @@ from app_core.services.GetBalance import GetBalance
 from app_core.services.GetUserPaymentID import GetUserPaymentID
 from app_core.services.AesVerifyKey import AesVerifyKey
 from app_core.services.User import User
+from app_core.services.ResolveRequest import ResolveRequest
+import json
 """
 前端頁面
 
@@ -76,6 +78,11 @@ def api_register(request):
 def api_get_account(request):
     user = User()
     return user.get_account(request)
+
+# 取得使用者Token
+def api_get_token(request):
+    toekn = ResolveRequest.ResolveToken(request)
+    return HttpResponse(json.dumps({'code':1,'token':toekn}))
 """
 密碼學 API
 """

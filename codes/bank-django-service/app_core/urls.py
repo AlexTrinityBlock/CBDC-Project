@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/logout', views.api_logout),
     path('api/register',views.api_register),
     path('api/get/account',views.api_get_account),
+    path('api/get/token',views.api_get_token),
 
     # 密碼學 API
     path('api/blind-signature/init',views.api_blind_signature_init),
