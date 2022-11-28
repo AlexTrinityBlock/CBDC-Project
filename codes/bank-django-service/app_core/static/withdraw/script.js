@@ -16,8 +16,7 @@ async function load_balance() {
 
 // 主函數
 function main() {
-    load_account();
-    load_balance();
+
 }
 
 // 當頁面完全載入後啟動主函數

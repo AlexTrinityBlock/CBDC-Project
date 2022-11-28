@@ -10,6 +10,7 @@ urlpatterns = [
     path('login', views.login, name='login'),
     path('logout', views.logout, name='logout'),
     path('register',views.register, name = 'register'),
+    path('withdraw',views.withdraw, name = 'withdraw'),
 
     # 使用者登入API
     path('api/login', views.api_login),

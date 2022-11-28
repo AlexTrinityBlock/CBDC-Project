@@ -40,6 +40,9 @@ def register(request):
 def logout(request):
     return render(request, 'logout/index.html')
 
+def withdraw(request):
+    return render(request, 'withdraw/index.html')
+
 """
 API
 
