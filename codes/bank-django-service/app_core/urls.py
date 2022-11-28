@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/check_login', views.api_check_login),
     path('api/logout', views.api_logout),
     path('api/register',views.api_register),
+    path('api/get/account',views.api_get_account),
 
     # 密碼學 API
     path('api/blind-signature/init',views.api_blind_signature_init),

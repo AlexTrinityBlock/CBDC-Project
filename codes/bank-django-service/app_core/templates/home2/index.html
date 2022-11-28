@@ -40,6 +40,12 @@
                         <a class="nav-link active text-secondary" href="/home">支付</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link active text-secondary" href="/home">付款條碼</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-secondary" href="/home">儲值</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link active text-secondary" href="/logout">登出</a>
                     </li>
                 </ul>
@@ -75,7 +81,37 @@
 
     <!-- 餘額與使用者 -->
     <div class="container">
-        bs5-grid-row
+        <div class="row ">
+            <!-- 使用者 -->
+            <div class="col-md-6">
+                <!-- 使用者標題 -->
+                <p id="user-title-text">使用者</p>
+                <!-- /使用者標題 -->
+                <!-- 使用者卡片 -->
+                <div class="card" id="user-card">
+                    <div class="card-body">
+                        <p class="card-text text-end" id="user_account">使用者</p>
+                    </div>
+                </div>
+                <!-- /使用者卡片 -->
+            </div>
+            <!-- /使用者 -->
+
+            <!-- 餘額 -->
+            <div class="col-md-6 ">
+                <!-- 餘額標題 -->
+                <p id="balance-title-text">餘額</p>
+                <!-- /餘額標題 -->
+                <!-- 餘額卡片 -->
+                <div class="card" id="balance-card">
+                    <div class="card-body">
+                        <p class="card-text text-end" id="balance_text">餘額</p>
+                    </div>
+                </div>
+                <!-- /餘額卡片 -->
+            </div>
+            <!-- /餘額 -->
+        </div>
     </div>
     <!-- /餘額與使用者 -->
 
@@ -83,7 +119,7 @@
     <div class="container text-secondary">
         <!-- 服務項目 -->
         <div class="row text-center">
-            <div class="col" id="services-text">服務項目</div>
+            <div class="col services-text">服務項目</div>
         </div>
         <!-- /服務項目 -->
 
@@ -94,7 +130,7 @@
                 <!-- 卡片連結 -->
                 <a href="">
                     <div class="card services-cards">
-                        <img src="../../static/home2/withdraw_icon.png" class="card-img-top">
+                        <img src="/static/home2/withdraw_icon.png" class="card-img-top">
                         <div class="card-body">
                             <h3 class="card-title">提款</h3>
                             <p class="card-text">從帳戶中提取數位貨幣</p>
@@ -109,7 +145,7 @@
                 <!-- 卡片連結 -->
                 <a href="">
                     <div class="card services-cards">
-                        <img src="../../static/home2/balance_inquiry_icon.png" class="card-img-top">
+                        <img src="/static/home2/balance_inquiry_icon.png" class="card-img-top">
                         <div class="card-body">
                             <h3 class="card-title">支付</h3>
                             <p class="card-text">掃描別人的條碼，或輸入別人的付款序號，將款項付給別人</p>
@@ -124,7 +160,7 @@
                 <!-- 卡片連結 -->
                 <a href="">
                     <div class="card services-cards">
-                        <img src="../../static/home2/saving_icon.png" class="card-img-top">
+                        <img src="/static/home2/saving_icon.png" class="card-img-top">
                         <div class="card-body">
                             <h3 class="card-title">付款條碼</h3>
                             <p class="card-text">顯示付款 QR code 與 付款序號</p>
@@ -133,6 +169,22 @@
                 </a>
             </div>
             <!-- /卡片3 -->
+
+            <!-- 卡片4 -->
+            <div class="col-md-4">
+                <!-- 卡片連結 -->
+                <a href="">
+                    <div class="card services-cards">
+                        <img src="../../static/home2/ICON-0.svg" class="card-img-top">
+                        <div class="card-body">
+                            <h3 class="card-title">儲值</h3>
+                            <p class="card-text">輸入點數卡或者點數序號來儲值</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- /卡片4 -->
+
         </div>
         <!-- /服務卡片組 -->
     </div>

@@ -10,6 +10,7 @@ from app_core.services.RedeemCurrency import RedeemCurrency
 from app_core.services.GetBalance import GetBalance
 from app_core.services.GetUserPaymentID import GetUserPaymentID
 from app_core.services.AesVerifyKey import AesVerifyKey
+from app_core.services.User import User
 """
 前端頁面
 
@@ -68,6 +69,10 @@ def api_register(request):
     register =Register()
     return register.register(request)
 
+# 取得使用者帳號
+def api_get_account(request):
+    user = User()
+    return user.get_account(request)
 """
 密碼學 API
 """

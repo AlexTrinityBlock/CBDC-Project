@@ -183,6 +183,39 @@ paths:
                   token:
                     type: string
                     example: 95f585c748524b1ba154c13a37f973f4
+
+  # 取得使用者帳號
+  /api/get/account:
+    get:
+      security:
+        - token: []
+      tags:
+      - "銀行使用者登入與註冊"
+      summary: 取得使用者帳號
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 檢查使用者token
+          # required: true
+          schema:
+            type: string
+      # 回應參數
+      responses:
+        '200':    # status code
+          description: 顯示token是否有效。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  account:
+                    type: string
+                    example: abc123
 #######################
 # 密碼學支援伺服器 API #
 #######################
