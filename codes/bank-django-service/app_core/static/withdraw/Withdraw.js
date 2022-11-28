@@ -1,5 +1,5 @@
 
-async function Withdraw(token,withdraw) {
+async function Withdraw(token,withdraw,url) {
     /**
      * 領錢
      * @param {string} token - 使用者的token
@@ -10,7 +10,7 @@ async function Withdraw(token,withdraw) {
         "withdraw": withdraw,
     }
 
-    let result = await fetch("http://127.0.0.1:8086/withdraw", {
+    let result = await fetch(url, {
         // 方法為Post
         method: "POST",
         // Header 一定要加入，否則在Laravel一類的框架可能會接收不到

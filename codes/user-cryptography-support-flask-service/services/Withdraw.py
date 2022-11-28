@@ -38,7 +38,10 @@ class Withdraw:
                 }
 
             random_number =str(random.randint(0,9999999))
-            secret_message = self.hash(str(uuid.uuid4())+random_number)
+            secret_message = json.dumps({
+                "uuid":self.hash(str(uuid.uuid4())+random_number),
+                "text":"This currency is issued by a partial blind signature algorithm"
+            }) 
 
             signer_step1 = requests.post(url+"/api/blind-signature/step/1/get/K1/Q/bit-list", data={'token': token,'withdraw':withdraw}, timeout=3).text
             signer_step1_obj = json.loads(signer_step1)

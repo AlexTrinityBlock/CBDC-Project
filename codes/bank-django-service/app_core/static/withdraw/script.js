@@ -3,6 +3,9 @@ import Withdraw from "/static/withdraw/Withdraw.js"
 import Cookies from "/static/cookie-js/js.cookie.min.mjs"
 import GetToken from "/static/withdraw/GetToken.js"
 
+// var url = "http://192.168.230.252:8086/withdraw"
+var url = "http://127.0.0.1:8086/withdraw"
+
 // 載入餘額
 async function load_balance() {
     window.setInterval(async () => {
@@ -23,7 +26,7 @@ async function handle_withdraw() {
         // 取得貨幣
         let withdraw_number = withdraw_input.value
         let token = await GetToken();//取得使用者識別
-        let currency = await Withdraw(token, withdraw_number);//取得貨幣
+        let currency = await Withdraw(token, withdraw_number,url);//取得貨幣
         balance_text.innerHTML = '$' + await GetBalance();//更新貨幣數量
         // 生成檔案
         var blob = new Blob([currency],
