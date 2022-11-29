@@ -4,7 +4,7 @@ import Cookies from "/static/cookie-js/js.cookie.min.mjs"
 import GetToken from "/static/withdraw/GetToken.js"
 
 // var url = "http://192.168.230.252:8086/withdraw"
-var url = "http://127.0.0.1:8086/withdraw"
+var url = "/api/withdraw/test"
 
 // 載入餘額
 async function load_balance() {

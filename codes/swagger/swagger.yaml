@@ -653,6 +653,53 @@ paths:
                   bank_user_payment_id:
                     type: string
                     example: 68746da1fe45c43396846880eb8c18f3966397af9f82fbf93170007d5003ec64
+# 測試用提款接口
+  #提款
+  /api/withdraw/test:
+    post:
+      tags:
+      - "銀行使用者貨幣服務"
+      summary: 測試用提款接口
+      requestBody:
+        description: 測試用提款接口
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 字串，銀行登入後取得的 token。
+                  type: string
+                  required: true
+                withdraw:
+                  description: 整數，要提領的金額。
+                  type: int
+                  required: true    
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  Info:
+                    type: string
+                    example: '{"currency": "1", "Text": "Technology provided by ECDSA project."}'
+                  R:
+                    type: string
+                    example:  d319c95e07fc2054fc0ae0a13fa74d5e7e5e85a9aac6244876af055ab61b0c5
+                  message:
+                    type: string
+                    example: 236eaa1d29afb27d3ed69461b24968d49452454c04e945e7f7aefd1204c9bcea
+                  s:
+                    type: string
+                    example: 301ac1953003348d41b6afdbd6145eebfa1fb2fc95f5493a626bdb2956aee6cc
+                  t:
+                    type: string
+                    example: 922257d693122b5ef27f1b635ee3fb3a3f457db8b21f5cabe78b0dcec729bbab
 #######################
 # 銀行使用者AES驗證API#
 #######################

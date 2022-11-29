@@ -76,4 +76,6 @@ class Withdraw:
                 "Hint":"Fail to withdraw",
                 'error':str(e)
             }
+        result =  json.dumps(result)
+        # result = result.replace("\\", "")
         return result

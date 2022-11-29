@@ -32,7 +32,7 @@ async function Withdraw(token,withdraw,url) {
     });
     let json_string = JSON.stringify(result);
     json_string = json_string.replaceAll("\\", "");
-    console.log(json_string)
+    // console.log(json_string)
     return  json_string;
 }
 

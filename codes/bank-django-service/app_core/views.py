@@ -12,6 +12,7 @@ from app_core.services.GetUserPaymentID import GetUserPaymentID
 from app_core.services.AesVerifyKey import AesVerifyKey
 from app_core.services.User import User
 from app_core.services.ResolveRequest import ResolveRequest
+from app_core.services.WithdrawProxy import WithdrawProxy
 import json
 """
 前端頁面
@@ -155,7 +156,10 @@ def get_balance(request):
 def bank_user_payment_id(request):
     obj = GetUserPaymentID()
     return obj.get_user_payment_ID(request)
-
+# 測試用提款接口
+def withdraw_test(request):
+    obj = WithdrawProxy()
+    return obj.withdraw_proxy(request)
 """
 使用者 AES 電子錢包
 """

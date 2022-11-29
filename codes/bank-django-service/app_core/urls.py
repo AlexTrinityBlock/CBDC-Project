@@ -42,6 +42,7 @@ urlpatterns = [
     path('api/redeem/currency', views.redeem_currency),
     path('api/get/balance', views.get_balance),
     path('api/get/user_payment_id', views.bank_user_payment_id),
+    path('api/withdraw/test', views.withdraw_test),
 
     # 使用者 AES　功能，設置 AES 認證密文
     path('api/set/aes-verify-ciphertext', views.api_set_aes_verify_ciphertext),
