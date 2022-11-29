@@ -110,8 +110,15 @@
                 <!-- 上傳貨幣外框 -->
                 <div class="card text-secondary">
                     <div class="card-body" id="payment_card">
-                        <h2>上傳你的貨幣儲存到帳戶中</h2>
-
+                        <h2>上傳</h2>
+                        <input class="form-control" type="file" id="currency_file">
+                        <!-- 等待圓環 -->
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-grow text-primary" role="status" id='upload_spinner' style="display:none">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <!-- /等待圓環 -->
                     </div>
                 </div>
                 <!-- /上傳貨幣外框 -->
