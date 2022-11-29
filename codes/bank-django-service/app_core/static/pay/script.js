@@ -11,7 +11,7 @@ async function load_balance() {
 async function webCam() {
     const html5QrCode = new Html5Qrcode("reader");
 
-    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+    const config = { fps: 10, qrbox: { width: 1000, height: 1000 } };
 
     html5QrCode.start({ facingMode: "environment" }, config, (decodedText, decodedResult) => {
         console.log('Success')

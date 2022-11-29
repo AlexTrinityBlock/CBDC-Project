@@ -32,6 +32,12 @@ a:active {
     text-decoration: none;
 }
 
+/* 全局字體 */
+body{
+    color: var(--page-background-color-1);
+}
+
+/* 上排Nav的字體大小 */
 nav{
     font-size: var(--nav-font-size-1);
 }
