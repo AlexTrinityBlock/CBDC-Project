@@ -12,6 +12,7 @@
     --margin-vertical-1: 30px;
     --card-color-2: #00b1cc;
     --card-padding-top-1: 35px;
+    --nav-font-size-1:20px;
 }
 
 /* 連結去除底線 */
@@ -29,6 +30,10 @@ a:hover {
 
 a:active {
     text-decoration: none;
+}
+
+nav{
+    font-size: var(--nav-font-size-1);
 }
 
 /* 左上方Nav的圖示 */
