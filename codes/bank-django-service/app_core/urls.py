@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout', views.logout, name='logout'),
     path('register',views.register, name = 'register'),
     path('withdraw',views.withdraw, name = 'withdraw'),
+    path('pay/qr-code',views.pay_qr_code_page, name = 'pay_qr_code_page'),
 
     # 使用者登入API
     path('api/login', views.api_login),

@@ -46,6 +46,8 @@ def logout(request):
 def withdraw(request):
     return render(request, 'withdraw/index.html')
 
+def pay_qr_code_page(request):
+    return render(request, 'pay_qr_code_page/index.html')
 """
 API
 
