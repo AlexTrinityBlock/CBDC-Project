@@ -26,13 +26,14 @@ SECRET_KEY = os.environ['BANK_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    os.environ['BANK_DJANGO_SERVICE_IP'],
-    '192.168.230.252'
-]
+# ALLOWED_HOSTS = [
+#     '127.0.0.1',
+#     'localhost',
+#     os.environ['BANK_DJANGO_SERVICE_IP'],
+#     '192.168.230.252'
+# ]
 
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
