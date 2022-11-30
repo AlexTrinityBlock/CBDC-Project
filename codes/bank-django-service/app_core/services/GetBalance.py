@@ -12,4 +12,7 @@ class GetBalance:
         id = ResolveRequest.ResolveUserID(request)
         balance = UserBalance.objects.filter(user_id=id)[0].balance
 
-        return HttpResponse(balance)
+        return HttpResponse(json.dumps({
+            'balance': balance,
+            'code':1,
+        }))

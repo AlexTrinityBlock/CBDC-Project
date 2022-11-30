@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     os.environ['BANK_DJANGO_SERVICE_IP'],
+    '192.168.230.252'
 ]
 
 

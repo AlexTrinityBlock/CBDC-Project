@@ -6,15 +6,21 @@ from . import views
 urlpatterns = [
     # 網站頁面
     path('', views.index, name='index'),
-    path('home', views.home, name='home'),
+    path('home', views.home2, name='home'),
     path('login', views.login, name='login'),
+    path('logout', views.logout, name='logout'),
     path('register',views.register, name = 'register'),
+    path('withdraw',views.withdraw, name = 'withdraw'),
+    path('pay/qr-code',views.pay_qr_code_page, name = 'pay_qr_code_page'),
+    path('pay',views.pay, name = 'pay'),
 
     # 使用者登入API
     path('api/login', views.api_login),
     path('api/check_login', views.api_check_login),
     path('api/logout', views.api_logout),
     path('api/register',views.api_register),
+    path('api/get/account',views.api_get_account),
+    path('api/get/token',views.api_get_token),
 
     # 密碼學 API
     path('api/blind-signature/init',views.api_blind_signature_init),
@@ -38,6 +44,12 @@ urlpatterns = [
     path('api/redeem/currency', views.redeem_currency),
     path('api/get/balance', views.get_balance),
     path('api/get/user_payment_id', views.bank_user_payment_id),
+    path('api/withdraw/test', views.withdraw_test),
+
+    # 使用者 AES　功能，設置 AES 認證密文
+    path('api/set/aes-verify-ciphertext', views.api_set_aes_verify_ciphertext),
+    path('api/get/aes-verify-ciphertext', views.api_get_aes_verify_ciphertext),
+
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡

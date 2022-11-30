@@ -19,11 +19,16 @@ tags:
     description: "密碼學支援服務API，請將 Server 調整到密碼學支援服務。"
   - name: "儲值卡"
     description: "儲值卡生成與儲值"
+  - name: "銀行使用者AES驗證API"
+    description: "銀行使用者AES驗證API"
+  - name: "銀行使用者電子錢包"
+    description: "銀行使用者電子錢包"
 
 paths:
 #################
 # 銀行伺服器 API #
 #################
+# 使用者登入
   /api/login:
     post:
       tags:
@@ -97,9 +102,39 @@ paths:
                   message:
                     type: string
                     example: Login success.
+
+  # 取得Token API
+  /api/get/token:
+    get:
+      security:
+        - token: []
+      tags:
+      - "銀行使用者登入與註冊"
+      summary: 取得Token API
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 使用者token
+          # required: true
+          schema:
+            type: string
+      # 回應參數
+      responses:
+        '200':    # status code
+          description: 顯示token是否有效。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
                   token:
                     type: string
-                    example: 95f585c748524b1ba154c13a37f973f4
+                    example: Login success.
 
 # 登出
   /api/logout:
@@ -179,6 +214,39 @@ paths:
                   token:
                     type: string
                     example: 95f585c748524b1ba154c13a37f973f4
+
+  # 取得使用者帳號
+  /api/get/account:
+    get:
+      security:
+        - token: []
+      tags:
+      - "銀行使用者登入與註冊"
+      summary: 取得使用者帳號
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 檢查使用者token
+          # required: true
+          schema:
+            type: string
+      # 回應參數
+      responses:
+        '200':    # status code
+          description: 顯示token是否有效。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+                  account:
+                    type: string
+                    example: abc123
 #######################
 # 密碼學支援伺服器 API #
 #######################
@@ -585,3 +653,183 @@ paths:
                   bank_user_payment_id:
                     type: string
                     example: 68746da1fe45c43396846880eb8c18f3966397af9f82fbf93170007d5003ec64
+# 測試用提款接口
+  #提款
+  /api/withdraw/test:
+    post:
+      tags:
+      - "銀行使用者貨幣服務"
+      summary: 測試用提款接口
+      requestBody:
+        description: 測試用提款接口
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 字串，銀行登入後取得的 token。
+                  type: string
+                  required: true
+                withdraw:
+                  description: 整數，要提領的金額。
+                  type: int
+                  required: true    
+      responses:
+        200:
+          description: 收到回傳訊息。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  Info:
+                    type: string
+                    example: '{"currency": "1", "Text": "Technology provided by ECDSA project."}'
+                  R:
+                    type: string
+                    example:  d319c95e07fc2054fc0ae0a13fa74d5e7e5e85a9aac6244876af055ab61b0c5
+                  message:
+                    type: string
+                    example: 236eaa1d29afb27d3ed69461b24968d49452454c04e945e7f7aefd1204c9bcea
+                  s:
+                    type: string
+                    example: 301ac1953003348d41b6afdbd6145eebfa1fb2fc95f5493a626bdb2956aee6cc
+                  t:
+                    type: string
+                    example: 922257d693122b5ef27f1b635ee3fb3a3f457db8b21f5cabe78b0dcec729bbab
+#######################
+# 銀行使用者AES驗證API#
+#######################
+# 儲存銀行使用者AES驗證密文
+  /api/set/aes-verify-ciphertext:
+    post:
+      tags:
+      - "銀行使用者AES驗證API"
+      summary: 儲存銀行使用者AES驗證密文
+      description: ""
+      requestBody:
+        description: 儲存銀行使用者AES驗證密文
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 
+                  type: string
+                  required: true
+                aes_key_verify_ciphertext:
+                  description: AES驗證密文
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: code:1表示成功，0表示失敗。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+# 儲存銀行使用者AES驗證密文
+  /api/get/aes-verify-ciphertext:
+    post:
+      tags:
+      - "銀行使用者AES驗證API"
+      summary: 取得銀行使用者AES驗證密文
+      description: ""
+      requestBody:
+        description: 取得銀行使用者AES驗證密文
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: code:1表示成功，0表示失敗。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+#######################
+# 銀行使用者電子錢包#
+#######################
+# 銀行使用者電子錢包存款
+  /api/digitalwallet/deposit:
+    post:
+      tags:
+      - "銀行使用者電子錢包"
+      summary: 銀行使用者電子錢包存錢
+      description: ""
+      requestBody:
+        description: 取得銀行使用者AES驗證密文
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              # 請求參數
+              properties:
+                token:
+                  description: 
+                  type: string
+                  required: true
+                digital_currency:
+                  description: 
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: code:1表示成功，0表示失敗。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+# 銀行使用者電子錢包列出儲存條目
+  /api/digitalwallet/list:
+    get:
+      tags:
+      - "銀行使用者電子錢包"
+      summary: 銀行使用者電子錢包列出儲存條目
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 檢查使用者token
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: code:1表示成功，0表示失敗。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1

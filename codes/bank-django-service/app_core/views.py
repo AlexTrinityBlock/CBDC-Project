@@ -9,6 +9,11 @@ from app_core.services.Voucher import Voucher
 from app_core.services.RedeemCurrency import RedeemCurrency
 from app_core.services.GetBalance import GetBalance
 from app_core.services.GetUserPaymentID import GetUserPaymentID
+from app_core.services.AesVerifyKey import AesVerifyKey
+from app_core.services.User import User
+from app_core.services.ResolveRequest import ResolveRequest
+from app_core.services.WithdrawProxy import WithdrawProxy
+import json
 """
 前端頁面
 
@@ -26,12 +31,26 @@ def index(request):
 def home(request):
     return render(request, 'home/index.html')
 
+def home2(request):
+    return render(request, 'home2/index.html')
+
 def login(request):
     return render(request, 'login/index.html')
 
 def register(request):
     return render(request, 'register/index.html')
 
+def logout(request):
+    return render(request, 'logout/index.html')
+
+def withdraw(request):
+    return render(request, 'withdraw/index.html')
+
+def pay_qr_code_page(request):
+    return render(request, 'pay_qr_code_page/index.html')
+
+def pay(request):
+    return render(request, 'pay/index.html')
 """
 API
 
@@ -61,6 +80,15 @@ def api_register(request):
     register =Register()
     return register.register(request)
 
+# 取得使用者帳號
+def api_get_account(request):
+    user = User()
+    return user.get_account(request)
+
+# 取得使用者Token
+def api_get_token(request):
+    toekn = ResolveRequest.ResolveToken(request)
+    return HttpResponse(json.dumps({'code':1,'token':toekn}))
 """
 密碼學 API
 """
@@ -133,3 +161,18 @@ def get_balance(request):
 def bank_user_payment_id(request):
     obj = GetUserPaymentID()
     return obj.get_user_payment_ID(request)
+# 測試用提款接口
+def withdraw_test(request):
+    obj = WithdrawProxy()
+    return obj.withdraw_proxy(request)
+"""
+使用者 AES 電子錢包
+"""
+# 設置電子錢包認證密文
+def api_set_aes_verify_ciphertext(request):
+    obj = AesVerifyKey()
+    return obj.set_aes_verify_ciphertext(request)
+# 取得電子錢包認證密文
+def api_get_aes_verify_ciphertext(request):
+    obj = AesVerifyKey()
+    return obj.get_aes_verify_ciphertext(request)

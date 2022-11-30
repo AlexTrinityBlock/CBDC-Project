@@ -27,11 +27,21 @@ class Withdraw:
     def withdraw(self,request):
         try:
             url = os.environ['BANK_DJANGO_SERVICE_URL']
+            try:
+                withdraw = request.form['withdraw']
+                token = request.form['token']
+            except Exception as e:
+                return {
+                    "code":0,
+                    "Hint":"Fail to withdraw",
+                    'error':str(e)
+                }
 
-            withdraw = request.form['withdraw']
-            token = request.form['token']
             random_number =str(random.randint(0,9999999))
-            secret_message = self.hash(str(uuid.uuid4())+random_number)
+            secret_message = json.dumps({
+                "uuid":self.hash(str(uuid.uuid4())+random_number),
+                "text":"This currency is issued by a partial blind signature algorithm"
+            }) 
 
             signer_step1 = requests.post(url+"/api/blind-signature/step/1/get/K1/Q/bit-list", data={'token': token,'withdraw':withdraw}, timeout=3).text
             signer_step1_obj = json.loads(signer_step1)
@@ -60,9 +70,12 @@ class Withdraw:
             result['t'] = hex(user.t)
             result['s'] = hex(user.s)
             result['R'] = hex(user.R)
-        except:
+        except Exception as e:
             return {
                 "code":0,
-                "Hint":"Fail to withdraw"
+                "Hint":"Fail to withdraw",
+                'error':str(e)
             }
+        result =  json.dumps(result)
+        # result = result.replace("\\", "")
         return result
