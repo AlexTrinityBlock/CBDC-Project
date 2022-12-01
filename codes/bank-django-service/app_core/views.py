@@ -51,6 +51,9 @@ def pay_qr_code_page(request):
 
 def pay(request):
     return render(request, 'pay/index.html')
+
+def deposit_upload(request):
+    return render(request, 'deposit_upload/index.html')
 """
 API
 

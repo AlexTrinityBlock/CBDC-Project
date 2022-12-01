@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/static/bootstrap5.0.2/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/pay_qr_code_page/style.css">
+    <link rel="stylesheet" href="/static/deposit_upload/style.css">
 </head>
 
 <body>
@@ -66,13 +66,13 @@
                     <div class="row">
                         <!-- 介紹文字 -->
                         <div class="col-6">
-                            <h1 id="introduction-title">付款條碼</h1>
-                            <p id="introduction-text" class="">別人可以掃描此條碼付款給你</p>
+                            <h1 id="introduction-title">儲存貨幣</h1>
+                            <p id="introduction-text" class="">將數位貨幣檔案上傳然後存入銀行存款</p>
                         </div>
                         <!-- /介紹文字 -->
                         <!-- ICON -->
                         <div class="col-6 ">
-                            <img id="introduction-image" src="../../static/pay_qr_code_page/saving_icon.png" alt="">
+                            <img id="introduction-image" src="../../static/deposit_upload/ICON-1.svg" alt="">
                         </div>
                         <!-- /ICON -->
                     </div>
@@ -80,6 +80,8 @@
             </div>
         </div>
     </div>
+    <br>
+    <br>
     <!-- /主畫面橫幅 -->
 
     <!-- 餘額 -->
@@ -101,41 +103,33 @@
     </div>
     <!-- /餘額 -->
 
-    <!-- QR code -->
+    <!-- 上傳貨幣 -->
     <div class="container">
         <div class="row ">
             <div class="col">
-                <!-- QR code外框 -->
+                <!-- 上傳貨幣外框 -->
                 <div class="card text-secondary">
-                    <div class="card-body">
-                        <div id="qr_code" class="text-center"></div>
+                    <div class="card-body" id="payment_card">
+                        <h2>上傳</h2>
+                        <input class="form-control" type="file" id="currency_file">
+                        <!-- 等待圓環 -->
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-grow text-primary" role="status" id='upload_spinner' style="display:none">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <!-- /等待圓環 -->
                     </div>
                 </div>
-                <!-- /QR code外框 -->
+                <!-- /上傳貨幣外框 -->
             </div>
         </div>
-        <br>
-        <!-- 顯示付款代碼 -->
-        <div class="row ">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title"> 付款代碼</h4>
-                        <b><p class="card-text" id="payment_id_div"></p></b>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /顯示付款代碼 -->
     </div>
-    <!-- /QR code -->
+    <!-- /上傳貨幣 -->
     <br>
     <br>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
 <script src="/static/bootstrap5.0.2/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="/static/pay_qr_code_page/jquery.min.js"></script>
-<script type="text/javascript" src="/static/pay_qr_code_page/qrcode.min.js"></script>
-<script type="module" src="/static/pay_qr_code_page/script.js"></script>
+<script type="module" src="/static/deposit_upload/script.js"></script>
 
 </html>

@@ -13,15 +13,21 @@ async function qr_code() {
     let payment_id = await GetPaymentID()
     let qrcode = new QRCode(document.getElementById("qr_code"), {
         colorDark : "#0066cc",
-    });
-	
+    });	
 	qrcode.makeCode(payment_id);
+}
+
+//顯示付款代碼
+async function display_payment_id(){
+    let payment_id = await GetPaymentID()
+    payment_id_div.innerHTML = payment_id 
 }
 
 // 主函數
 function main() {
     load_balance();
     qr_code();
+    display_payment_id();
 }
 
 // 當頁面完全載入後啟動主函數
