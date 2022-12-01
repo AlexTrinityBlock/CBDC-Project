@@ -91,13 +91,18 @@ nav {
     /* 寬度 */
     max-width: 300px;
     /* 高度 */
-    height: 350px;
+    height: 150px;
     /* 置中 */
     float: none;
     margin-left: auto;
     margin-right: auto;
     /* 文字顏色 */
     color: var(--shadow-color);
+}
+
+.services-cards p{
+    margin-top: var(--margin-vertical-1);
+    font-size: 20px;
 }
 
 /* 服務卡片圖片 */
