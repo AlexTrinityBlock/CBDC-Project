@@ -179,3 +179,8 @@ def api_set_aes_verify_ciphertext(request):
 def api_get_aes_verify_ciphertext(request):
     obj = AesVerifyKey()
     return obj.get_aes_verify_ciphertext(request)
+"""
+管理員登入頁面
+"""
+def administrator_login(request):
+    return render(request, 'administrator_login/index.html')

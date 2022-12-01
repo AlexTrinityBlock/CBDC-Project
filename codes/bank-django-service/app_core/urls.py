@@ -51,6 +51,8 @@ urlpatterns = [
     path('api/set/aes-verify-ciphertext', views.api_set_aes_verify_ciphertext),
     path('api/get/aes-verify-ciphertext', views.api_get_aes_verify_ciphertext),
 
+    # 管理員登入頁面
+    path('administrator/login', views.administrator_login,),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡
