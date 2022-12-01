@@ -53,6 +53,7 @@ urlpatterns = [
 
     # 管理員登入頁面
     path('administrator/login', views.administrator_login,),
+    path('administrator/home', views.administrator_home,),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡
@@ -61,6 +62,8 @@ none_login_pages = [
     "",
     "register",
     "login",
+    "administrator/login",
+    "administrator/home",
     # API
     "api/login",
     "api/check_login",

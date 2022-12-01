@@ -182,5 +182,9 @@ def api_get_aes_verify_ciphertext(request):
 """
 管理員登入頁面
 """
+# 管理員登入
 def administrator_login(request):
     return render(request, 'administrator_login/index.html')
+# 管理員首頁
+def administrator_home(request):
+    return render(request, 'administrator_home/index.html')

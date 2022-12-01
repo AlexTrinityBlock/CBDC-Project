@@ -1,6 +1,3 @@
-import Cookies from '/static/login/js.cookie.min.mjs'
-import CheckLoginStatus from '/static/login/CheckLoginStatus.js'
-
 // 送出函數
 function sendMessage(account_input, password_input) {
     // Fetch函數
@@ -43,13 +40,6 @@ function submit() {
 
 // 主函數
 async function main() {
-    // 假如已經登入了就跳轉到主頁面
-    let token = Cookies.get('token')
-    let loginCheck = await CheckLoginStatus(token)
-    if (loginCheck) {
-        window.location.replace("/home");
-    }
-
     document.getElementById("submit").onclick = submit;
 }
 
