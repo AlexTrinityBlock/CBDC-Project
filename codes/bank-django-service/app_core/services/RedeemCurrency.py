@@ -2,6 +2,7 @@ from app_core.services.ResolveRequest import ResolveRequest
 from app_core.models.UsedCurrency import UsedCurrency
 from app_core.models.UserBalance import UserBalance
 from app_core.models.User import User
+from app_core.models.TransactionLog import TransactionLog
 from django.http import HttpResponse
 import json
 import os
@@ -34,6 +35,15 @@ class RedeemCurrency:
         result = requests.post(url, data={'message':message,'Info':Info,'R': R, 's':s, 't':t}).text
         result = json.loads(result)
         if result['code'] == 0: #若驗證失敗
+            # 進行交易失敗紀錄
+            transaction_log_model = TransactionLog()
+            transaction_log_model.used_currency = json.dumps(data)
+            transaction_log_model.user_id =  ResolveRequest.ResolveUserID(request)
+            transaction_log_model.status = 0
+            transaction_log_model.type = 'Deposit'
+            transaction_log_model.message = 'Invalid currency,signature can\'t pass verify.'
+            transaction_log_model.save()
+            # 回傳失敗訊息
             return HttpResponse(json.dumps({
                 'code':0,
                 'message':'Invalid signature.'
@@ -56,6 +66,15 @@ class RedeemCurrency:
         used_currency.s = s
         used_currency.t = t
         used_currency.save()
+
+        # 進行交易成功紀錄
+        transaction_log_model = TransactionLog()
+        transaction_log_model.used_currency = json.dumps(data)
+        transaction_log_model.user_id =  ResolveRequest.ResolveUserID(request)
+        transaction_log_model.status = 1
+        transaction_log_model.type = 'Deposit'
+        transaction_log_model.message = 'Successful Deposit.'
+        transaction_log_model.save()
 
         return HttpResponse(json.dumps({
             'code':1,
