@@ -22,7 +22,7 @@ jobs:
       with:
         timeout_minutes: 10
         max_attempts: 20
-        command: docker compose exec bank-django-service python manage.py test app_core.tests.test_register
+        command: docker compose exec bank-django-service python manage.py test app_core.tests.test_login
 
     - uses: actions/checkout@v3
     - name: 測試銀行伺服器
