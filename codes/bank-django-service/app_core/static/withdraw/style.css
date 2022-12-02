@@ -71,7 +71,7 @@ nav{
 
 /* 介紹文字背景 */
 #introduction-backbround {
-    height: 450px;
+    min-height: 450px;
     /* background-image: linear-gradient(to right, var(--page-background-color-1), var(--page-background-color-2)); */
     background-color: var(--panel-background-color);
 }

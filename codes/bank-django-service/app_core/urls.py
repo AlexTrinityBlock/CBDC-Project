@@ -40,6 +40,7 @@ urlpatterns = [
     # 生成代金券序號
     path('api/generate/voucher', views.api_generate_voucher),
     path('api/redeem/voucher', views.redeem_voucher),
+    path('api/list/voucher', views.list_voucher),
 
     # 使用者兌換貨幣
     path('api/redeem/currency', views.redeem_currency),
@@ -54,6 +55,7 @@ urlpatterns = [
     # 管理員登入頁面
     path('administrator/login', views.administrator_login,),
     path('administrator/home', views.administrator_home,),
+    path('administrator/issue/voucher', views.administrator_issue_voucher,),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡
@@ -64,6 +66,7 @@ none_login_pages = [
     "login",
     "administrator/login",
     "administrator/home",
+    "administrator/issue/voucher",
     # API
     "api/login",
     "api/check_login",

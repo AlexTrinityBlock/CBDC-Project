@@ -88,16 +88,19 @@ nav {
     /* 上下方間隙 */
     margin-top: var(--margin-vertical-1);
     margin-bottom: var(--margin-vertical-1);
-    /* 寬度 */
-    max-width: 300px;
     /* 高度 */
-    height: 150px;
+    min-height: 150px;
     /* 置中 */
     float: none;
     margin-left: auto;
     margin-right: auto;
     /* 文字顏色 */
     color: var(--shadow-color);
+}
+
+.services-cards .accordion-item button{
+     /* 文字顏色 */
+     color: var(--shadow-color);   
 }
 
 .services-cards p{
@@ -116,4 +119,9 @@ nav {
 
 #nav-title {
     color: var(--main-color);
+}
+
+.accordion-body img{
+    height: 200px;
+    width: 200px;
 }

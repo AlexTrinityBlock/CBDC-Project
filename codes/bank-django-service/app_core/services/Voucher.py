@@ -74,3 +74,32 @@ class Voucher:
             'message': 'The voucher successfully deposited into the bank'
         }))
 
+    # 列出代金券
+    def list_voucher(self,request):
+        """
+        用管理員帳戶生成代金券
+        """
+        role = ResolveRequest.ResolveRole(request)
+
+        # 若沒有使用者權限，則無法生成
+        if role != 'administrator': 
+            return HttpResponse(json.dumps({
+                'code': 0,
+                'message': 'User forbidden'
+        }))
+
+        vouchers = VoucherModel.objects.all()
+        voucher_list = list()
+
+        for voucher in vouchers:
+            voucher_dict = dict()
+            voucher_dict['id'] = voucher.id
+            voucher_dict['currency'] = voucher.currency
+            voucher_dict['voucher_token'] = voucher.voucher_token
+            voucher_dict['is_used'] = voucher.is_used
+            voucher_list.append(voucher_dict)
+
+        return HttpResponse(json.dumps({
+            'code': 1,
+            'vouchers': json.dumps(voucher_list)
+        }))

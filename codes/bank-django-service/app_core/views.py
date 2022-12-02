@@ -141,14 +141,20 @@ def api_administrator_check_login(request):
 """
 生成代金券
 """
+# 生成代金券
 def api_generate_voucher(request):
     obj = Voucher()
     return obj.generate_voucher(request)
 
+# 兌換代金券
 def redeem_voucher(request):
     obj = Voucher()
     return obj.redeem_voucher(request)
 
+# 列出代金券
+def list_voucher(request):
+    obj = Voucher()
+    return obj.list_voucher(request)
 """
 使用者存款服務
 """
@@ -188,3 +194,6 @@ def administrator_login(request):
 # 管理員首頁
 def administrator_home(request):
     return render(request, 'administrator_home/index.html')
+# 管理員發行點數頁面
+def  administrator_issue_voucher(request):
+    return render(request, 'administrator_issue_voucher/index.html')

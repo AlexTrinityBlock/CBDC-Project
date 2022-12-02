@@ -541,6 +541,32 @@ paths:
                   token:
                     type: string
                     example: 27add4b6aa8a6842e3072ac048a7b20b9c73f8f4b0ec06ce9b0f513b9b201102
+# 列出儲值卡
+  /api/list/voucher:
+    get:
+      tags:
+      - "儲值卡"
+      summary: 列出儲值卡
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 使用者token
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: balance\:餘額數量
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  balance:
+                    type: int
+                    example: 100
 #######################
 # 銀行使用者貨幣服務API#
 #######################
