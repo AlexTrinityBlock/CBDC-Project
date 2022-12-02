@@ -54,6 +54,9 @@ def pay(request):
 
 def deposit_upload(request):
     return render(request, 'deposit_upload/index.html')
+
+def redeem_voucher_page(request):
+    return render(request, 'redeem_voucher/index.html')
 """
 API
 

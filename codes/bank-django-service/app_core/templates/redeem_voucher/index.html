@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/static/bootstrap5.0.2/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/administrator_issue_voucher/style.css">
+    <link rel="stylesheet" href="/static/pay_qr_code_page/style.css">
 </head>
 
 <body>
@@ -16,8 +16,8 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <!-- 圖片首頁連結 -->
-            <a class="navbar-brand" href="/administrator/home">
-                <h1 id='nav-title'>CBDC 管理員</h1>
+            <a class="navbar-brand" href="/home">
+                <img src="/static/home2/CBDC.png" alt="CBDC計劃圖片" id="nav-icon">
             </a>
             <!-- /圖片首頁連結 -->
             <!-- 選單響應按鈕 -->
@@ -31,16 +31,22 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/administrator/home">首頁</a>
+                        <a class="nav-link active text-secondary" href="/home">首頁</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="">交易紀錄</a>
+                        <a class="nav-link active text-secondary" href="/withdraw">提款</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="">用戶清單</a>
+                        <a class="nav-link active text-secondary" href="/pay">支付</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/administrator/issue/voucher">發行點數</a>
+                        <a class="nav-link active text-secondary" href="/pay/qr-code">付款條碼</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-secondary" href="/home">儲值</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-secondary" href="/home">儲存貨幣</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active text-secondary" href="/logout">登出</a>
@@ -60,10 +66,15 @@
                     <div class="row">
                         <!-- 介紹文字 -->
                         <div class="col-6">
-                            <h1 id="introduction-title">發行點數</h1>
-                            <p id="introduction-text" class="">發行點數，並且查看已經發行的點數。</p>
+                            <h1 id="introduction-title">儲值</h1>
+                            <p id="introduction-text" class="">別人可以掃描此條碼付款給你</p>
                         </div>
                         <!-- /介紹文字 -->
+                        <!-- ICON -->
+                        <div class="col-6 ">
+                            <img id="introduction-image" src="../../static/pay_qr_code_page/saving_icon.png" alt="">
+                        </div>
+                        <!-- /ICON -->
                     </div>
                 </div>
             </div>
@@ -71,48 +82,48 @@
     </div>
     <!-- /主畫面橫幅 -->
 
-    <!-- 下方服務選項 -->
-    <div class="container text-secondary">
-        <!-- 服務項目 -->
-        <div class="row text-center">
-            <div class="col services-text">發行點數</div>
-        </div>
-        <!-- /服務項目 -->
-
-        <!-- 服務卡片組 -->
-        <div class="row ">
-
-            <!-- 卡片1 -->
-            <div class="col-12 ">
-                <div class="card services-cards">
+    <!-- 餘額 -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 ">
+                <!-- 餘額標題 -->
+                <p id="qr-title-text">餘額</p>
+                <!-- /餘額標題 -->
+                <!-- 餘額卡片 -->
+                <div class="card" id="qr-card">
                     <div class="card-body">
-                        <!-- 輸入新貨幣 -->
-                        <div class="mb-3 row">
-                            <label for="inputPassword" class="col-md-2 col-form-label">新增點數面額</label>
-                            <div class="col-8">
-                                <input type="text" class="form-control" id="amount_input">
-                            </div>
-                            <div class="col-2">
-                                <button type="button" class="btn btn-warning" id="add_voucher_btn">+</button>
-                            </div>
-                        </div>
-                        <!-- /輸入新貨幣 -->
-                        <!-- 貨幣清單 -->
-                        <div class="accordion accordion-flush" id="accordionFlush">
-                        </div>
-                        <!-- /貨幣清單 -->
+                        <p class="card-text text-end" id="balance_text">餘額</p>
                     </div>
                 </div>
+                <!-- /餘額卡片 -->
             </div>
-            <!-- /卡片1 -->
-
         </div>
-        <!-- /服務卡片組 -->
     </div>
-    <!-- /下方服務選項 -->
+    <!-- /餘額 -->
+
+    <!-- QR code -->
+    <div class="container">
+        <div class="row ">
+            <div class="col">
+                <!-- QR code外框 -->
+                <div class="card text-secondary">
+                    <div class="card-body">
+                        <div id="qr_code" class="text-center"></div>
+                    </div>
+                </div>
+                <!-- /QR code外框 -->
+            </div>
+        </div>
+        <br>
+    </div>
+    <!-- /QR code -->
+    <br>
+    <br>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
 <script src="/static/bootstrap5.0.2/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/static/pay_qr_code_page/jquery.min.js"></script>
 <script type="text/javascript" src="/static/pay_qr_code_page/qrcode.min.js"></script>
-<script type="module" src="/static/administrator_issue_voucher/script.js"></script>
+<script type="module" src="/static/pay_qr_code_page/script.js"></script>
 
 </html>

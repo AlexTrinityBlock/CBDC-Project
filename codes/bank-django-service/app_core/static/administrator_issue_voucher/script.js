@@ -42,7 +42,8 @@ function rend_voucher_list(vouchersObj){
                 aria-labelledby='obj-`+element.voucher_token+`' data-bs-parent='#accordionFlush'>
                 <div class='accordion-body' `+labelColor+`>
                     點數 token: `+element.voucher_token+`<br>
-                    `+isUsed+`
+                    `+isUsed+`<br>
+                    額度: `+element.currency+`
                     <div id='qr`+element.voucher_token+`' ></div>
                 </div>
             </div>

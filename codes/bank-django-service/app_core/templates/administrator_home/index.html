@@ -16,7 +16,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <!-- 圖片首頁連結 -->
-            <a class="navbar-brand" href="/home">
+            <a class="navbar-brand" href="/administrator/home">
                 <h1 id='nav-title'>CBDC 管理員</h1>
             </a>
             <!-- /圖片首頁連結 -->
@@ -36,11 +36,11 @@
                     <li class="nav-item">
                         <a class="nav-link active text-secondary" href="">交易紀錄</a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="">用戶清單</a>
-                    </li> -->
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="">發行點數</a>
+                        <a class="nav-link active text-secondary" href="">用戶清單</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-secondary" href="/administrator/issue/voucher">發行點數</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active text-secondary" href="/logout">登出</a>
@@ -64,11 +64,6 @@
                             <p id="introduction-text" class="">檢視用戶交易紀錄,用戶清單，並且發行點數。</p>
                         </div>
                         <!-- /介紹文字 -->
-                        <!-- ICON -->
-                        <div class="col-6 ">
-                            <img id="introduction-image" src="../../static/administrator_home/ICON.png" alt="">
-                        </div>
-                        <!-- /ICON -->
                     </div>
                 </div>
             </div>
@@ -89,7 +84,7 @@
             <!-- 卡片1 -->
             <div class="col-md-4 ">
                 <!-- 卡片連結 -->
-                <a href="/withdraw">
+                <a href="">
                     <div class="card services-cards">
                         <div class="card-body">
                             <h3 class="card-title">交易紀錄</h3>
@@ -103,7 +98,7 @@
             <!-- 卡片2 -->
             <div class="col-md-4">
                 <!-- 卡片連結 -->
-                <a href="/pay">
+                <a href="">
                     <div class="card services-cards">
                         <div class="card-body">
                             <h3 class="card-title">用戶清單</h3>
@@ -118,7 +113,7 @@
             <!-- 卡片3 -->
             <div class="col-md-4">
                 <!-- 卡片連結 -->
-                <a href="pay/qr-code">
+                <a href="/administrator/issue/voucher">
                     <div class="card services-cards">
                         <div class="card-body">
                             <h3 class="card-title">發行點數</h3>
