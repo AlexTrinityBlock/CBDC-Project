@@ -34,19 +34,20 @@
                         <a class="nav-link active text-secondary" href="/home">首頁</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/withdraw">提款</a>
+                        <a class="nav-link active text-secondary" href="/withdraw">隱私模式-提款</a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/pay">支付</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/pay/qr-code">付款條碼</a>
+                        <a class="nav-link active text-secondary" href="/deposit/upload">隱私模式-存款</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active text-secondary" href="/redeem/voucher">儲值</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/deposit/upload">儲存貨幣</a>
+                        <a class="nav-link active text-secondary" href="/pay">公開支付</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-secondary" href="/pay/qr-code">公開支付-收款條碼</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active text-secondary" href="/logout">登出</a>
@@ -135,43 +136,28 @@
                     <div class="card services-cards">
                         <img src="/static/home2/withdraw_icon.png" class="card-img-top">
                         <div class="card-body">
-                            <h3 class="card-title">提款</h3>
-                            <p class="card-text">從帳戶中提取數位貨幣</p>
+                            <h3 class="card-title">隱私模式-提款</h3>
+                            <p class="card-text">不被追蹤的，從帳戶中提取數位貨幣。</p>
                         </div>
                     </div>
                 </a>
             </div>
             <!-- /卡片1 -->
 
-            <!-- 卡片2 -->
+            <!-- 卡片5 -->
             <div class="col-md-4">
                 <!-- 卡片連結 -->
-                <a href="/pay">
+                <a href="/deposit/upload">
                     <div class="card services-cards">
-                        <img src="/static/home2/balance_inquiry_icon.png" class="card-img-top">
+                        <img src="../../static/home2/ICON-1.svg" class="card-img-top">
                         <div class="card-body">
-                            <h3 class="card-title">支付</h3>
-                            <p class="card-text">掃描別人的條碼，或輸入別人的付款序號，將款項付給別人</p>
+                            <h3 class="card-title">隱私模式-存款</h3>
+                            <p class="card-text">不被追蹤的，將數位貨幣檔案上傳然後存入銀行存款</p>
                         </div>
                     </div>
                 </a>
             </div>
-            <!-- /卡片2 -->
-
-            <!-- 卡片3 -->
-            <div class="col-md-4">
-                <!-- 卡片連結 -->
-                <a href="/pay/qr-code">
-                    <div class="card services-cards">
-                        <img src="/static/home2/saving_icon.png" class="card-img-top">
-                        <div class="card-body">
-                            <h3 class="card-title">付款條碼</h3>
-                            <p class="card-text">顯示付款 QR code</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <!-- /卡片3 -->
+            <!-- /卡片5 -->
 
             <!-- 卡片4 -->
             <div class="col-md-4">
@@ -188,20 +174,37 @@
             </div>
             <!-- /卡片4 -->
 
-            <!-- 卡片5 -->
+            <!-- 卡片2 -->
             <div class="col-md-4">
                 <!-- 卡片連結 -->
-                <a href="/deposit/upload">
+                <a href="/pay">
                     <div class="card services-cards">
-                        <img src="../../static/home2/ICON-1.svg" class="card-img-top">
+                        <img src="/static/home2/balance_inquiry_icon.png" class="card-img-top">
                         <div class="card-body">
-                            <h3 class="card-title">儲存貨幣</h3>
-                            <p class="card-text">將數位貨幣檔案上傳然後存入銀行存款</p>
+                            <h3 class="card-title">公開支付</h3>
+                            <p class="card-text">掃描別人的條碼，或輸入別人的付款序號，將款項付給別人</p>
                         </div>
                     </div>
                 </a>
             </div>
-            <!-- /卡片5 -->
+            <!-- /卡片2 -->
+
+            <!-- 卡片3 -->
+            <div class="col-md-4">
+                <!-- 卡片連結 -->
+                <a href="/pay/qr-code">
+                    <div class="card services-cards">
+                        <img src="/static/home2/saving_icon.png" class="card-img-top">
+                        <div class="card-body">
+                            <h3 class="card-title">公開支付-收款條碼</h3>
+                            <p class="card-text">顯示付款 QR code</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- /卡片3 -->
+
+
 
         </div>
         <!-- /服務卡片組 -->
