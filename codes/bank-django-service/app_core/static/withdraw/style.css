@@ -93,3 +93,9 @@ nav{
     margin-top: var(--margin-vertical-1);
     margin-bottom: var(--margin-vertical-1);
 }
+
+/* QR code */
+#qr_code img{
+    margin-left: auto;
+    margin-right: auto;
+}
