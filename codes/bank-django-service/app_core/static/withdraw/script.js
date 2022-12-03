@@ -32,6 +32,12 @@ async function handle_withdraw() {
         var blob = new Blob([currency],
             { type: "text/plain;charset=utf-8" });
         saveAs(blob, "貨幣."+await uuidv4()+".txt");
+        //  彈跳視窗
+        Swal.fire({
+            icon: 'success',
+            title: '提款成功 !',
+        })
+        withdraw_input.value = 0
     }, false);
 }
 

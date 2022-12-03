@@ -8,6 +8,13 @@ var oldVoucherList = ''
 function add_voucher_button_handler() {
     add_voucher_btn.onclick = async () => {
         let addVoucherResult = await AddVoucher(amount_input.value)
+        if (addVoucherResult.code == 1){
+            Swal.fire({
+                icon: 'success',
+                title: 'Success !',
+            })
+            amount_input.value = 0
+        }
     }
 }
 

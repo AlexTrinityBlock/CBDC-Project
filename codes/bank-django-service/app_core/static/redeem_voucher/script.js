@@ -31,7 +31,7 @@ async function process_2(decodedText) {
     if (redeemResult.code == 1) {
         Swal.fire({
             icon: 'success',
-            title: 'Success !',
+            title: '儲值成功 !',
         })
     }
     init()

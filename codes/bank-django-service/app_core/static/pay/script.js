@@ -36,9 +36,31 @@ async function payment_process_2() {
 
 // 付款流程-3
 async function payment_process_3(){
-    console.log(amount)
+    console.log(amount)//支付金額
     console.log(user_payment_id)//支付對象的ID
     let token = await GetToken();//取得使用者識別
+
+    // 測試支付
+    let testCurrency = await Withdraw(token, 0,url);//取得0元貨幣
+    // JSON解析貨幣
+    testCurrency = JSON.parse(testCurrency);
+    let testInfo = testCurrency.Info
+    let testMessage = testCurrency.message
+    let testT = testCurrency.t
+    let testS = testCurrency.s
+    let testR = testCurrency.R
+    let testResult =await Pay(user_payment_id,testMessage,testInfo,testR,testS,testT)
+    if(testResult.code!=1){
+        payment_form.style.display = "block";
+        Swal.fire({
+            icon: 'error',
+            title: '轉帳失敗!',
+            text: '轉帳失敗，但金額不會缺失，請確認掃描的QR code 是否正確。',
+        })
+        return;
+    }
+
+    // 實際支付
     let currency = await Withdraw(token, amount,url);//取得貨幣
     // JSON解析貨幣
     currency = JSON.parse(currency);
@@ -47,10 +69,16 @@ async function payment_process_3(){
     let t = currency.t
     let s = currency.s
     let R = currency.R
-
     let result =await Pay(user_payment_id,message,Info,R,s,t)
     payment_form.style.display = "block";
     payment_amount_input.value = 0
+
+    if(result.code == 1){
+        Swal.fire({
+            icon: 'success',
+            title: '支付成功 !',
+        })
+    }
 }
 
 // 主函數

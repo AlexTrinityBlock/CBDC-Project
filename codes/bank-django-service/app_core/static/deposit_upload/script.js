@@ -2,10 +2,27 @@ import GetBalance from "/static/deposit_upload/GetBalance.js"
 import RedeemCurrency from "/static/deposit_upload/RedeemCurrency.js"
 import GetPaymentID from "/static/deposit_upload/GetPaymentID.js"
 
+var oldBalance = 0
 // 載入餘額
 async function load_balance() {
+    // 取得貨幣
+    let balance = await GetBalance();
+    oldBalance = balance;
+    balance_text.innerHTML = '$' + balance
+
+    // 刷新貨幣額度
     window.setInterval(async () => {
-        balance_text.innerHTML = '$' + await GetBalance();
+        let balance = await GetBalance();
+
+        balance_text.innerHTML = '$' + balance
+        if (balance > oldBalance) {
+            Swal.fire({
+                icon: 'success',
+                title: '+ $'+(balance - oldBalance),
+            })
+        }
+
+        oldBalance = balance;
     }, 1000);
 }
 
@@ -36,6 +53,18 @@ function file_handler() {
         currency_file.style.display = "block";
         // 清除上傳內容
         currency_file.value = null
+
+        if(result.code == 1){
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: '貨幣儲存成功 !',
+            // })
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: '無效的貨幣!',
+            })
+        }
     });
 }
 

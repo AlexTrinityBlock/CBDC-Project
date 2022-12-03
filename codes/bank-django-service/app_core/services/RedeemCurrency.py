@@ -53,10 +53,16 @@ class RedeemCurrency:
         amount = json.loads(Info)['currency']
 
         # 將額度存入使用者帳戶
-        id = User.objects.filter(bank_user_payment_id=bank_user_payment_id)[0].id
-        user_balance = UserBalance.objects.filter(user_id=id)[0]
-        user_balance.balance = user_balance.balance + int(amount)
-        user_balance.save()
+        try:
+            id = User.objects.filter(bank_user_payment_id=bank_user_payment_id)[0].id
+            user_balance = UserBalance.objects.filter(user_id=id)[0]
+            user_balance.balance = user_balance.balance + int(amount)
+            user_balance.save()
+        except:
+            return HttpResponse(json.dumps({
+                'code':0,
+                'message':'Wrong QR code.'
+            }))
 
         # 將使用過的盲簽章進行儲存
         used_currency = UsedCurrency()
