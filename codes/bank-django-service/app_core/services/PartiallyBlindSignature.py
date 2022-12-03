@@ -3,6 +3,7 @@ import json
 from app_core.services.PartiallyBlindSignatureServerInterface import PartiallyBlindSignatureServerInterface
 from app_core.services.ResolveRequest import ResolveRequest
 from app_core.models.UserBalance import UserBalance
+from app_core.models.TransactionLog import TransactionLog
 import redis
 import os
 
@@ -101,12 +102,34 @@ class PartiallyBlindSignature:
             self.server.save_and_next_step(token)        
             result = self.server.output()
             self.init_blind_signature(request)
+            
             # 扣款
             withdraw = int(self.server.status['withdraw'])
             self.cost_user_balance(request,withdraw)
+            
+            # 在順利完成前進行紀錄
+            transaction_log_model = TransactionLog()
+            transaction_log_model.user_id =  ResolveRequest.ResolveUserID(request)
+            transaction_log_model.status = 1
+            transaction_log_model.type = 'Withdraw'
+            transaction_log_model.message = 'Success Withdraw !'
+            transaction_log_model.amount = self.server.status['withdraw']
+            transaction_log_model.save()
+
             return HttpResponse(result)
         except:
+            # 對交易失敗進行紀錄
+            transaction_log_model = TransactionLog()
+            transaction_log_model.user_id =  ResolveRequest.ResolveUserID(request)
+            transaction_log_model.status = 0
+            transaction_log_model.type = 'Withdraw'
+            transaction_log_model.message = 'Fail to Withdraw !'
+            transaction_log_model.amount = self.server.status['withdraw']
+            transaction_log_model.save()
+
+            # 重置盲簽章狀態
             self.init_blind_signature(request)
+            # 回傳失敗訊息
             return HttpResponse(json.dumps({
                 "code": 0,
                 "message": "step5 fail"
