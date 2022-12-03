@@ -1,24 +1,9 @@
-import AddVoucher from "/static/administrator_issue_voucher/AddVoucher.js"
-import GetVoucherList from "/static/administrator_issue_voucher/GetVoucherList.js"
+import GetVoucherList from "/static/administrator_transaction_log/GetVoucherList.js"
 
 // 舊點數卡資料
 var oldVoucherList = ''
 
-// 新增點數卡增加按鈕觸發
-function add_voucher_button_handler() {
-    add_voucher_btn.onclick = async () => {
-        let addVoucherResult = await AddVoucher(amount_input.value)
-        if (addVoucherResult.code == 1){
-            Swal.fire({
-                icon: 'success',
-                title: 'Success !',
-            })
-            amount_input.value = 0
-        }
-    }
-}
-
-// 渲染點數卡畫面
+// 渲染交易紀錄畫面
 function rend_voucher_list(vouchersObj){
     vouchersObj.forEach((element) => {
         // 錢幣是否被使用
@@ -97,7 +82,6 @@ async function update_voucher_list() {
 
 // 主函數
 function main() {
-    add_voucher_button_handler()
     update_voucher_list()
 }
 
