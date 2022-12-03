@@ -111,15 +111,49 @@
                 <!-- 上傳貨幣外框 -->
                 <div class="card text-secondary">
                     <div class="card-body" id="payment_card">
-                        <h2>上傳</h2>
-                        <input class="form-control" type="file" id="currency_file">
-                        <!-- 等待圓環 -->
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-grow text-primary" role="status" id='upload_spinner' style="display:none">
-                                <span class="visually-hidden">Loading...</span>
+                        <!-- 風琴分頁上排 -->
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link " id="nav-home-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                    aria-selected="true">
+                                    上傳
+                                </button>
+                                <button class="nav-link active" id="nav_tab_1" data-bs-toggle="tab"
+                                    data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1"
+                                    aria-selected="true">
+                                    掃描 QR code
+                                </button>
                             </div>
+                        </nav>
+                        <br>
+                        <!-- /風琴分頁上排 -->
+                        <!-- 風琴分頁外框 -->
+                        <div class="tab-content" id="nav-tabContent">
+                            <!-- 檔案上傳 -->
+                            <div class="tab-pane fade show " id="nav-home" role="tabpanel"
+                                aria-labelledby="nav-home-tab">
+                                <!-- 上傳按鈕 -->
+                                <input class="form-control" type="file" id="currency_file">
+                                <!-- 等待圓環 -->
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-grow text-primary" role="status" id='upload_spinner'
+                                        style="display:none">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <!-- /等待圓環 -->
+                            </div>
+                            <!-- /檔案上傳 -->
+                            
+                            <!-- QR code -->
+                            <div class="tab-pane fade show active" id="nav-1" role="tabpanel"
+                                aria-labelledby="nav_tab_1"> 
+                             <div id="reader"></div>
+                            </div>
+                            <!-- /QR code -->
                         </div>
-                        <!-- /等待圓環 -->
+                        <!-- /風琴分頁外框 -->
                     </div>
                 </div>
                 <!-- /上傳貨幣外框 -->
@@ -131,6 +165,7 @@
     <br>
 </body>
 <script src="/static/bootstrap5.0.2/bootstrap.bundle.min.js"></script>
+<script src="/static/pay/html5-qrcode.min.js" type="text/javascript"></script>
 <script src="/static/sweetalert2/sweetalert2.all.min.js" type="text/javascript"></script>
 <script type="module" src="/static/deposit_upload/script.js"></script>
 
