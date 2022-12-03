@@ -1,11 +1,27 @@
 import GetBalance from "/static/redeem_voucher/GetBalance.js"
 import RedeemVoucher from "/static/redeem_voucher/RedeemVoucher.js"
 
+var oldBalance = 0
 // 載入餘額
 async function load_balance() {
-    balance_text.innerHTML = '$' + await GetBalance();
+    // 取得貨幣
+    let balance = await GetBalance();
+    oldBalance = balance;
+    balance_text.innerHTML = '$' + balance
+
+    // 刷新貨幣額度
     window.setInterval(async () => {
-        balance_text.innerHTML = '$' + await GetBalance();
+        let balance = await GetBalance();
+
+        balance_text.innerHTML = '$' + balance
+        if (balance > oldBalance) {
+            Swal.fire({
+                icon: 'success',
+                title: '+ $'+(balance - oldBalance),
+            })
+        }
+
+        oldBalance = balance;
     }, 1000);
 }
 
@@ -28,10 +44,11 @@ async function process_1() {
 async function process_2(decodedText) {
     let redeemResult = await RedeemVoucher(decodedText)
     console.log(redeemResult.code)
-    if (redeemResult.code == 1) {
+    if (redeemResult.code == 0) {
         Swal.fire({
-            icon: 'success',
-            title: '儲值成功 !',
+            icon: 'error',
+            title: '儲值失敗 !',
+            text:'請檢查儲值條碼是否正確，或被使用。'
         })
     }
     init()
