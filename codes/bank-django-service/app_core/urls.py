@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/administrator/login', views.api_administrator_login),
     path('api/administrator/check_login', views.api_administrator_check_login),
     path('api/administrator/logout', views.api_administrator_logout),
+    path('api/administrator/get/transaction_log', views.api_administrator_get_transaction_log),
 
     # 生成代金券序號
     path('api/generate/voucher', views.api_generate_voucher),

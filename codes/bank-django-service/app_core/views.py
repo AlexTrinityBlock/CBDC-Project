@@ -13,6 +13,7 @@ from app_core.services.AesVerifyKey import AesVerifyKey
 from app_core.services.User import User
 from app_core.services.ResolveRequest import ResolveRequest
 from app_core.services.WithdrawProxy import WithdrawProxy
+from app_core.services.TransactionLog import TransactionLog
 import json
 """
 前端頁面
@@ -203,3 +204,11 @@ def  administrator_issue_voucher(request):
 # 管理員交易紀錄檢視
 def administrator_transaction_log(request):
     return render(request, 'administrator_transaction_log/index.html')
+
+"""
+管理取得紀錄
+"""
+# 管理員取得交易紀錄
+def api_administrator_get_transaction_log(request):
+    obj = TransactionLog()
+    return obj.transaction_log(request)
