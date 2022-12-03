@@ -57,6 +57,7 @@ urlpatterns = [
     path('administrator/login', views.administrator_login,),
     path('administrator/home', views.administrator_home,),
     path('administrator/issue/voucher', views.administrator_issue_voucher,),
+    path('administrator/transaction_log', views.administrator_transaction_log,),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡

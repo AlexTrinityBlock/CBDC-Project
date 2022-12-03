@@ -11,7 +11,8 @@ class AdministratorLoginMiddleware:
         # 登錄要登入的頁面
         self.admin_login_require_page = [
             'administrator/home',
-            'administrator/issue/voucher'
+            'administrator/issue/voucher',
+            'administrator/transaction_log'
         ]
     
     def check_path_in_list(self,path:str):

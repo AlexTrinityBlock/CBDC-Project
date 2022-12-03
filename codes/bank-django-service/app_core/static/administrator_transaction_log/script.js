@@ -60,12 +60,25 @@ function rend_voucher_list(vouchersObj){
     });
 }
 
+// 繪製QRCode
+function qrcode(vouchersObj){
+    vouchersObj.forEach((element) => {
+        if (element.is_used == 1){return}
+        let qrcode = new QRCode(document.getElementById("qr"+element.voucher_token), {
+            colorDark : "green",
+        });	
+        qrcode.clear();
+        qrcode.makeCode(element.voucher_token);
+    })
+}
+
 // 更新點數卡
 async function update_voucher_list() {
     let listVoucherResult = await GetVoucherList()
     listVoucherResult = listVoucherResult.vouchers
     let vouchersObj = JSON.parse(listVoucherResult)
     rend_voucher_list(vouchersObj)
+    qrcode(vouchersObj)
 
     window.setInterval(async () => {
         let listVoucherResult = await GetVoucherList()
@@ -78,7 +91,7 @@ async function update_voucher_list() {
         // 清理舊資料
         accordionFlush.innerHTML = ''
         rend_voucher_list(vouchersObj)
-
+        qrcode(vouchersObj)
     }, 1000);
 }
 

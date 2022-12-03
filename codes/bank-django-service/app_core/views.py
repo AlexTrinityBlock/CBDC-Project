@@ -200,3 +200,6 @@ def administrator_home(request):
 # 管理員發行點數頁面
 def  administrator_issue_voucher(request):
     return render(request, 'administrator_issue_voucher/index.html')
+# 管理員交易紀錄檢視
+def administrator_transaction_log(request):
+    return render(request, 'administrator_transaction_log/index.html')
