@@ -1,5 +1,5 @@
-async function GetVoucherList() {
-    let result = await fetch("/api/list/voucher?" + new URLSearchParams({
+async function GetTransactionLog() {
+    let result = await fetch("/api/administrator/get/transaction_log?" + new URLSearchParams({
     }),
         {
             // Get方法
@@ -14,15 +14,10 @@ async function GetVoucherList() {
             // 將收到的回應轉換成JSON物件
             return response.json();
         }).then((jsonObj) => {
-            // 若登入成功
-            if (jsonObj['code'] == 1) {
-                return jsonObj
-            } else {
-                return false
-            }
+            return jsonObj
         });
 
     return result
 }
 
-export default GetVoucherList
+export default GetTransactionLog

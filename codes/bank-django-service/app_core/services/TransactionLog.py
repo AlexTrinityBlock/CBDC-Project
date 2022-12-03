@@ -34,5 +34,5 @@ class TransactionLog:
 
         return HttpResponse(json.dumps({
             'code': 1,
-            'vouchers': json.dumps(transaction_logs_list)
+            'transaction_logs': json.dumps(transaction_logs_list)
         }))
