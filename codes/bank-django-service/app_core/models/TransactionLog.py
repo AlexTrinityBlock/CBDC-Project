@@ -10,3 +10,4 @@ class TransactionLog(models.Model):
    used_currency = models.CharField(null=True,max_length=1000) # 若是存款，保留貨幣的內容。
    message = models.CharField(null=True,max_length=1000) # 額外訊息
    amount = models.IntegerField(null=True) # 提款的額度
+   log_time = models.DateTimeField(auto_now=True)

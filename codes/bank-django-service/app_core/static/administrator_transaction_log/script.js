@@ -6,7 +6,7 @@ var oldTransactionLogList = ''
 // 渲染交易紀錄畫面
 function rend_transactionLog_list(transactionLogsObj){
     transactionLogsObj.forEach((element) => {
-
+        console.log(element)
         let labelColor = ''
         let status = ''
         if(element.status == 0){
@@ -23,7 +23,7 @@ function rend_transactionLog_list(transactionLogsObj){
                 <button class='accordion-button collapsed' type='button' data-bs-toggle='collapse'`+labelColor+`
                     data-bs-target='#flush-collapse`+element.id+`' aria-expanded='false'
                     aria-controls='flush-collapseOne'>
-                    `+element.id+`
+                    `+element.log_time+`
                 </button>
             </h2>
             <div id='flush-collapse`+element.id+`' class='accordion-collapse collapse'

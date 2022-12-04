@@ -6,6 +6,7 @@ from app_core.models.UserBalance import UserBalance
 from django.http import HttpResponse
 import json
 import os
+from datetime import datetime
 
 class TransactionLog:
     def transaction_log(self,request):
@@ -30,6 +31,7 @@ class TransactionLog:
             transaction_log_dict['used_currency'] = transaction_log.used_currency
             transaction_log_dict['message'] = transaction_log.message
             transaction_log_dict['amount'] = transaction_log.amount
+            transaction_log_dict['log_time'] = transaction_log.log_time.strftime("%Y/%m/%d  %H:%M:%S")
             transaction_logs_list.append(transaction_log_dict)
 
         return HttpResponse(json.dumps({
