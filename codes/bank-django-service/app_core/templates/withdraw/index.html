@@ -130,7 +130,19 @@
                                 <br>
                                 <div class="mb-3">
                                     <label for="withdraw-input" class="form-label">提領金額</label>
-                                    <input type="text" class="form-control" id="withdraw_input" placeholder="">
+                                    <!-- <input type="text" class="form-control"  placeholder=""> -->
+                                    <select class="form-select" id="withdraw_input">
+                                        <option selected>選擇金額</option>
+                                        <option value="1">1</option>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="500">500</option>
+                                        <option value="1000">1000</option>
+                                        <option value="5000">5000</option>
+                                        <option value="10000">10000</option>
+                                    </select>
                                     <br>
                                     <button type="button" class="btn btn-primary" id="withdraw_btn">領取</button>
                                 </div>
