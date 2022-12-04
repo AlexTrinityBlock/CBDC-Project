@@ -89,7 +89,7 @@ nav {
     margin-top: var(--margin-vertical-1);
     margin-bottom: var(--margin-vertical-1);
     /* 高度 */
-    min-height: 150px;
+    /* min-height: 150px; */
     /* 置中 */
     float: none;
     margin-left: auto;
