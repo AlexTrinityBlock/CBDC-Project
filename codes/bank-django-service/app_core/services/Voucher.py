@@ -3,6 +3,7 @@ from app_core.services.ResolveRequest import ResolveRequest
 from app_core.services.UUIDRandom import UUIDRandom
 from app_core.models.User import User
 from app_core.models.UserBalance import UserBalance
+from app_core.models.TransactionLog import TransactionLog
 from django.http import HttpResponse
 import json
 import os
@@ -27,6 +28,14 @@ class Voucher:
         voucher.currency = data['amount']
         voucher.voucher_token = token
         voucher.save()
+
+        # 進行交易紀錄
+        transaction_log_model = TransactionLog()
+        transaction_log_model.status = 1
+        transaction_log_model.amount = data['amount']
+        transaction_log_model.type = 'Administrator issue voucher.'
+        transaction_log_model.message = 'Administrator issue voucher $'+ str(data['amount']) + '.'
+        transaction_log_model.save()
 
         return HttpResponse(json.dumps({
             'code': 1,
@@ -69,6 +78,16 @@ class Voucher:
         user_balance.balance = user_balance.balance + currency_in_voucher
         user_balance.save()
         
+        # 進行交易紀錄
+        transaction_log_model = TransactionLog()
+        transaction_log_model.used_currency = input_data['voucher_token']
+        transaction_log_model.user_id =  ResolveRequest.ResolveUserID(request)
+        transaction_log_model.status = 1
+        transaction_log_model.amount = currency_in_voucher
+        transaction_log_model.type = 'User redeem voucher!'
+        transaction_log_model.message = 'Success get $'+str(currency_in_voucher)
+        transaction_log_model.save()
+
         return HttpResponse(json.dumps({
             'code': 1,
             'message': 'The voucher successfully deposited into the bank'
