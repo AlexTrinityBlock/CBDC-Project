@@ -7,10 +7,28 @@ var amount = 0;
 var user_payment_id = null;
 var url = "/api/withdraw/test"
 
+var oldBalance = 0;
+
 // 載入餘額
 async function load_balance() {
+    // 取得貨幣
+    let balance = await GetBalance();
+    oldBalance = balance;
+    balance_text.innerHTML = '$' + balance
+
+    // 刷新貨幣額度
     window.setInterval(async () => {
-        balance_text.innerHTML = '$' + await GetBalance();
+        let balance = await GetBalance();
+
+        balance_text.innerHTML = '$' + balance
+        if (balance > oldBalance) {
+            Swal.fire({
+                icon: 'success',
+                title: '+ $'+(balance - oldBalance),
+            })
+        }
+
+        oldBalance = balance;
     }, 1000);
 }
 
