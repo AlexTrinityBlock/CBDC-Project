@@ -34,8 +34,18 @@ function sendMessage(account_input, password_input, e_mail_input) {
     });
 }
 
+//處理密碼不吻合
+function handle_password_no_match(){
+    if ( password.value != password_check.value){
+        LoginFail.innerHTML = "兩次密碼不吻合"
+        return false
+    }
+    return true
+}
+
 // 將註冊送出
 function submit() {
+    if (!handle_password_no_match()){return} //如果兩次密碼不吻合則結束
     sendMessage(account.value, password.value, e_mail.value)
 }
 

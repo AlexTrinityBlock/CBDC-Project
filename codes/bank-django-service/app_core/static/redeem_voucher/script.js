@@ -1,6 +1,7 @@
 import GetBalance from "/static/redeem_voucher/GetBalance.js"
 import RedeemVoucher from "/static/redeem_voucher/RedeemVoucher.js"
 
+var oldQRText = ''
 var oldBalance = 0
 // 載入餘額
 async function load_balance() {
@@ -30,7 +31,9 @@ async function qr_scanner() {
     const html5QrCode = new Html5Qrcode("reader");
     const config = { fps: 10, qrbox: { width: 1000, height: 1000 } };
     html5QrCode.start({ facingMode: "environment" }, config, (decodedText, decodedResult) => {
+        if(decodedText == oldQRText){return} // 若是舊的 QR code 就停止。
         html5QrCode.stop()
+        oldQRText = decodedText
         process_2(decodedText)
     });
 }
@@ -43,7 +46,6 @@ async function process_1() {
 // 支付步驟2
 async function process_2(decodedText) {
     let redeemResult = await RedeemVoucher(decodedText)
-    console.log(redeemResult.code)
     if (redeemResult.code == 0) {
         Swal.fire({
             icon: 'error',
