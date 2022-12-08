@@ -29,6 +29,9 @@ class Register():
         user.account = data['account']
         user.e_mail = data['e_mail']
         user.password_hash = password_hash
+        user.name = data['user_name']
+        user.phone = data['phone']
+        user.home_address = data['home_address']
         user.bank_user_payment_id = UUIDRandom.random_uuid_string()
         user.save()
 
