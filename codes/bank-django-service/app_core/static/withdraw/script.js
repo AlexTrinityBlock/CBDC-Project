@@ -84,7 +84,7 @@ async function handle_withdraw() {
             Swal.fire({
                 icon: 'error',
                 title: '提款失敗 !',
-                confirmButtonText: '有可能餘額不足',
+                text: '有可能餘額不足',
                 allowOutsideClick: false,
             })
         }
