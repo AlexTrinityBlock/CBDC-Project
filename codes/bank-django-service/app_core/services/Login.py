@@ -76,6 +76,16 @@ class Login():
         # 檢查帳號密碼是否存在 
         if self.check_account(account):
             if self.check_password(account, password):
+                # 檢查是否已經從別瀏覽器登入
+                redis_connection_user_index = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=1, password=os.environ['REDIS_PASSWORD'])
+                redis_connection_token_index = redis.Redis(host=os.environ['REDIS_IP'], port=6379, db=0, password=os.environ['REDIS_PASSWORD'])
+                # 若已經從別處登入
+                if redis_connection_user_index.exists(account):
+                   # 登出另一處
+                    token = redis_connection_user_index.get(account)
+                    redis_connection_user_index.delete(account)
+                    redis_connection_token_index.delete(token)
+                # 建立回應訊息
                 result = {'code':1, 'message':'Login success.'}
                 uuid_token = self.setUserToken(account)
                 result["token"] = uuid_token
