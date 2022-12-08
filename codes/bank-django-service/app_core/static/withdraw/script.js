@@ -6,10 +6,28 @@ import GetToken from "/static/withdraw/GetToken.js"
 // var url = "http://192.168.230.252:8086/withdraw"
 var url = "/api/withdraw/test"
 
+var oldBalance = 0;
+
 // 載入餘額
 async function load_balance() {
+    // 取得貨幣
+    let balance = await GetBalance();
+    oldBalance = balance;
+    balance_text.innerHTML = '$' + balance
+
+    // 刷新貨幣額度
     window.setInterval(async () => {
-        balance_text.innerHTML = '$' + await GetBalance();
+        let balance = await GetBalance();
+
+        balance_text.innerHTML = '$' + balance
+        if (balance > oldBalance) {
+            Swal.fire({
+                icon: 'success',
+                title: '+ $'+(balance - oldBalance),
+            })
+        }
+
+        oldBalance = balance;
     }, 1000);
 }
 
@@ -20,18 +38,45 @@ async function uuidv4() {
     );
 }
 
+//建立 QR code
+async function qr_code(text) {
+    let qrcode = new QRCode(document.getElementById("qr_code"), {
+        colorDark: "#0066cc",
+        correctLevel : QRCode.CorrectLevel.L,
+    });
+    qrcode.makeCode(text);
+}
+
 // 提領貨幣
 async function handle_withdraw() {
     withdraw_btn.addEventListener('click', async function (e) {
         // 取得貨幣
         let withdraw_number = withdraw_input.value
         let token = await GetToken();//取得使用者識別
-        let currency = await Withdraw(token, withdraw_number,url);//取得貨幣
+        let currency = await Withdraw(token, withdraw_number, url);//取得貨幣
         balance_text.innerHTML = '$' + await GetBalance();//更新貨幣數量
         // 生成檔案
         var blob = new Blob([currency],
             { type: "text/plain;charset=utf-8" });
-        saveAs(blob, "貨幣."+await uuidv4()+".txt");
+        saveAs(blob, "貨幣." + await uuidv4() + ".txt");
+        //  彈跳視窗
+
+        Swal.fire({
+            icon: 'success',
+            title: '提款成功 !',
+            confirmButtonText: '取得QR code',
+            allowOutsideClick: false,
+        }).then((result) => {
+            Swal.fire({
+                title: '貨幣 QR code',
+                html: '<div id="qr_code"></div>',
+                confirmButtonText: '關閉',
+                allowOutsideClick: false,
+            })
+            qr_code(currency)
+        })
+
+        withdraw_input.value = 0
     }, false);
 }
 

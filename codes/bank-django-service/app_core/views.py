@@ -13,6 +13,7 @@ from app_core.services.AesVerifyKey import AesVerifyKey
 from app_core.services.User import User
 from app_core.services.ResolveRequest import ResolveRequest
 from app_core.services.WithdrawProxy import WithdrawProxy
+from app_core.services.TransactionLog import TransactionLog
 import json
 """
 前端頁面
@@ -54,6 +55,9 @@ def pay(request):
 
 def deposit_upload(request):
     return render(request, 'deposit_upload/index.html')
+
+def redeem_voucher_page(request):
+    return render(request, 'redeem_voucher/index.html')
 """
 API
 
@@ -141,14 +145,20 @@ def api_administrator_check_login(request):
 """
 生成代金券
 """
+# 生成代金券
 def api_generate_voucher(request):
     obj = Voucher()
     return obj.generate_voucher(request)
 
+# 兌換代金券
 def redeem_voucher(request):
     obj = Voucher()
     return obj.redeem_voucher(request)
 
+# 列出代金券
+def list_voucher(request):
+    obj = Voucher()
+    return obj.list_voucher(request)
 """
 使用者存款服務
 """
@@ -179,3 +189,26 @@ def api_set_aes_verify_ciphertext(request):
 def api_get_aes_verify_ciphertext(request):
     obj = AesVerifyKey()
     return obj.get_aes_verify_ciphertext(request)
+"""
+管理員登入頁面
+"""
+# 管理員登入
+def administrator_login(request):
+    return render(request, 'administrator_login/index.html')
+# 管理員首頁
+def administrator_home(request):
+    return render(request, 'administrator_home/index.html')
+# 管理員發行點數頁面
+def  administrator_issue_voucher(request):
+    return render(request, 'administrator_issue_voucher/index.html')
+# 管理員交易紀錄檢視
+def administrator_transaction_log(request):
+    return render(request, 'administrator_transaction_log/index.html')
+
+"""
+管理取得紀錄
+"""
+# 管理員取得交易紀錄
+def api_administrator_get_transaction_log(request):
+    obj = TransactionLog()
+    return obj.transaction_log(request)

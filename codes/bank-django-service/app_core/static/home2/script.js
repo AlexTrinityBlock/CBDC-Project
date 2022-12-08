@@ -1,17 +1,34 @@
 import GetUserAccount from "/static/home2/GetUserAccount.js"
 import GetBalance from "/static/home2/GetBalance.js"
 
-// 載入使用者帳號
-async function load_account() {    
-    user_account.innerHTML = await GetUserAccount();
-}
+var oldBalance = 0;
 
 // 載入餘額
 async function load_balance() {
-    balance_text.innerHTML = '$'+ await GetBalance();
-    window.setInterval(async ()=>{
-        balance_text.innerHTML = '$'+ await GetBalance();
+    // 取得貨幣
+    let balance = await GetBalance();
+    oldBalance = balance;
+    balance_text.innerHTML = '$' + balance
+
+    // 刷新貨幣額度
+    window.setInterval(async () => {
+        let balance = await GetBalance();
+
+        balance_text.innerHTML = '$' + balance
+        if (balance > oldBalance) {
+            Swal.fire({
+                icon: 'success',
+                title: '+ $'+(balance - oldBalance),
+            })
+        }
+
+        oldBalance = balance;
     }, 1000);
+}
+
+// 載入使用者帳號
+async function load_account() {    
+    user_account.innerHTML = await GetUserAccount();
 }
 
 // 主函數

@@ -13,7 +13,8 @@ urlpatterns = [
     path('withdraw',views.withdraw, name = 'withdraw'),
     path('pay/qr-code',views.pay_qr_code_page, name = 'pay_qr_code_page'),
     path('pay',views.pay, name = 'pay'),
-    path('deposit/upload',views.deposit_upload, name = 'deposit_upload'),
+    path('deposit/upload',views.deposit_upload, name = 'deposit_upload'),    
+    path('redeem/voucher',views.redeem_voucher_page, name = 'redeem_voucher'),
 
     # 使用者登入API
     path('api/login', views.api_login),
@@ -36,10 +37,12 @@ urlpatterns = [
     path('api/administrator/login', views.api_administrator_login),
     path('api/administrator/check_login', views.api_administrator_check_login),
     path('api/administrator/logout', views.api_administrator_logout),
+    path('api/administrator/get/transaction_log', views.api_administrator_get_transaction_log),
 
     # 生成代金券序號
     path('api/generate/voucher', views.api_generate_voucher),
     path('api/redeem/voucher', views.redeem_voucher),
+    path('api/list/voucher', views.list_voucher),
 
     # 使用者兌換貨幣
     path('api/redeem/currency', views.redeem_currency),
@@ -51,6 +54,11 @@ urlpatterns = [
     path('api/set/aes-verify-ciphertext', views.api_set_aes_verify_ciphertext),
     path('api/get/aes-verify-ciphertext', views.api_get_aes_verify_ciphertext),
 
+    # 管理員登入頁面
+    path('administrator/login', views.administrator_login,),
+    path('administrator/home', views.administrator_home,),
+    path('administrator/issue/voucher', views.administrator_issue_voucher,),
+    path('administrator/transaction_log', views.administrator_transaction_log,),
 ]
 
 # 把不需要登入就可以瀏覽的頁面加入這裡
@@ -59,6 +67,9 @@ none_login_pages = [
     "",
     "register",
     "login",
+    "administrator/login",
+    "administrator/home",
+    "administrator/issue/voucher",
     # API
     "api/login",
     "api/check_login",

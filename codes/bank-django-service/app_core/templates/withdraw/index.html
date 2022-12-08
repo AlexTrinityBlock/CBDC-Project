@@ -34,19 +34,20 @@
                         <a class="nav-link active text-secondary" href="/home">首頁</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/withdraw">提款</a>
+                        <a class="nav-link active text-secondary" href="/withdraw">隱私模式-提款</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active text-secondary" href="/deposit/upload">隱私模式-存款</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/pay">支付</a>
+                        <a class="nav-link active text-secondary" href="/redeem/voucher">儲值</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/pay/qr-code">付款條碼</a>
+                        <a class="nav-link active text-secondary" href="/pay">公開支付</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/home">儲值</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active text-secondary" href="/home">儲存貨幣</a>
+                        <a class="nav-link active text-secondary" href="/pay/qr-code">公開支付-收款條碼</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active text-secondary" href="/logout">登出</a>
@@ -66,8 +67,8 @@
                     <div class="row">
                         <!-- 介紹文字 -->
                         <div class="col-6">
-                            <h1 id="introduction-title">提款</h1>
-                            <p id="introduction-text" class="">從帳戶中提取或下載數位貨幣</p>
+                            <h1 id="introduction-title">隱私模式-提款</h1>
+                            <p id="introduction-text" class="">不被追蹤的，從帳戶中提取數位貨幣。</p>
                         </div>
                         <!-- /介紹文字 -->
                         <!-- ICON -->
@@ -129,7 +130,19 @@
                                 <br>
                                 <div class="mb-3">
                                     <label for="withdraw-input" class="form-label">提領金額</label>
-                                    <input type="text" class="form-control" id="withdraw_input" placeholder="">
+                                    <!-- <input type="text" class="form-control"  placeholder=""> -->
+                                    <select class="form-select" id="withdraw_input">
+                                        <option selected>選擇金額</option>
+                                        <option value="1">1</option>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="500">500</option>
+                                        <option value="1000">1000</option>
+                                        <option value="5000">5000</option>
+                                        <option value="10000">10000</option>
+                                    </select>
                                     <br>
                                     <button type="button" class="btn btn-primary" id="withdraw_btn">領取</button>
                                 </div>
@@ -155,6 +168,9 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
 <script src="/static/bootstrap5.0.2/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/static/pay_qr_code_page/jquery.min.js"></script>
+<script type="text/javascript" src="/static/pay_qr_code_page/qrcode.min.js"></script>
+<script src="/static/sweetalert2/sweetalert2.all.min.js" type="text/javascript"></script>
 <script type="module" src="/static/withdraw/script.js"></script>
 
 </html>

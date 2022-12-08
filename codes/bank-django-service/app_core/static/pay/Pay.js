@@ -32,15 +32,11 @@ async function Pay(bank_user_payment_id,message,Info,R,s,t) {
         return response.json();
     }).then((jsonObj) => {
         // 若登入成功
-        if (jsonObj['code'] == 1) {
-            return jsonObj
-        } else {
-            console.log(jsonObj)
-        }
+        return jsonObj
     });
-    let json_string = JSON.stringify(result);
+    // let json_string = JSON.stringify(result);
 
-    return  json_string;
+    return  result;
 }
 
 export default Pay

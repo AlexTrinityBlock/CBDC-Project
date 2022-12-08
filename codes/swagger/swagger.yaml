@@ -13,8 +13,6 @@ tags:
     description: "銀行用戶登入API。"
   - name: "銀行使用者貨幣服務"
     description: "銀行用戶以有效的盲簽章兌換回存款額度，查詢餘額等服務。"
-  - name: "銀行管理員登入"
-    description: "銀行管理員登入API。"
   - name: "密碼學支援服務"
     description: "密碼學支援服務API，請將 Server 調整到密碼學支援服務。"
   - name: "儲值卡"
@@ -23,6 +21,11 @@ tags:
     description: "銀行使用者AES驗證API"
   - name: "銀行使用者電子錢包"
     description: "銀行使用者電子錢包"
+  - name: "銀行管理員登入"
+    description: "銀行管理員登入API。"
+  - name: "銀行管理員存取訊息"
+    description: "銀行管理員可存取的，銀行使用者各項紀錄"
+
 
 paths:
 #################
@@ -541,6 +544,32 @@ paths:
                   token:
                     type: string
                     example: 27add4b6aa8a6842e3072ac048a7b20b9c73f8f4b0ec06ce9b0f513b9b201102
+# 列出儲值卡
+  /api/list/voucher:
+    get:
+      tags:
+      - "儲值卡"
+      summary: 列出儲值卡
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 管理員token
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: balance\:餘額數量
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  balance:
+                    type: int
+                    example: 100
 #######################
 # 銀行使用者貨幣服務API#
 #######################
@@ -819,6 +848,35 @@ paths:
         - name: token
           in: query
           description: 檢查使用者token
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: code:1表示成功，0表示失敗。
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    type: int
+                    example: 1
+#######################
+# 銀行管理員存取訊息#
+#######################
+# 銀行管理員取得交易紀錄
+  /api/administrator/get/transaction_log:
+    get:
+      tags:
+      - "銀行管理員存取訊息"
+      summary: 銀行管理員取得交易紀錄
+      description: ""
+      # 請求參數
+      parameters:
+        - name: token
+          in: query
+          description: 管理員token
           required: true
           schema:
             type: string
