@@ -58,7 +58,7 @@ class PartiallyBlindSignature:
             withdraw = ResolveRequest.ResolvePost(request)['withdraw'] #取得使用者請求提款的額度            
             public_info = json.dumps({
                 "currency":withdraw,
-                "Text":"Technology provided by ECDSA project."
+                "Text":"CBDC Bank."
             }) 
             self.server.generate_I(public_info)
 
