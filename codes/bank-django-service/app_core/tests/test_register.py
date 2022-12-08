@@ -12,7 +12,7 @@ class TestRegist(TestCase):
         print("[註冊測試] 註冊測試判別。")
 
         rf = RequestFactory()
-        post_request = rf.post('/api/register/', {'account': 'test1sdfds1w23ewq', 'password':'test','e_mail':'test@example.com'})
+        post_request = rf.post('/api/register/', {'account': 'test1sdfds1w23ewq', 'password':'test','e_mail':'test@example.com','user_name':'Test User name','phone':'000000000','home_address':'Address'})
 
         register = Register()
         response = register.register(post_request) 

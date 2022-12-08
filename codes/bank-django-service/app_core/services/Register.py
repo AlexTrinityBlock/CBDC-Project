@@ -26,15 +26,19 @@ class Register():
             result = json.dumps(result)
             return HttpResponse(result)
 
-        user.account = data['account']
-        user.e_mail = data['e_mail']
-        user.password_hash = password_hash
-        user.name = data['user_name']
-        user.phone = data['phone']
-        user.home_address = data['home_address']
-        user.bank_user_payment_id = UUIDRandom.random_uuid_string()
-        user.save()
-
+        try:
+            user.account = data['account']
+            user.e_mail = data['e_mail']
+            user.password_hash = password_hash
+            user.name = data['user_name']
+            user.phone = data['phone']
+            user.home_address = data['home_address']
+            user.bank_user_payment_id = UUIDRandom.random_uuid_string()
+            user.save()
+        except:
+            result = {'code':0, 'message':'Missing parameters!'}
+            result = json.dumps(result)
+            return HttpResponse(result)
         # 新增帳戶時添加一個存款資料表條目。
         user_id = User.objects.filter(account=data['account'])[0].id
         user_balance = UserBalance()
