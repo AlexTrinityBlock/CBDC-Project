@@ -33,6 +33,8 @@ function sendMessage() {
             window.location.replace("/login");
         } else if(jsonObj['code'] == 2){
             LoginFail.innerHTML = "帳號已經被註冊"
+        } else if(jsonObj['code'] == 0){
+            LoginFail.innerHTML = "請確認每個欄位都有輸入"
         }
     });
 }
