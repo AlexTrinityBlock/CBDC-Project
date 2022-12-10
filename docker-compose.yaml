@@ -1,5 +1,5 @@
 #docker-compose版本
-version: "3.9"
+version: "3.3"
 #服務，每個功能或容器就是一個服務。
 services:
 
