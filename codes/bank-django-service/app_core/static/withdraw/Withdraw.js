@@ -24,16 +24,10 @@ async function Withdraw(token,withdraw,url) {
         return response.json();
     }).then((jsonObj) => {
         // 若登入成功
-        if (jsonObj['code'] == 1) {
-            return jsonObj
-        } else {
-            console.log(jsonObj)
-        }
+        return jsonObj
     });
-    let json_string = JSON.stringify(result);
-    // json_string = json_string.replaceAll("\\", "");
-    // console.log(json_string)
-    return  json_string;
+
+    return  result;
 }
 
 export default Withdraw

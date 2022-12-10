@@ -1,10 +1,13 @@
 // 送出函數
-function sendMessage(account_input, password_input, e_mail_input) {
+function sendMessage() {
     // Fetch函數
     const data = JSON.stringify({
-        'account': account_input,
-        'password': password_input,
-        'e_mail': e_mail_input
+        'account': account.value,
+        'password': password.value,
+        'e_mail': e_mail.value,
+        'user_name':user_name.value,
+        'home_address':home_address.value,
+        'phone': phone.value
     })
 
 
@@ -30,6 +33,8 @@ function sendMessage(account_input, password_input, e_mail_input) {
             window.location.replace("/login");
         } else if(jsonObj['code'] == 2){
             LoginFail.innerHTML = "帳號已經被註冊"
+        } else if(jsonObj['code'] == 0){
+            LoginFail.innerHTML = "請確認每個欄位都有輸入"
         }
     });
 }
@@ -60,7 +65,7 @@ function handleValidateEmail()
 function submit() {
     if (!handleValidateEmail()){return} // Email格式不符合就結束
     if (!handlePasswordMatch()){return} //如果兩次密碼不吻合則結束
-    sendMessage(account.value, password.value, e_mail.value)
+    sendMessage()
 }
 
 // 主函數

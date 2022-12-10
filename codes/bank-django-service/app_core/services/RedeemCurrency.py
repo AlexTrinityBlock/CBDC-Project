@@ -35,7 +35,7 @@ class RedeemCurrency:
             transaction_log_model.status = 0
             transaction_log_model.amount = amount
             transaction_log_model.type = 'Deposit'
-            transaction_log_model.message = 'Currency is used.'
+            transaction_log_model.message = 'Currency was used.'
             transaction_log_model.save()
             return HttpResponse(json.dumps({
                 'code':0,

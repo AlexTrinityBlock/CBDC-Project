@@ -71,12 +71,14 @@ function file_handler() {
 
 // QR cdoe
 async function qr_code() {
-
     await new Promise(r => setTimeout(r, 500));
     const html5QrCode = new Html5Qrcode("reader");
     const config = { fps: 10, qrbox: { width: 1000, height: 1000 } };
     html5QrCode.start({ facingMode: "environment" }, config, async (decodedText, decodedResult) => {
+        // 收到一樣的訊息則退出
         if (oldQRcode == decodedText) { return }
+        // 關閉攝影機
+        html5QrCode.stop()
         // 解析收到的內容
         let currency = JSON.parse(decodedText);
         // 寫入變數
@@ -90,13 +92,16 @@ async function qr_code() {
         // 傳送給銀行
         let result = await RedeemCurrency(payment_id, message, Info, R, s, t)
         oldQRcode = decodedText
-
+        // 回傳錯誤訊息
         if (result.code == 0) {
             Swal.fire({
                 icon: 'error',
                 title: '無效的 QR code',
             })
         }
+        // 等待 0.5 秒後重新展開攝影機
+        await new Promise(r => setTimeout(r, 500));
+        qr_code()
     });
 
 }
